@@ -304,7 +304,7 @@ class RLAgent(nn.Module):
 
         end_time = time.time() - start_time
 
-        # self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} -- time {} s'.format(eval_type, R.mean().numpy(), str(std_r), end_time))  
+        self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} -- time {} s'.format(eval_type, R.mean().numpy(), str(std_r), end_time))  
         
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':

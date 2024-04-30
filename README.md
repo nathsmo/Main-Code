@@ -33,9 +33,8 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 - [ ] Migrate Beam Search architecture
 - [ ] ?? Alter dataset to use Amazon data as input???
 - [ ] Create graph to show progress over time of the algorithm
-- [ ] 
 
-* Ultimate question for our angle:*  What is the factor taking too long to train the model. Reduce Runtime
+**Ultimate question for our angle:**  What is the factor taking too long to train the model. Reduce Runtime
 
 
 

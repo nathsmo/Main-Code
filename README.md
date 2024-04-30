@@ -7,7 +7,14 @@ We use Reinforcement for solving Travelling Salesman Problem (TSP)
 Base code inspired by the implementation of paper: [Reinforcement Learning for Solving the Vehicle Routing Problem](https://arxiv.org/abs/1802.04240v2). 
 
 ## Information
-### Currently under constructions. Modifications needed:
+## Currently under construction!!!! 
+*Ideas to implement to make code more efficient*
+* Self Attention
+* Different Embedding
+* Multi-head Attention
+* Beam Search
+  
+### Modifications needed:
 - [ ] The model isn't being saved, therefore the variables arent being reused in the correct way (I think)
 - [x] Actor/Critic are not talking to each other and that's why variables never change
 - [x] Standard deviation is null but that's because there's no data to compare it to.
@@ -16,6 +23,7 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 - [ ] Evaluate the model to see performance
 - [ ] See how to run on cloud - LIACS servers
 - [ ] See tests for the model on Readme, test all parameters
+- [ ] Create baselines for comparison
 
 ## Dependencies
 
@@ -46,5 +54,5 @@ python main.py --task=vrp10 --is_train=False --infer_type=single --model_dir=./p
 ### Logs
 All logs are stored in ``result.txt`` file stored in ``./logs/task_date_time`` directory.
 
-## Acknowledgements
-Thanks to [pemami4911/neural-combinatorial-rl-pytorch](https://github.com/pemami4911/neural-combinatorial-rl-pytorch) for getting the idea of restructuring the code.
+<!---## Acknowledgements
+Thanks to [pemami4911/neural-combinatorial-rl-pytorch](https://github.com/pemami4911/neural-combinatorial-rl-pytorch) for getting the idea of restructuring the code.)---!>

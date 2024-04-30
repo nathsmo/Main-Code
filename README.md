@@ -8,14 +8,14 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 
 ## Information
 ### Currently under constructions. Modifications needed:
-1. The model isn't being saved, therefore the variables arent being reused in the correct way (I think)
-2. SOLVED Actor/Critic are not talking to each other and that's why variables never change
-3. SOLVED Standard deviation is null but that's because there's no data to compare it to.
-4. SOLVED Never makes a decision, always returns the same value.
-5. We have to save the model and print the results
-6. Evaluate the model to see performance
-7. See how to run on cloud - LIACS servers
-8. See tests for the model on Readme, test all parameters
+- [ ] The model isn't being saved, therefore the variables arent being reused in the correct way (I think)
+- [x] Actor/Critic are not talking to each other and that's why variables never change
+- [x] Standard deviation is null but that's because there's no data to compare it to.
+- [x] Never makes a decision, always returns the same value.
+- [ ] We have to save the model and print the results
+- [ ] Evaluate the model to see performance
+- [ ] See how to run on cloud - LIACS servers
+- [ ] See tests for the model on Readme, test all parameters
 
 ## Dependencies
 

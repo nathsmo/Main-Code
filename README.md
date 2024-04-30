@@ -40,8 +40,9 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 
 ## Dependencies
 
-* Pytorch 2.2.2
+* Pytorch 2.2 or > 
 * Numpy
+* Python 3.11.7 or >
 
 ## How to Run
 ### Train

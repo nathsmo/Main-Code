@@ -23,11 +23,11 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 - [x] Actor/Critic are not talking to each other and that's why variables never change
 - [x] Standard deviation is null but that's because there's no data to compare it to.
 - [x] Never makes a decision, always returns the same value.
-- [ ] The model isn't being saved, therefore the variables arent being reused in the correct way (I think)
-- [ ] We have to save the model and print the results
+- [x] The model isn't being saved, therefore the variables arent being reused in the correct way (I think) (BUT, idk how to evaluate)
+- [x] We have to save the model and print the results
 - [ ] Evaluate the model to see performance
 - [ ] Run on cloud - LIACS servers
-- [ ] See tests for the model on Readme, test all parameters
+- [ ] See tests for the model. (Test all parameters)
 - [ ] Create baselines for comparison -> from Github baseline
 - [ ] Create graph to show progress over time of the algorithm
 

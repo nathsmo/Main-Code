@@ -60,6 +60,8 @@ class principal(nn.Module):
             prt.print_out('Evaluation started ...')
             self.agent.inference(args['infer_type'])
 
+        torch.save(self.agent, f"{args['model_dir']}/agent_complete.pth")
+
         prt.print_out(f'Total time is {time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))}')
 
     def train(self):
@@ -73,10 +75,11 @@ class principal(nn.Module):
 
             actor_loss_val, critic_loss_val, R_val, v_val = self.agent.run_train_step()
             
-            # if step%args['save_interval'] == 0:
+            if step % args['save_interval'] == 0:
                 # ModelManager.save_model(self.agent, self.optimizer, step+1, args['model_dir'])
+                torch.save(self.agent.state_dict(), f"{args['model_dir']}/model_{step}.pth")
 
-            if step%args['log_interval'] == 0:    
+            if step % args['log_interval'] == 0:    
 
                 train_time_end = time.time()-train_time_beg
 
@@ -85,7 +88,7 @@ class principal(nn.Module):
                 
                 train_time_beg = time.time()
 
-            if step%args['test_interval'] == 0:
+            if step % args['test_interval'] == 0:
                 self.agent.inference(args['infer_type'])
 
 if __name__ == "__main__":

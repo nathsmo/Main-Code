@@ -28,14 +28,11 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 - [ ] Evaluate the model to see performance
 - [ ] Run on cloud - LIACS servers
 - [ ] See tests for the model on Readme, test all parameters
-- [ ] Create baselines for comparison
-- [ ] Migrate VRP structure
-- [ ] Migrate Beam Search architecture
-- [ ] ?? Alter dataset to use Amazon data as input???
+- [ ] Create baselines for comparison -> from Github baseline
 - [ ] Create graph to show progress over time of the algorithm
 
 **Ultimate question for our angle:**  What is the factor taking too long to train the model. Reduce Runtime
-
+* Note: we did change the neural network layer from convolutional to linear because it is supposed to be more effective on pytorch that way.
 
 
 ## Dependencies
@@ -48,22 +45,23 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 ### Train
 By default, the code is running in the training mode on a single gpu. For running the code, one can use the following command:
 ```bash
-python main.py --task=vrp10
+python main.py --task=tsp10
 ```
 
 It is possible to add other config parameters like:
 ```bash
-python main.py --task=vrp10 --gpu=0 --n_glimpses=1 --use_tanh=False 
+python main.py --task=tsp10 --gpu=0 --n_glimpses=1 --use_tanh=False 
 ```
 There is a full list of all configs in the ``config.py`` file. Also, task specific parameters are available in ``task_specific_params.py``
+
 ### Inference
 For running the trained model for inference, it is possible to turn off the training mode. For this, you need to specify the directory of the trained model (to-do), otherwise random model will be used for decoding:
 ```bash
-python main.py --task=vrp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
+python main.py --task=tsp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
 ```
 The default inference is run in batch mode, meaning that all testing instances are fed simultanously. It is also possible to do inference in single mode, which means that we decode instances one-by-one. The latter case is used for reporting the runtimes and it will display detailed reports. For running the inference with single mode, you can try:
 ```bash
-python main.py --task=vrp10 --is_train=False --infer_type=single --model_dir=./path_to_your_saved_checkpoint
+python main.py --task=tsp10 --is_train=False --infer_type=single --model_dir=./path_to_your_saved_checkpoint
 ```
 ### Logs
 All logs are stored in ``result.txt`` file stored in ``./logs/task_date_time`` directory.
@@ -75,3 +73,4 @@ Thanks to [pemami4911/neural-combinatorial-rl-pytorch](https://github.com/pemami
 * Modify Reinforcement Learning - see options. (More efficient, see different reward functions, aim to lower time)
 * Modify Neural Network Parameters
 * Improve solution quality from Amazon dataset (compare to previous results from other papers) ---!>
+

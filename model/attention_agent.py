@@ -336,10 +336,3 @@ class MyNetwork(nn.Module):
         x = F.relu(self.fc1(x))  # Apply ReLU activation function to the output of the first layer
         x = self.fc2(x)  # Apply the second layer
         return x.squeeze(1)  # Squeeze dimension 1 if it is of size 1
-
-
-
-
-
-
-

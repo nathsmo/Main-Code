@@ -31,7 +31,7 @@ def ParseParams():
     # Data
     parser.add_argument('--task', default='vrp10', help="Select the task to solve; i.e. tsp10")
     parser.add_argument('--batch_size', default=128,type=int, help='Batch size in training')
-    parser.add_argument('--n_train', default=6000,type=int, help='Number of training steps') # Original every: 60,000 now: 10,000
+    parser.add_argument('--n_train', default=10000,type=int, help='Number of training steps') # Original every: 260,000 now: 10,000
     parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')
 
     # Network
@@ -77,6 +77,7 @@ def ParseParams():
     parser.add_argument('--model_dir', type=str, default='')
     parser.add_argument('--load_path', type=str, default='', help='Path to load trained variables')
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
+    parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
                         
     args, unknown = parser.parse_known_args()
     args = vars(args)

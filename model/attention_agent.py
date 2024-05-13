@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import sys
 import torch.nn.init as init
 
-from shared.embeddings import LinearEmbedding
+from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding
 from shared.decode_step import RNNDecodeStep
 
 class RLAgent(nn.Module):
@@ -26,7 +26,11 @@ class RLAgent(nn.Module):
         self.clAttentionActor = clAttentionActor
 
         # Embedding and Decoder setup
-        self.embedding = LinearEmbedding(args['embedding_dim'])
+        if args['emb_type'] == 'linear':
+            self.embedding = LinearEmbedding(args['embedding_dim'])
+        else:
+            self.embedding = EnhancedLinearEmbedding(2, args['embedding_dim'])
+
         self.decodeStep = RNNDecodeStep(clAttentionActor, args['hidden_dim'],
                                         use_tanh=args['use_tanh'],
                                         tanh_exploration=args['tanh_exploration'],
@@ -50,9 +54,7 @@ class RLAgent(nn.Module):
         
         self.prt.print_out("It took {}s to build the agent.".format(model_time))
 
-
     # def train(self):
-
         # self.train_model = self.build_model("stochastic")
         # self.train_step = self.build_train_step()
 

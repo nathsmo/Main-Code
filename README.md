@@ -33,7 +33,8 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 
 **Ultimate question for our angle:**  What is the factor taking too long to train the model. Reduce Runtime
 * Note: we did change the neural network layer from convolutional to linear because it is supposed to be more effective on pytorch that way.
-
+* Note: Experiments could include change in embedding dimensions/ changing kernel size
+    In order to change the embedding from simple to enhanced -> emb_type configuration.
 
 ## Dependencies
 

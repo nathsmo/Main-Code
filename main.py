@@ -53,14 +53,15 @@ class principal(nn.Module):
         if args['is_train']:
             print("Training started ...")
             self.train()
-            torch.save(self.agent, f"{args['model_dir']}/agent_complete.pth")
+            save_here = f"{args['model_dir']}"#/agent_complete.pth"
+            torch.save(self.agent.state_dict(), save_here)
 
         else: # inference/ evaluation
             prt.print_out('Evaluation started ...')
-            self.agent = torch.load(args['model_dir'])
+            self.agent.load_state_dict(torch.load(args['model_dir']))
             self.agent.eval()
             self.agent.inference(args['infer_type'])
-            
+
         prt.print_out(f'Total time is {time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))}')
 
     def train(self):

@@ -16,9 +16,10 @@ from shared.self_decode_step import AttentionDecoder
 # !!!!!! Decode type does not work in this code -> only greedy
 
 class RLAgent(nn.Module):
-    def __init__(self, args, env, dataGen, reward_func, clAttentionActor, clAttentionCritic, is_train=True):
+    def __init__(self, args, prt, env, dataGen, reward_func, clAttentionActor, clAttentionCritic, is_train=True):
         super(RLAgent, self).__init__()
         self.args = args
+        self.prt = prt
         self.env = env
         self.dataGen = dataGen
         self.reward_func = reward_func
@@ -30,14 +31,14 @@ class RLAgent(nn.Module):
 
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 
-                                           num_heads=args['num_heads'], num_actions=1)
+                                           num_heads=args['num_heads'], num_actions=5)
 
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
         init.xavier_uniform_(self.decoder_input)
         
         print("Agent created - Self Attention...")
 
-    def build_model(self, decode_type): #prev -> forward
+    def build_model(self, decode_type= "greedy"): #prev -> forward
         args = self.args
         env = self.env
         input_pnt = env.input_pnt  # input_pnt: [batch_size x max_time x hidden_dim]
@@ -47,95 +48,51 @@ class RLAgent(nn.Module):
         context = self.embedding.forward(input_pnt)
         decoder_input = context[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
         
+        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+
+        # Create tensors and lists
+        actions_tmp = []
+        log_probs = []
+        probs = []
+        idxs = []
+
+
         # Reset the Environment.
         env.reset()
 
-
-        for i in range(args['decode_len']):
-            # Get logit and decoder_state
-
-            # print("Dimensions of decoder input: [batch_size, seq, hidden_dim]", decoder_input.shape, 
-            #         " ---context: ", context.shape, "mask: ", self.env.mask.shape)
-            actions, logit, prob, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
-
-            # logit, attn_weights = self.decodeStep.forward(decoder_input, context, self.env.mask)
-            print("Logit shape: ", logit.shape)
-            print("Prob shape: ", prob.shape)
-            print("Actions: ", actions)
-
-            sys.exit()
-
-            # elif decode_type == "stochastic":
-            #     # Select stochastic actions.
-            #     prob_s = prob.squeeze(1)
-            #     idx = torch.multinomial(prob_s, num_samples=1, replacement=True)
-            # #     print("Idx: ", idx)
-
-            # state = self.env.step(idx)
-            # sys.exit()
-
-
-            # Forward pass
-            # output, attn_weights = model(inputs, context, mask)
-
-            # print("Output shape:", output.shape)  # Should be [batch_size, hidden_dim]
-            # print("Attention weights shape:", attn_weights.shape)  # Should be [batch_size, seq_length, seq_length]
-            # print("Output:", output)
-
-        # sys.exit()
-
-        # print('*** THIS IS THE DECODER INPUT - encoder_emb_inp: ', encoder_emb_inp.shape)
-        # sys.exit()
-        # decoder_input = encoder_emb_inp[:, env.n_nodes - 1].unsqueeze(self.args['decode_len']) # decoder_input: [batch_size, seq_length, hidden_dim]
-        # Decoding loop
-        # sys.exit()
-        # Decoder input: [batch_size x sequence_length x hidden_dim]
-        # output, attn_weights = self.decodeStep(encoder_emb_inp, encoder_emb_inp, self.env)
-        # output, attn_weights = self.decodeStep(output, output, self.env)
-
-        print('------Output shape: ', output.shape, type(output))
-        print("Output: ", output)
-        probabilities = F.softmax(output, dim=-1)
-        print("Probabilities: ", probabilities)
-
-        sys.exit()
         for i in range(args['decode_len']):
             # Get logit and attention weights
             # print('decoder_input shape: ', decoder_input.shape)
-            output, attn_weights = self.decodeStep(decoder_input, context, self.env)
-            print('------Output shape: ', output.shape, type(output))
-            probabilities = F.softmax(output, dim=-1)
+            action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
     
             if decode_type == "greedy":
-                action = torch.argmax(probabilities).item()  # Get the action with the maximum Q-value
-
+                # action = torch.argmax(probabilities).item()  # Get the action with the maximum Q-value
+                prob, action_selected = self.decodeStep.select_action(action_logits, 'greedy')
             elif decode_type == "stochastic":  # Select stochastic actions.
-                print("Probabilities: ", probabilities)
-                action = torch.multinomial(probabilities, 1, replacement=True)
-                print("Action: ", action)
-                # idx = torch.multinomial(prob, num_samples=1, replacement=True)
-            # print("Idx shape: ", idx.shape, type(idx))
+                # action = torch.multinomial(probabilities, 1, replacement=True)
+                prob, action_selected = self.decodeStep.select_action(action_logits, 'stochastic')   
             
-            state = self.env.step(action)
-            print("State: ", state)
-            batched_idx = torch.cat([BatchSequence, action], dim=1).long()
-            sys.exit()
-            gathered = encoder_emb_inp[batched_idx[:, 0], batched_idx[:, 1]]
+            action_selected = action_selected.unsqueeze(1)
+            state = self.env.step(action_selected)
+
+            batched_idx = torch.cat([BatchSequence, action_selected], dim=1).long()
+
+            gathered = context[batched_idx[:, 0], batched_idx[:, 1]]
             # print('Gathered: ', gathered)
+
             # Expanding dimensions: Adding a dimension at axis 1
             decoder_input = gathered.unsqueeze(1)
-            # print('decoder_input 2: ', decoder_input)
             # print("Decoder input shape: ", decoder_input.shape)
             # print("Decoder input mean: ", decoder_input.mean())
             
             # Advanced indexing in PyTorch to replace gather_nd
-            selected_probs = probabilities[batched_idx[:, 0], batched_idx[:, 1]] 
-            print("Selected probs: ", selected_probs)
+            selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]] 
+            # print("Selected probs: ", selected_probs)
             # Taking logarithm of the gathered elements
             log_prob = torch.log(selected_probs)
 
             probs.append(prob)
-            idxs.append(idx)
+            idxs.append(action_selected)
             log_probs.append(log_prob)
 
             # Gather using the constructed indices
@@ -150,8 +107,8 @@ class RLAgent(nn.Module):
             v = torch.tensor(0)
 
             if decode_type == "stochastic":
-                v = self.stochastic_process(batch_size, encoder_emb_inp)
-        sys.exit()
+                v = self.stochastic_process(batch_size, context)
+
         return (R, v, log_probs, actions, idxs, self.env.input_pnt , probs)
     
     def stochastic_process(self, batch_size, encoder_emb_inp):
@@ -195,7 +152,6 @@ class RLAgent(nn.Module):
         v_nograd = v.detach()
         R_nograd = R.detach()
 
-        sys.exit()
         # Actor and Critic
         actor = self.clAttentionActor(self.args['hidden_dim'])
         critic = self.clAttentionCritic(self.args['hidden_dim'])

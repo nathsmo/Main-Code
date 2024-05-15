@@ -101,7 +101,9 @@ class RLAgent(nn.Module):
                 # Select stochastic actions.
                 # print("Prob: ", prob.shape)
                 idx = torch.multinomial(prob, num_samples=1, replacement=True)
-                # print("Idx: ", idx)
+                print("Idx: ", idx)
+                print("Idx shape: ", idx.shape)
+                sys.exit()
 
             state = self.env.step(idx)
             # print("State: ", state)

@@ -34,6 +34,7 @@ class principal(nn.Module):
         self.AttentionCritic = Attention
         if args['decoder'] == 'self':
             self.agent = SelfAttentionAgent(args,
+                            prt,
                             self.env,
                             self.dataGen,
                             reward_func,

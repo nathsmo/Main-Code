@@ -29,7 +29,7 @@ def ParseParams():
     parser = argparse.ArgumentParser(description="Neural Combinatorial Optimization with RL")
 
     # Data
-    parser.add_argument('--task', default='vrp10', help="Select the task to solve; i.e. tsp10")
+    parser.add_argument('--task', default='tsp10', help="Select the task to solve; i.e. tsp10")
     parser.add_argument('--batch_size', default=128,type=int, help='Batch size in training')
     parser.add_argument('--n_train', default=10000,type=int, help='Number of training steps') # Original every: 260,000 now: 10,000
     parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')
@@ -78,7 +78,9 @@ def ParseParams():
     parser.add_argument('--load_path', type=str, default='', help='Path to load trained variables')
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
     parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
-                        
+    parser.add_argument('--decoder', default='pointer', help='pointer|self')
+    parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')
+
     args, unknown = parser.parse_known_args()
     args = vars(args)
 

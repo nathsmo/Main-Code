@@ -11,13 +11,14 @@ from TSP.tsp_datagen import DataGenerator
 from TSP.tsp_env import VRPEnvironment, reward_func
 from shared.attention import Attention
 from model.attention_agent import RLAgent
+from model.self_attention_agent import RLAgent as SelfAttentionAgent
+
 from configs import ParseParams
 from shared.model_manager import ModelManager
 
 # Problems:
-# 6. Evaluate the model to see performance
-# 7. See how to run on cloud - LIACS servers
-# 8. See tests for the model on Readme, test all parameters
+# * See how to run on cloud - LIACS servers
+# * See tests for the model on Readme (test all parameters)
 
 class principal(nn.Module):
     def __init__(self, args, prt):
@@ -31,16 +32,24 @@ class principal(nn.Module):
         # If task TSP
         self.AttentionActor = Attention
         self.AttentionCritic = Attention
-
-        # create an RL Agent (Network)
-        self.agent = RLAgent(args,
-                        prt,
-                        self.env,
-                        self.dataGen,
-                        reward_func,
-                        self.AttentionActor,
-                        self.AttentionCritic,
-                        is_train=args['is_train']) # Model class
+        if args['decoder'] == 'self':
+            self.agent = SelfAttentionAgent(args,
+                            self.env,
+                            self.dataGen,
+                            reward_func,
+                            self.AttentionActor,
+                            self.AttentionCritic,
+                            is_train=args['is_train']) # Model class
+        else:
+            # create an RL Agent (Network)
+            self.agent = RLAgent(args,
+                            prt,
+                            self.env,
+                            self.dataGen,
+                            reward_func,
+                            self.AttentionActor,
+                            self.AttentionCritic,
+                            is_train=args['is_train']) # Model class
         
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 

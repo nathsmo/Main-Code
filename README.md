@@ -64,6 +64,10 @@ The default inference is run in batch mode, meaning that all testing instances a
 ```bash
 python main.py --task=tsp10 --is_train=False --infer_type=single --model_dir=./path_to_your_saved_checkpoint
 ```
+## Running self-attention
+```bash
+python main.py --task=tsp10 --decoder=self --num_heads=4
+```
 ### Logs
 All logs are stored in ``result.txt`` file stored in ``./logs/task_date_time`` directory.
 

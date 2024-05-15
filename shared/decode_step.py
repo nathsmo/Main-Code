@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import sys
 
+# Original implementation of the attention mechanism is through pointer networks
 class DecodeStep(nn.Module):
     """
     Base class for decoding (without RNN).
@@ -28,8 +29,8 @@ class DecodeStep(nn.Module):
     def forward(self, decoder_inp, context, Env, decoder_state=None):
         # I think here's the problem
         # Process glimpses
-        print('Decoder input: ', decoder_inp)
-        print('Context: ', context)
+        # print('Decoder input: ', decoder_inp)
+        # print('Context: ', context)
         mask = Env.mask
         for glimpse in self.glimpses:
             ref, logit = glimpse(decoder_inp, context, Env)
@@ -40,7 +41,6 @@ class DecodeStep(nn.Module):
 
         # Process pointer attention
         # print('Inputs provided: ', decoder_inp, context, Env)
-        
         _, logit = self.pointer(decoder_inp, context, Env)
 
         if self.mask_pointer:
@@ -48,7 +48,6 @@ class DecodeStep(nn.Module):
         
         log_prob = F.log_softmax(logit, dim=-1)
         prob = F.exp(log_prob)
-
         return logit, decoder_state
 
 class RNNDecodeStep(DecodeStep):
@@ -92,11 +91,10 @@ class RNNDecodeStep(DecodeStep):
         _, logit = self.pointer(decoder_inp, context, Env)
         if self.mask_pointer:
             logit -= self.BIGNUMBER * mask
-
+        # print('Logit shape before return: ', logit.shape) # [128, 10]
+        # sys.exit()
         return logit, decoder_state
     
     def _init_hidden(self, batch_size):
         return (torch.zeros(self.rnn_layers, batch_size, self.hidden_dim),
                 torch.zeros(self.rnn_layers, batch_size, self.hidden_dim))
-
-# Hasn't been tested yet.

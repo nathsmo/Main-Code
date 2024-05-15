@@ -10,6 +10,7 @@ class LinearEmbedding(nn.Module):
         # Input: embedding_dim: embedding dimension
         super(LinearEmbedding, self).__init__()
         self.project_emb = nn.Conv1d(in_channels=2, out_channels=embedding_dim, kernel_size=1)
+        print("Embedding - linear")
     
     def forward(self, input_pnt):
         # emb_inp_pnt: [batch_size, embedding_dim, max_time]
@@ -42,6 +43,7 @@ class EnhancedLinearEmbedding(nn.Module):
         self.residual = nn.Conv1d(num_channels, embedding_dim, kernel_size=1)
 
     def forward(self, input_pnt):
+        print("Embedding - enhanced")
         # Transpose input to match Conv1d expected input shape (batch, channels, sequence length)
         input_pnt = input_pnt.transpose(1, 2)
         # Pass through first layer and activate
@@ -61,10 +63,10 @@ if __name__ == "__main__":
     # Create LinearEmbedding instance
     # linear_embedding = LinearEmbedding(embedding_dim)
     linear_embedding = EnhancedLinearEmbedding(2, embedding_dim)
-# 
+
     # Example input tensor
     # input_pnt = torch.randn(32, 10, 2)  # Batch size 32, max_time 10, input_dim 2
-    input_pnt = torch.randn(2, 10, 2)  # Batch size 32, max_time 10, input_dim 1
+    input_pnt = torch.randn(2, 10, 2)  # Batch size 2, max_time 10, input_dim 2
 
     # Obtain embedded tensor
     emb_inp_pnt = linear_embedding.forward(input_pnt)

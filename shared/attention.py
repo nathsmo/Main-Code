@@ -100,27 +100,26 @@ Flexibility: Although nn.Linear and nn.Conv1d can both perform linear
     have a specific shape suitable for convolution.
 """
 
-"""
-# Example usage
-batch_size = 32
-max_time = 10
-dim = 64
+# # Example usage
+# batch_size = 32
+# max_time = 10
+# dim = 64
 
-# Create model instance
-model = Attention(dim=dim)
+# # Create model instance
+# model = Attention(dim=dim)
 
-# Create sample input tensors
-query = torch.randn(batch_size, dim)
-ref = torch.randn(batch_size, max_time, dim)
+# # Create sample input tensors
+# query = torch.randn(batch_size, dim)
+# ref = torch.randn(batch_size, max_time, dim)
 
-# Forward pass
-e, logits = model(query, ref)
+# # Forward pass
+# e, logits = model(query, ref)
 
-print("Convolved reference shape:", e.shape)
-print("Logits shape:", logits.shape)
-print("Logits:", logits)    
-# Convolved reference shape: torch.Size([32, 10, 64])
-# Logits shape: torch.Size([32, 10])
-"""
+# print("Convolved reference shape:", e.shape)
+# print("Logits shape:", logits.shape)
+# # print("Logits:", logits)    
+# # Convolved reference shape: torch.Size([32, 10, 64])
+# # Logits shape: torch.Size([32, 10])
 
-#Tested and working as expected
+
+# #Tested and working as expected

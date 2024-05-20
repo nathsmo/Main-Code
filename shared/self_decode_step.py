@@ -56,8 +56,6 @@ num_heads = 4
 # print("Logits shape:", logit.shape)
 # print("Attention weights shape:", attn_weights.shape)
 
-
-
 # # Example usage
 # num_actions = 5  # Define the number of possible actions
 # attention_decoder = AttentionDecoder(input_dim=hidden_dim, hidden_dim=hidden_dim, num_heads=num_heads, num_actions=num_actions)

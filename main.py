@@ -16,10 +16,6 @@ from model.self_attention_agent import RLAgent as SelfAttentionAgent
 from configs import ParseParams
 from shared.model_manager import ModelManager
 
-# Problems:
-# * See how to run on cloud - LIACS servers
-# * See tests for the model on Readme (test all parameters)
-
 class principal(nn.Module):
     def __init__(self, args, prt):
         super(principal, self).__init__()
@@ -29,7 +25,6 @@ class principal(nn.Module):
 
         self.env = VRPEnvironment(args)
         
-        # If task TSP
         self.AttentionActor = Attention
         self.AttentionCritic = Attention
         if args['decoder'] == 'self':

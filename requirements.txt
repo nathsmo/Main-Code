@@ -58,6 +58,8 @@ langchain==0.0.274
 langsmith==0.0.92
 lark==1.1.8
 libclang==16.0.6
+lightning==2.2.4
+lightning-utilities==0.11.2
 llama_cpp_python==0.1.81
 lxml==5.1.0
 Markdown==3.5.2
@@ -99,6 +101,7 @@ PyPika==0.48.9
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-magic==0.4.27
+pytorch-lightning==2.2.4
 PyYAML==6.0.1
 red-black-tree-mod==1.20
 regex==2023.12.25
@@ -129,6 +132,7 @@ threadpoolctl==3.3.0
 tokenizers==0.15.2
 torch==2.2.0
 torchaudio==2.2.0
+torchmetrics==1.4.0.post0
 torchvision==0.17.0
 tqdm==4.66.1
 transformers==4.37.2

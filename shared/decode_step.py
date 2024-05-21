@@ -92,7 +92,6 @@ class RNNDecodeStep(DecodeStep):
         if self.mask_pointer:
             logit -= self.BIGNUMBER * mask
         # print('Logit shape before return: ', logit.shape) # [128, 10]
-        # sys.exit()
         return logit, decoder_state
     
     def _init_hidden(self, batch_size):

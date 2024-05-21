@@ -101,14 +101,10 @@ class RLAgent(nn.Module):
                 # Select stochastic actions.
                 # print("Prob: ", prob.shape)
                 idx = torch.multinomial(prob, num_samples=1, replacement=True)
-                print("Idx: ", idx)
-                print("Idx shape: ", idx.shape)
-                sys.exit()
 
             state = self.env.step(idx)
             # print("State: ", state)
             batched_idx = torch.cat([BatchSequence, idx], dim=1).long()
-            # sys.exit()
             gathered = encoder_emb_inp[batched_idx[:, 0], batched_idx[:, 1]]
 
             # Expanding dimensions: Adding a dimension at axis 1
@@ -139,7 +135,6 @@ class RLAgent(nn.Module):
 
             if decode_type == "stochastic":
                 v = self.stochastic_process(batch_size, encoder_emb_inp)
-        # sys.exit()
         return (R, v, log_probs, actions, idxs, self.env.input_pnt , probs)
     
     def stochastic_process(self, batch_size, encoder_emb_inp):

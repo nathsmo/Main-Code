@@ -58,8 +58,7 @@ class principal(nn.Module):
         if args['is_train']:
             print("Training started ...")
             self.train()
-            save_here = f"{args['model_dir']}"#/agent_complete.pth"
-            torch.save(self.agent.state_dict(), save_here)
+            torch.save(self.agent.state_dict(), f"{args['model_dir']}/agent_complete.pth")
 
         else: # inference/ evaluation
             prt.print_out('Evaluation started ...')

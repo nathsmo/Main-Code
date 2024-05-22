@@ -78,7 +78,7 @@ def ParseParams():
     parser.add_argument('--load_path', type=str, default='', help='Path to load trained variables')
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
     parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
-    parser.add_argument('--decoder', default='pointer', help='pointer|self')
+    parser.add_argument('--decoder', default='pointer', help='pointer|self|beam_search')
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')
 
     args, unknown = parser.parse_known_args()

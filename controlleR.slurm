@@ -24,6 +24,7 @@ echo "[$SHELL] ## current working directory: "$CWD
 
 # Run the file
 echo "[$SHELL] ## Run script"
-python main.py --task=tsp10 --n_train=100000
+# python main.py --task=tsp10 --n_train=100000
+python main.py --task=tsp10 --n_train=10000
 
 echo "[$SHELL] ## Script finished"

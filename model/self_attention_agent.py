@@ -25,30 +25,33 @@ class RLAgent(nn.Module):
         self.reward_func = reward_func
         self.clAttentionCritic = clAttentionCritic
         self.clAttentionActor = clAttentionActor
-
+        
         # Choose the type of embedding based on args
-        self.embedding = LinearEmbedding(args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(2, args['embedding_dim'])
-
+        if args['emb_type'] == 'linear':
+            self.embedding = LinearEmbedding(args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(2, args['embedding_dim'])
+        else:
+            self.embedding = EnhancedLinearEmbedding(2, args['embedding_dim'])
+        
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 
-                                           num_heads=args['num_heads'], num_actions=5)
+                                           num_heads=args['num_heads'], num_actions=5, beam_width=args['beam_width'])
 
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
         init.xavier_uniform_(self.decoder_input)
         
-        print("Agent created - Self Attention...")
+        print("Agent created - Self Attention.")
 
-    def build_model(self, decode_type= "greedy"): #prev -> forward
+    def build_model(self, eval_type= "greedy"): #prev -> forward
         args = self.args
         env = self.env
         input_pnt = env.input_pnt  # input_pnt: [batch_size x max_time x hidden_dim]
         batch_size = input_pnt.shape[0] 
 
-        # encoder_emb_inp: [batch_size x seq_len x embedding_dim]
+        # encoder_emb_inp/context: [batch_size x seq_len x embedding_dim]
         context = self.embedding.forward(input_pnt)
-        decoder_input = context[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
-        
-        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+
+        # Reset the Environment.
+        env.reset()
 
         # Create tensors and lists
         actions_tmp = []
@@ -56,22 +59,15 @@ class RLAgent(nn.Module):
         probs = []
         idxs = []
 
-
-        # Reset the Environment.
-        env.reset()
-
+        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+        # Start from trainable nodes in TSP
+        decoder_input = context[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
+        
         for i in range(args['decode_len']):
             # Get logit and attention weights
-            # print('decoder_input shape: ', decoder_input.shape)
             action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
-    
-            if decode_type == "greedy":
-                # action = torch.argmax(probabilities).item()  # Get the action with the maximum Q-value
-                prob, action_selected = self.decodeStep.select_action(action_logits, 'greedy')
-            elif decode_type == "stochastic":  # Select stochastic actions.
-                # action = torch.multinomial(probabilities, 1, replacement=True)
-                prob, action_selected = self.decodeStep.select_action(action_logits, 'stochastic')   
-            
+            prob, action_selected = self.decodeStep.select_action(action_logits, eval_type)   
+
             action_selected = action_selected.unsqueeze(1)
             state = self.env.step(action_selected)
 
@@ -106,7 +102,7 @@ class RLAgent(nn.Module):
             # Critic
             v = torch.tensor(0)
 
-            if decode_type == "stochastic":
+            if eval_type == "stochastic":
                 v = self.stochastic_process(batch_size, context)
 
         return (R, v, log_probs, actions, idxs, self.env.input_pnt , probs)
@@ -148,7 +144,7 @@ class RLAgent(nn.Module):
         This function returns a train_step op, in which by running it we proceed one training step.
         """
 
-        R, v, log_probs, actions, idxs , batch , probs = self.build_model("stochastic") 
+        R, v, log_probs, actions, idxs , batch , probs = self.build_model(eval_type='stochastic') 
         v_nograd = v.detach()
         R_nograd = R.detach()
 
@@ -184,19 +180,18 @@ class RLAgent(nn.Module):
         
         return train_step
 
-    def evaluate_single(self, eval_type="greedy"):
+    def evaluate_single(self, eval_type='greedy'):
 
         start_time = time.time()
         avg_reward = []
-        summary = self.build_model()
+        summary = self.build_model(eval_type)
 
         self.dataGen.reset()
         test_df = self.dataGen.get_test_data()
 
         test_loader = DataLoader(test_df, batch_size=self.args['batch_size']) 
 
-        problem_count = 0
-        while problem_count < self.dataGen.n_problems:
+        for problem_count in range(self.dataGen.n_problems):
             for data in test_loader:                
                 self.env.input_data = data
 
@@ -216,16 +211,10 @@ class RLAgent(nn.Module):
                     for idx, action in enumerate(actions):
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type,step))
+                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, step))
                     self.prt.print_out('\nExample test input: {}'.format(example_input))
                     self.prt.print_out('\nExample test output: {}'.format(example_output))
                     self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))
-
-                # Break the cycle
-                problem_count += 1
-                
-                if problem_count >= self.dataGen.n_problems:
-                    break
                 
         end_time = time.time() - start_time
                 
@@ -241,8 +230,7 @@ class RLAgent(nn.Module):
         
         self.env.reset()
 
-        summary = self.build_model()
-        # summary = self.val_model_greedy(eval_type, "!!!!  evaluate batch !!! ")
+        summary = self.build_model(eval_type)
 
         data = self.dataGen.get_test_data()
         
@@ -272,9 +260,11 @@ class RLAgent(nn.Module):
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
             self.evaluate_batch('greedy')
+            # self.evaluate_batch('beam_search')
         
         elif infer_type == 'single':
             self.evaluate_single('greedy')
+            # self.evaluate_single('beam_search')
         
         self.prt.print_out("##################################################################")
 

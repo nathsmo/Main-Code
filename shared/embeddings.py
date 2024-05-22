@@ -14,8 +14,8 @@ class LinearEmbedding(nn.Module):
     
     def forward(self, input_pnt):
         # emb_inp_pnt: [batch_size, embedding_dim, max_time]
-        a = input_pnt.transpose(1, 2)
         emb_inp_pnt = self.project_emb(input_pnt.transpose(1, 2))
+        
         return emb_inp_pnt.transpose(1, 2)
 
 class EnhancedLinearEmbedding(nn.Module):

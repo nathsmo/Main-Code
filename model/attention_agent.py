@@ -45,27 +45,29 @@ class RLAgent(nn.Module):
         print("Agent created - Pointer Network.")
 
     def build_model(self, decode_type= "greedy"):
-        # if where is not None:
-            # print("Calling build model from ", where)
-
         # Builds the model
         args = self.args
         env = self.env
         batch_size = env.input_pnt.shape[0]
         
+        if decode_type == 'beam_search':
+            beam_width = args['beam_width']
+        else:
+            beam_width = 1
+
         # print("Batch size: ", batch_size)
         # print("env.input_pnt shape: ", env.input_pnt.shape)
 
         # input_pnt: [batch_size x max_time x input_dim=2]
         input_pnt = env.input_pnt
+        if not isinstance(input_pnt, torch.Tensor):
+            input_pnt = torch.tensor(input_pnt, dtype=torch.double).float()
 
         # encoder_emb_inp: [batch_size x max_time x embedding_dim]
         encoder_emb_inp = self.embedding.forward(input_pnt)
 
         # Reset the Environment.
-        env.reset()
-
-        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+        env.reset(beam_width)
 
         # Create tensors and lists
         actions_tmp = []
@@ -73,19 +75,36 @@ class RLAgent(nn.Module):
         probs = []
         idxs = []
 
-        # Start from depot
-        idx = (env.n_nodes - 1) * torch.ones([batch_size, 1])
-        action = input_pnt[:, env.n_nodes - 1].unsqueeze(1)
+        if beam_width > 1:
+            BatchSequence = torch.arange(0, batch_size * beam_width, dtype=torch.int64).unsqueeze(1)
+            # Start from depot
+            idx = (env.n_nodes - 1) * torch.ones(batch_size * beam_width, 1, dtype=torch.int64)
 
-        # Decoder State
-        # Initialize LSTM state tensors for hidden (h) and cell (c) states
-        decoder_state = self.decodeStep._init_hidden(batch_size)
+            # Assuming 'input_pnt' is a PyTorch tensor and is correctly dimensioned
+            # Repeat the last node's input points to match beam width
+            # Ensure that input_pnt[:, env.n_nodes - 1] is 2D by unsqueezing if necessary
+            if input_pnt[:, env.n_nodes - 1].dim() == 1:
+                input_pnt = input_pnt[:, env.n_nodes - 1].unsqueeze(1)  # Make it [batch_size, 1] if it's not
+            action = input_pnt.repeat(1, beam_width, 1)
+            decoder_state = self.decodeStep._init_hidden(batch_size*beam_width)
+            decoder_input = self.decoder_input.repeat(batch_size * beam_width, 1, 1)
+            context = encoder_emb_inp.repeat(beam_width, 1, 1)
 
-        # Start from trainable nodes in TSP
-        decoder_input = encoder_emb_inp[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
+        else:
+            BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+            # Start from depot
+            idx = (env.n_nodes - 1) * torch.ones([batch_size, 1])
+            action = input_pnt[:, env.n_nodes - 1].unsqueeze(1)
 
-        # Decoding loop
-        context = encoder_emb_inp
+            # Decoder State
+            # Initialize LSTM state tensors for hidden (h) and cell (c) states
+            decoder_state = self.decodeStep._init_hidden(batch_size)
+
+            # Start from trainable nodes in TSP
+            decoder_input = encoder_emb_inp[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
+
+            # Decoding loop
+            context = encoder_emb_inp
 
         
         for i in range(args['decode_len']):
@@ -94,6 +113,7 @@ class RLAgent(nn.Module):
             # print('Logit shape: ', logit.shape)
             prob = F.softmax(logit, dim=-1)
             # print("Probabilities: ", prob)
+            beam_parent = None
             if decode_type == "greedy":
                 idx = torch.argmax(prob, dim=1).unsqueeze(1)
 
@@ -102,15 +122,49 @@ class RLAgent(nn.Module):
                 # print("Prob: ", prob.shape)
                 idx = torch.multinomial(prob, num_samples=1, replacement=True)
 
-            state = self.env.step(idx)
+            elif decode_type == "beam_search":
+                if i == 0:
+                    # Create a sequence for batch_beam index calculation
+                    batchBeamSeq = torch.arange(batch_size).unsqueeze(1).repeat(1, beam_width).view(-1, 1)
+                    beam_path = []
+                    log_beam_probs = []
+                    # Log probabilities for selecting beam_width different branches initially
+                    log_beam_prob = torch.log(torch.chunk(prob, beam_width, dim=0)[0])
+
+                elif i > 0:
+                    log_beam_prob = torch.log(prob) + log_beam_probs[-1]
+                    # Reshape to align for beam_width grouping
+                    log_beam_prob = torch.cat(torch.chunk(log_beam_prob, beam_width, dim=0), dim=1)
+
+                # Get top k probabilities and indices
+                topk_logprob_val, topk_logprob_ind = torch.topk(log_beam_prob, beam_width, dim=1)
+
+                # Reshape for correct beam search tracking
+                topk_logprob_val = topk_logprob_val.transpose(0, 1).contiguous().view(-1, 1)
+                topk_logprob_ind = topk_logprob_ind.transpose(0, 1).contiguous().view(-1, 1)
+
+                # Compute new indices for the next step and trace back the beam parents
+                idx = (topk_logprob_ind % env.n_nodes).long()  # Which city in the route.
+                beam_parent = (topk_logprob_ind // env.n_nodes).long()  # Which hypothesis it came from.
+
+                # Update batchBeamSeq for next usage and gather new probs
+                batchedBeamIdx = batchBeamSeq + batch_size * beam_parent
+                prob = prob.view(-1)[batchedBeamIdx.squeeze()]
+
+                beam_path.append(beam_parent)
+                log_beam_probs.append(topk_logprob_val)
+                #------ ending of beam search
+
+            state = self.env.step(idx, beam_parent)
             # print("State: ", state)
             batched_idx = torch.cat([BatchSequence, idx], dim=1).long()
+            if decode_type == "beam_search":
+                encoder_emb_inp = encoder_emb_inp.repeat(beam_width, 1, 1)
+
             gathered = encoder_emb_inp[batched_idx[:, 0], batched_idx[:, 1]]
 
             # Expanding dimensions: Adding a dimension at axis 1
             decoder_input = gathered.unsqueeze(1)
-            # print("Decoder input shape: ", decoder_input.shape)
-            # print("Decoder input mean: ", decoder_input.mean())
 
             # Advanced indexing in PyTorch to replace gather_nd
             selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]]  # Adjust this based on your actual index structure
@@ -122,10 +176,28 @@ class RLAgent(nn.Module):
             idxs.append(idx)
             log_probs.append(log_prob)
 
+            if decode_type == "beam_search":
+                input_pnt = input_pnt.repeat(beam_width, 1, 1)
+
             # Gather using the constructed indices
             action = input_pnt[batched_idx[:, 0], batched_idx[:, 1]]
             actions_tmp.append(action)
-            actions = actions_tmp
+            if decode_type == "beam_search":
+                tmplst = []
+                tmpind = [BatchSequence]  # Ensure BatchSequence is properly initialized, e.g., torch.arange(batch_size * beam_width).view(-1, 1)
+                for k in reversed(range(len(actions_tmp))):
+                    # Gather from actions_tmp using the last element of tmpind as indices
+                    current_indices = tmpind[-1].squeeze()  # Remove any singleton dimensions for indexing
+                    selected_actions = actions_tmp[k][current_indices]
+                    tmplst = [selected_actions] + tmplst
+
+                    # Update indices for the next iteration
+                    new_indices = batchBeamSeq[current_indices] + batch_size * beam_path[k][current_indices]
+                    tmpind.append(new_indices)
+
+                actions = tmplst
+            else:
+                actions = actions_tmp
 
             R = self.reward_func(actions)
             # print("Reward: ", R)
@@ -213,22 +285,34 @@ class RLAgent(nn.Module):
 
         start_time = time.time()
         avg_reward = []
-        summary = self.build_model()
+        summary = self.build_model(eval_type)
+
 
         self.dataGen.reset()
         test_df = self.dataGen.get_test_data()
 
         test_loader = DataLoader(test_df, batch_size=self.args['batch_size']) 
 
-        problem_count = 0
-        while problem_count < self.dataGen.n_problems:
+        for problem_count in range(self.dataGen.n_problems):
             for data in test_loader:                
                 self.env.input_data = data
 
                 R, v, log_probs, actions, idxs, batch, _ = summary
 
-                avg_reward.append(R)
-                R_ind0 = 0
+                if eval_type == 'greedy':
+                    avg_reward.append(R)
+                    R_ind0 = 0
+                elif eval_type == 'beam_search':
+                    # Assuming R is a PyTorch tensor initially; if R is a NumPy array, convert it using torch.from_numpy(R)
+                    # First, expand the dimensions of R at axis 1
+                    R = R.unsqueeze(1)
+                    # Split R into 'self.args['beam_width']' parts along the first dimension (axis 0)
+                    split_R = torch.split(R, split_size_or_sections=int(R.size(0) / self.args['beam_width']), dim=0)
+                    # Concatenate the split tensors along the second dimension (axis 1)
+                    R = torch.cat(split_R, dim=1)
+                    R_val = np.amin(R,1, keepdims = False)
+                    R_ind0 = np.argmin(R,1)[0]
+                    avg_reward.append(R_val)
 
                 # Sample Decode
                 if problem_count % int(self.args['log_interval']) == 0:
@@ -241,16 +325,11 @@ class RLAgent(nn.Module):
                     for idx, action in enumerate(actions):
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type,step))
+                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, step))
                     self.prt.print_out('\nExample test input: {}'.format(example_input))
                     self.prt.print_out('\nExample test output: {}'.format(example_output))
                     self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))
-
-                # Break the cycle
-                problem_count += 1
                 
-                if problem_count >= self.dataGen.n_problems:
-                    break
                 
         end_time = time.time() - start_time
                 
@@ -265,12 +344,13 @@ class RLAgent(nn.Module):
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
-
-        summary = self.build_model()
-        # summary = self.val_model_greedy(eval_type, "!!!!  evaluate batch !!! ")
+        summary = self.build_model(eval_type)
+        if eval_type == 'greedy':
+            beam_width = 1
+        elif eval_type == 'beam_search':
+            beam_width = self.args['beam_width']
 
         data = self.dataGen.get_test_data()
-        
         start_time = time.time()
 
         if np.array_equal(self.env.input_data, data):
@@ -286,20 +366,32 @@ class RLAgent(nn.Module):
             print("  R is empty !")
             sys.exit()
 
+        if beam_width > 1:
+            # Assuming R is a PyTorch tensor and not a numpy array; if it's a numpy array, convert it first
+            # R = torch.tensor(R) if it's initially a numpy array
+            R = torch.unsqueeze(R, 1)  # Add a dimension at axis 1
+
+            # Split and then concatenate across the desired dimension
+            # Split the tensor into 'beam_width' parts along the new dimension (axis 0, as it becomes after unsqueeze)
+            split_tensors = torch.split(R, split_size_or_sections=int(R.shape[0] / beam_width), dim=0)
+            R = torch.cat(split_tensors, dim=1)
+
+            # Compute the minimum across the concatenated dimension
+            R = torch.min(R, dim=1).values  # torch.min returns a namedtuple (values, indices)
+
+
         std_r = R.std().item()
-        # print("This is the std of R: ", std_r)
-        # R = torch.min(R) 
 
         end_time = time.time() - start_time
-
         self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} -- time {} s'.format(eval_type, R.mean().numpy(), str(std_r), end_time))  
         
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
             self.evaluate_batch('greedy')
-        
+            # self.evaluate_batch('beam_search')
         elif infer_type == 'single':
             self.evaluate_single('greedy')
+            # self.evaluate_single('beam_search')
         
         self.prt.print_out("##################################################################")
 

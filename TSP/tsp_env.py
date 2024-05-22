@@ -30,7 +30,7 @@ class VRPEnvironment:
         self.n_nodes = self.args['n_nodes']
         self.input_dim = self.args['input_dim']
 
-    def reset(self):
+    def reset(self, beam_width=1):
         """
         Reset the environment and return the initial state.
         """
@@ -38,18 +38,33 @@ class VRPEnvironment:
         # This definition is so bad... like the tensor wants to to be a flexible tensor 
         #       but pytorch doesnt work like that
         """
+        self.beam_width = beam_width
         self.input_pnt = self.input_data
         batch_size = self.input_data.shape[0]
 
-        self.mask = torch.zeros(batch_size, self.args['n_nodes'])  # self.mask: [batch_size, n_nodes]
+        self.mask = torch.zeros(batch_size*beam_width, self.args['n_nodes'])  # self.mask: [batch_size, n_nodes]
         state = State(mask = self.mask)
 
         return state
 
-    def step(self, idx):
+    def step(self, idx, beam_parent=None):
         """
         Mask the nodes that can be visited in the next steps.
         """
+        # if the environment is used in beam search decoder
+        if beam_parent is not None:
+            # BatchBeamSeq: [batch_size*beam_width x 1]
+            # [0,1,2,3,...,127,0,1,...],
+            batch_size = self.input_data.shape[0]
+            batchBeamSeq = torch.arange(batch_size).unsqueeze(1).repeat(1, self.beam_width).view(-1, 1)
+
+            # batchedBeamIdx: [batch_size*beam_width]
+            # Multiply beam_parent by batch_size and add to batchBeamSeq to get batched beam indices
+            batchedBeamIdx = batchBeamSeq + batch_size * beam_parent.unsqueeze(1)
+            
+            # MASK: [batch_size*beam_width x sourceL]
+            # Use advanced indexing to update the mask; ensure batchedBeamIdx is squeezed to 1D
+            self.mask = self.mask[batchedBeamIdx.squeeze(1)]
 
         # Convert idx to a one-hot tensor
         # Remove the unnecessary dimension and ensure it's a long tensor

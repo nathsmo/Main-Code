@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -15,7 +14,7 @@ class SelfAttention(nn.Module):
         return attn_output.transpose(0, 1), attn_weights  # Convert back to (batch, seq_len, dim)
 
 class AttentionDecoder(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_heads, num_actions, num_layers=1, dropout=0.1):
+    def __init__(self, input_dim, hidden_dim, num_heads, num_actions, num_layers=1, dropout=0.1, beam_width=1):
         super(AttentionDecoder, self).__init__()
         self.rnn = nn.LSTM(input_size=input_dim, hidden_size=hidden_dim, num_layers=num_layers,
                            batch_first=True, dropout=dropout if num_layers > 1 else 0)
@@ -23,6 +22,7 @@ class AttentionDecoder(nn.Module):
         self.action_head = nn.Linear(hidden_dim, num_actions)  # Action head for generating action logits
         self.rnn_layers = num_layers
         self.hidden_dim = hidden_dim
+        self.beam_width = beam_width  # Beam width
 
     def forward(self, inputs, context, mask=None):
         rnn_out, _ = self.rnn(inputs)
@@ -31,49 +31,30 @@ class AttentionDecoder(nn.Module):
         return action_logits, attn_weights
 
     def select_action(self, action_logits, method='greedy'):
+        if method == 'beam_search':
+            return self.beam_search(action_logits, self.beam_width)
         probabilities = F.softmax(action_logits, dim=-1)
         if method == 'greedy':
             return probabilities, torch.argmax(probabilities, dim=-1)  # Greedy selection
         elif method == 'stochastic':
             return probabilities, torch.multinomial(probabilities, 1).squeeze(-1)  # Stochastic selection
 
+    def beam_search(self, logits, beam_width):
+        # Start with an empty beam
+        beam = [(torch.tensor([]), 0)]  # (action sequence, log_prob)
+        for _ in range(logits.size(1)):  # Assuming logits are (batch_size, seq_len, num_actions)
+            new_beam = []
+            for prefix, score in beam:
+                probabilities = F.softmax(logits, dim=-1)
+                top_probs, top_inds = probabilities.topk(beam_width, dim=1)  # Get top beam_width probabilities and their indices
+                for i in range(beam_width):
+                    new_prefix = torch.cat([prefix, top_inds[:, i]])  # Append new index to prefix
+                    new_score = score + torch.log(top_probs[:, i])  # Add log probability of choosing this index
+                    new_beam.append((new_prefix, new_score))
+            # Sort all candidates in new_beam by score in descending order and select the best beam_width ones
+            beam = sorted(new_beam, key=lambda x: x[1], reverse=True)[:beam_width]
+        return beam[0][0]  # Return the sequence with the highest probability
+
     def _init_hidden(self, batch_size):
         return (torch.zeros(self.rnn_layers, batch_size, self.hidden_dim),
                 torch.zeros(self.rnn_layers, batch_size, self.hidden_dim))
-    
-# Example usage
-batch_size = 128
-seq_length = 10
-hidden_dim = 128
-num_heads = 4
-
-# # Instantiate the decoder
-# attention_decoder = AttentionDecoder(input_dim=hidden_dim, hidden_dim=hidden_dim, num_heads=num_heads)
-
-# # Forward pass
-# logit, attn_weights = attention_decoder(inputs, context, mask)
-# print("Logits:", logit)
-# print("Logits shape:", logit.shape)
-# print("Attention weights shape:", attn_weights.shape)
-
-# # Example usage
-# num_actions = 5  # Define the number of possible actions
-# attention_decoder = AttentionDecoder(input_dim=hidden_dim, hidden_dim=hidden_dim, num_heads=num_heads, num_actions=num_actions)
-
-# # Dummy data
-# inputs = torch.randn(batch_size, seq_length, hidden_dim)
-# context = torch.randn(batch_size, seq_length, hidden_dim)
-
-# # Forward pass
-# action_logits, attn_weights = attention_decoder(inputs, context)
-# # print("Action logits:", action_logits)
-# print("Action logits shape:", action_logits.shape)
-
-# # Action selection
-# selected_action_greedy = attention_decoder.select_action(action_logits, 'greedy')
-# selected_action_stochastic = attention_decoder.select_action(action_logits, 'stochastic')
-# print("Selected action (greedy) shape:", selected_action_greedy.shape)
-# print("Selected action (stochastic) shape:", selected_action_stochastic.shape)
-
-# print("Selected action (greedy):", selected_action_greedy)
-# print("Selected action (stochastic):", selected_action_stochastic)

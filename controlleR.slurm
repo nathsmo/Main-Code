@@ -3,7 +3,7 @@
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=24:00:00
+#SBATCH --time=20:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -11,7 +11,7 @@
 # we explicitly call the modules to improve reproducibility
 # in case the default settings change
 module load Python/3.11.3-GCCcore-12.3.0
-
+module load ^Miniconda
 # Source the Python virtual environment
 # source $HOME/user_guide_tutorials/thesis/torch_thesis_server/bin/activate
 

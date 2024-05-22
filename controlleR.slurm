@@ -12,6 +12,7 @@
 # in case the default settings change
 module load Python/3.11.3-GCCcore-12.3.0
 module load ^Miniconda
+
 # Source the Python virtual environment
 # source $HOME/user_guide_tutorials/thesis/torch_thesis_server/bin/activate
 

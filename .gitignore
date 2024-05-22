@@ -2,3 +2,8 @@
 /logs
 /past_logs
 /outputs
+
+/model/__pycache__
+/shared/__pycache__
+/TSP/__pycache__
+

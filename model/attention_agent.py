@@ -388,10 +388,10 @@ class RLAgent(nn.Module):
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
             self.evaluate_batch('greedy')
-            self.evaluate_batch('beam_search')
+            # self.evaluate_batch('beam_search')
         elif infer_type == 'single':
             self.evaluate_single('greedy')
-            self.evaluate_single('beam_search')
+            # self.evaluate_single('beam_search')
         
         self.prt.print_out("##################################################################")
 

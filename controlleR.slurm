@@ -3,7 +3,7 @@
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=20:00:00
+#SBATCH --time=40:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -24,7 +24,7 @@ echo "[$SHELL] ## current working directory: "$CWD
 
 # Run the file
 echo "[$SHELL] ## Run script"
-# python main.py --task=tsp10 --n_train=100000
-python main.py --task=tsp10 --n_train=10000
+python main.py --task=tsp10 --n_train=100000
+# python main.py --task=tsp10 --n_train=10000
 
 echo "[$SHELL] ## Script finished"

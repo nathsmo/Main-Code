@@ -34,6 +34,7 @@ class EnhancedLinearEmbedding(nn.Module):
     def __init__(self, num_channels, embedding_dim):
         super(EnhancedLinearEmbedding, self).__init__()
         # Initialize the first convolution layer with padding to maintain dimension
+        print("Embedding - enhanced")
         self.layer1 = nn.Conv1d(num_channels, embedding_dim, kernel_size=3, padding=1)
         # ReLU activation
         self.activation = nn.ReLU()
@@ -43,7 +44,6 @@ class EnhancedLinearEmbedding(nn.Module):
         self.residual = nn.Conv1d(num_channels, embedding_dim, kernel_size=1)
 
     def forward(self, input_pnt):
-        print("Embedding - enhanced")
         # Transpose input to match Conv1d expected input shape (batch, channels, sequence length)
         input_pnt = input_pnt.transpose(1, 2)
         # Pass through first layer and activate

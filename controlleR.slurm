@@ -24,11 +24,21 @@ echo "[$SHELL] ## current working directory: "$CWD
 
 # Run the file
 echo "[$SHELL] ## Run script"
-python main.py --task=tsp10 --n_train=100000 --
+# Basic training
+# python main.py --task=tsp10 --n_train=100000 
 # python main.py --task=tsp20 --n_train=100000
-# python main.py --task=tsp50 --n_train=100000
+# python main.py --task=tsp50 --n_train=10000
+# Basic + Self attention
 # python main.py --task=tsp10 --decoder=self --num_heads=4 --n_train=100000
 # python main.py --task=tsp20 --decoder=self --num_heads=4 --n_train=100000
-# python main.py --task=tsp50 --decoder=self --num_heads=4 --n_train=100000
+# python main.py --task=tsp50 --decoder=self --num_heads=4 --n_train=10000
+# Basic training + Embedding Enhanced
+# python main.py --task=tsp10 --n_train=100000 --emb)type=enhanced
+# python main.py --task=tsp20 --n_train=100000 --emb)type=enhanced
+# python main.py --task=tsp50 --n_train=10000 --emb)type=enhanced
+# Basic
+# python main.py --task=tsp10 --n_train=100000 --n_glimpses=3
+# python main.py --task=tsp20 --n_train=100000 --n_glimpses=3
+# python main.py --task=tsp50 --n_train=10000 --n_glimpses=3
 
 echo "[$SHELL] ## Script finished"

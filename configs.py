@@ -35,7 +35,6 @@ def ParseParams():
     parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')
 
     # Network
-    parser.add_argument('--agent_type', default='attention', help="attention|pointer")
     parser.add_argument('--forget_bias', default=1.0,type=float, help="Forget bias for BasicLSTMCell.")
     parser.add_argument('--embedding_dim', default=128,type=int, help='Dimension of input embedding')
     parser.add_argument('--hidden_dim', default=128,type=int, help='Dimension of hidden layers in Enc/Dec')
@@ -77,7 +76,9 @@ def ParseParams():
     parser.add_argument('--model_dir', type=str, default='')
     parser.add_argument('--load_path', type=str, default='', help='Path to load trained variables')
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
+    
     parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
+
     parser.add_argument('--decoder', default='pointer', help='pointer|self|beam_search')
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')
 

@@ -1,0 +1,57 @@
+
+Gurobi 11.0.2 (mac64[x86], gurobi_cl) logging started Mon May 27 16:05:14 2024
+
+Set parameter LogFile to value "gurobi.log"
+
+Gurobi 11.0.2 (mac64[x86], gurobi_cl) logging started Mon May 27 16:05:35 2024
+
+Set parameter LogFile to value "gurobi.log"
+
+Gurobi 11.0.2 (mac64[x86], gurobi_cl) logging started Mon May 27 16:09:54 2024
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Using license file /Users/nat/gurobi.lic
+Academic license - for non-commercial use only - expires 2025-05-27
+
+Gurobi 11.0.2 (mac64[x86], gurobi_cl) logging started Mon May 27 16:15:44 2024
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Using license file /Users/nat/gurobi.lic
+Academic license - for non-commercial use only - expires 2025-05-27
+
+Gurobi 11.0.2 (mac64[x86], gurobi_cl) logging started Mon May 27 16:16:54 2024
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Using license file /Users/nat/gurobi.lic
+Academic license - for non-commercial use only - expires 2025-05-27
+
+Gurobi Optimizer version 11.0.2 build v11.0.2rc0 (mac64[x86] - Darwin 22.6.0 22G720)
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read MPS format model from file /Library/gurobi1102/macos_universal2/examples/data/afiro.mps
+Reading time = 0.00 seconds
+AFIRO: 27 rows, 32 columns, 83 nonzeros
+
+CPU model: Intel(R) Core(TM) i7-7660U CPU @ 2.50GHz
+Thread count: 2 physical cores, 4 logical processors, using up to 4 threads
+
+Optimize a model with 27 rows, 32 columns and 83 nonzeros
+Model fingerprint: 0x092217cc
+Coefficient statistics:
+  Matrix range     [1e-01, 2e+00]
+  Objective range  [3e-01, 1e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [4e+01, 5e+02]
+Presolve removed 18 rows and 20 columns
+Presolve time: 0.01s
+Presolved: 9 rows, 12 columns, 32 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -5.9751945e+02   5.541356e+01   0.000000e+00      0s
+       6   -4.6475314e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 6 iterations and 0.02 seconds (0.00 work units)
+Optimal objective -4.647531429e+02

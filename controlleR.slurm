@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=main_code
+#SBATCH --job-name=variation_F2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -24,28 +24,10 @@ echo "[$SHELL] ## current working directory: "$CWD
 
 # Run the file
 echo "[$SHELL] ## Run script"
-# Basic training
-# python main.py --task=tsp10 --n_train=100000 
-# python main.py --task=tsp20 --n_train=100000
-# python main.py --task=tsp50 --n_train=35000
-# Basic + Self attention
-# python main.py --task=tsp10 --decoder=self --num_heads=4 --n_train=100000
-# python main.py --task=tsp20 --decoder=self --num_heads=4 --n_train=100000
-# python main.py --task=tsp50 --decoder=self --num_heads=4 --n_train=35000
-# Basic training + Embedding Enhanced
-# python main.py --task=tsp10 --n_train=100000 --emb_type=enhanced
-# python main.py --task=tsp20 --n_train=100000 --emb_type=enhanced
-# python main.py --task=tsp50 --n_train=35000 --emb_type=enhanced
-# Basic
-# python main.py --task=tsp10 --n_train=100000 --n_glimpses=3
-# python main.py --task=tsp20 --n_train=100000 --n_glimpses=3
-# python main.py --task=tsp50 --n_train=35000 --n_glimpses=3
-
 
 ##### Evaluation
 # python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
 # python main.py --task=tsp10 --is_train=False --emb_type=enhanced --infer_type=single --model_dir=./output_models/agent_complete.pth
-
 
 
 # Training organized
@@ -86,7 +68,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='E2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
 
 # # F2: New combination + rnn
-# python main.py --variation='F2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+python main.py --variation='F2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
 
 
 echo "[$SHELL] ## Script finished"

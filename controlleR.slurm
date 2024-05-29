@@ -39,6 +39,6 @@ echo "[$SHELL] ## Run script"
 # Basic
 # python main.py --task=tsp10 --n_train=100000 --n_glimpses=3
 # python main.py --task=tsp20 --n_train=100000 --n_glimpses=3
-python main.py --task=tsp50 --n_train=35000 --n_glimpses=3
+# python main.py --task=tsp50 --n_train=35000 --n_glimpses=3
 
 echo "[$SHELL] ## Script finished"

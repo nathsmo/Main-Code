@@ -25,7 +25,9 @@ echo "[$SHELL] ## current working directory: "$CWD
 # Run the file
 echo "[$SHELL] ## Run script"
 
-##### Evaluation
+##### Eval-tsp10
+##### Example: python main.py --task=tsp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
+
 # python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
 # python main.py --task=tsp10 --is_train=False --emb_type=enhanced --infer_type=single --model_dir=./output_models/agent_complete.pth
 

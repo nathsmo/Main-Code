@@ -110,9 +110,27 @@ echo "[$SHELL] ## Run script"
 
 ## Eval A1
 ## Single
-# python main.py --variation='A1' --task=tsp10 --is_train=False --n_train=100000 --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=single
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=single
 ## Batch
-# python main.py --variation='A1' --task=tsp10 --is_train=False --n_train=100000 --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=batch
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=batch
+
+## Eval C1
+## Single
+# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=single
+## Batch
+# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=batch
+
+## Eval A2
+## Single
+# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=single
+## Batch
+# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=batch
+
+## Eval C2
+## Single
+# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=single
+## Batch
+# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=batch
 
 
 

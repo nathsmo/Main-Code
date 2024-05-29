@@ -27,9 +27,9 @@ class RLAgent(nn.Module):
 
         # Embedding and Decoder setup
         if args['emb_type'] == 'linear':
-            self.embedding = LinearEmbedding(args['embedding_dim'])
+            self.embedding = LinearEmbedding(prt, args['embedding_dim'])
         else:
-            self.embedding = EnhancedLinearEmbedding(2, args['embedding_dim'])
+            self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
 
         self.decodeStep = RNNDecodeStep(clAttentionActor, args['hidden_dim'],
                                         use_tanh=args['use_tanh'],
@@ -42,7 +42,7 @@ class RLAgent(nn.Module):
         
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
         init.xavier_uniform_(self.decoder_input)
-        print("Agent created - Pointer Network.")
+        self.prt.print_out("Agent created - Pointer Network.")
 
     def build_model(self, decode_type= "greedy"):
         # Builds the model
@@ -356,7 +356,7 @@ class RLAgent(nn.Module):
         start_time = time.time()
 
         if np.array_equal(self.env.input_data, data):
-            print("The data is the same.!!!!!!")
+            self.prt.print_out("The data is the same.!!!!!!")
             sys.exit()
 
         self.env.input_data = data
@@ -364,8 +364,8 @@ class RLAgent(nn.Module):
         R, v, log_probs, actions, idxs, batch, _ = summary
 
         if len(R.size()) == 0:
-            print("This is the std of R: ", R.std())
-            print("  R is empty !")
+            self.prt.print_out("This is the std of R: ", R.std())
+            self.prt.print_out("  R is empty !")
             sys.exit()
 
         if beam_width > 1:

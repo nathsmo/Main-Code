@@ -106,19 +106,19 @@ echo "[$SHELL] ## Run script"
 
 ##### Eval-tsp10
 ##### Example: python main.py --task=tsp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
-# python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
+python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
 
 ## Eval A1
 ## Single
-python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
-## Batch
-python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
+# ## Batch
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
 
-## Eval C1
-## Single
-python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=single
-## Batch
-python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=batch
+# ## Eval C1
+# ## Single
+# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=single
+# ## Batch
+# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=batch
 
 ## Eval A2
 ## Single

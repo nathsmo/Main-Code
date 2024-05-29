@@ -6,11 +6,11 @@ class LinearEmbedding(nn.Module):
     """ This class implements linear embedding.
     It is only a mapping to a higher dimensional space.
     """
-    def __init__(self, embedding_dim):
+    def __init__(self, prt, embedding_dim):
         # Input: embedding_dim: embedding dimension
         super(LinearEmbedding, self).__init__()
         self.project_emb = nn.Conv1d(in_channels=2, out_channels=embedding_dim, kernel_size=1)
-        print("Embedding - linear")
+        prt.print_out("Embedding - linear")
     
     def forward(self, input_pnt):
         # emb_inp_pnt: [batch_size, embedding_dim, max_time]
@@ -31,10 +31,10 @@ class EnhancedLinearEmbedding(nn.Module):
             Introducing skip connections between layers (like those used in ResNet architectures) can help in training deeper 
             networks by alleviating issues like vanishing gradients.
     """
-    def __init__(self, num_channels, embedding_dim):
+    def __init__(self, prt, num_channels, embedding_dim):
         super(EnhancedLinearEmbedding, self).__init__()
         # Initialize the first convolution layer with padding to maintain dimension
-        print("Embedding - enhanced")
+        prt.print_out("Embedding - enhanced")
         self.layer1 = nn.Conv1d(num_channels, embedding_dim, kernel_size=3, padding=1)
         # ReLU activation
         self.activation = nn.ReLU()

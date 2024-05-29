@@ -56,7 +56,7 @@ class principal(nn.Module):
         start_time = time.time()
 
         if args['is_train']:
-            print("Training started ...")
+            prt.print_out("Training started ...")
             self.train()
             torch.save(self.agent.state_dict(), f"{args['model_dir']}/agent_complete.pth")
 

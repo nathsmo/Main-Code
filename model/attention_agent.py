@@ -302,6 +302,7 @@ class RLAgent(nn.Module):
                 if eval_type == 'greedy':
                     avg_reward.append(R)
                     R_ind0 = 0
+
                 elif eval_type == 'beam_search':
                     # Assuming R is a PyTorch tensor initially; if R is a NumPy array, convert it using torch.from_numpy(R)
                     # First, expand the dimensions of R at axis 1
@@ -323,16 +324,17 @@ class RLAgent(nn.Module):
                         example_input.append(list(batch[0, i, :]))
                     
                     for idx, action in enumerate(actions):
+                        here = list(action[R_ind0*np.shape(batch)[0]])
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, step))
+                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
                     self.prt.print_out('\nExample test input: {}'.format(example_input))
                     self.prt.print_out('\nExample test output: {}'.format(example_output))
                     self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))
                 
                 
         end_time = time.time() - start_time
-                
+        
         # Finished going through the iterator dataset.
         self.prt.print_out('\n Validation overall avg_reward: {}'.format(np.mean(avg_reward)) )
         self.prt.print_out('Validation overall reward std: {}'.format(np.sqrt(np.var(avg_reward))) )

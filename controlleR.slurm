@@ -41,4 +41,52 @@ echo "[$SHELL] ## Run script"
 # python main.py --task=tsp20 --n_train=100000 --n_glimpses=3
 # python main.py --task=tsp50 --n_train=35000 --n_glimpses=3
 
+
+##### Evaluation
+# python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
+# python main.py --task=tsp10 --is_train=False --emb_type=enhanced --infer_type=single --model_dir=./output_models/agent_complete.pth
+
+
+
+# Training organized
+
+# A1: Basic
+python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+
+# B1: Decoder change + Basic
+python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+
+# C1: Emb type change + Basic
+python main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+
+# D1: New combination
+python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
+
+# E1: Enhanced emb + Glimpse
+python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+
+# F1: New combination + rnn
+python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+
+#### TSP20
+
+# A2: Basic
+python main.py --variation='A1' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear  
+
+# B2: Decoder change + Basic
+python main.py --variation='B1' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+
+# C2: Emb type change + Basic
+python main.py --variation='C1' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+
+# D2: New combination
+python main.py --variation='D1' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
+
+# E2: Enhanced emb + Glimpse
+python main.py --variation='E1' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+
+# F2: New combination + rnn
+python main.py --variation='F1' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+
+
 echo "[$SHELL] ## Script finished"

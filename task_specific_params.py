@@ -5,14 +5,6 @@ TaskTSP = namedtuple('TaskTSP', ['task_name',
 						'input_dim', 
 						'n_nodes',
 						'decode_len'])
-TaskVRP = namedtuple('TaskVRP', ['task_name', 
-						'input_dim',
-						'n_nodes' ,
-						'n_cust',
-						'decode_len',
-						'capacity',
-						'demand_max'])
-
 
 task_lst = {}
 

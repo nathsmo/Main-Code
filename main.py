@@ -62,6 +62,13 @@ class principal(nn.Module):
 
         else: # inference/ evaluation
             prt.print_out('Evaluation started ...')
+
+            # print("Loaded keys:")
+            state_dict = torch.load(args['model_dir'])
+            # print(state_dict.keys())
+            # print("Expected keys:")
+            # print(self.agent.state_dict().keys())
+
             self.agent.load_state_dict(torch.load(args['model_dir']))
             self.agent.eval()
             self.agent.inference(args['infer_type'])
@@ -101,6 +108,17 @@ if __name__ == "__main__":
     if args['random_seed'] is not None and args['random_seed'] > 0:
 
         prt.print_out(f"# Set random seed to {args['random_seed']}")
+
+        prt.print_out(f"# Set parameters for this run:")
+        prt.print_out(f"# Variation:    {args['variation']}")
+        prt.print_out(f"# Task:         {args['task']}")
+        prt.print_out(f"# Decoder:      {args['decoder']}")
+        prt.print_out(f"# Embed type:   {args['emb_type']}")
+        prt.print_out(f"# n_glimpses:   {args['n_glimpses']}")
+        prt.print_out(f"# rnn layers:   {args['rnn_layers']}")
+        prt.print_out(f"# n_train:      {args['n_train']}")
+        prt.print_out(f"# num heads:    {args['num_heads']}")
+
         np.random.seed(args['random_seed'])
         torch.manual_seed(args['random_seed'])
         

@@ -30,10 +30,11 @@ def ParseParams():
 
     # Data
     parser.add_argument('--task', default='tsp10', help="Select the task to solve; i.e. tsp10")
+    # Number of epochs = n_train/batch_size
     parser.add_argument('--batch_size', default=128,type=int, help='Batch size in training')
-    parser.add_argument('--n_train', default=25000,type=int, help='Number of training steps') # Original every: 260,000 now: 10,000
-    parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')
-
+    parser.add_argument('--n_train', default=25000,type=int, help='Number of training steps') # Original every: 2560 . 260,000 now: 10,000
+    parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')# Keeping to the original 1000 for test size
+    
     # Network
     parser.add_argument('--forget_bias', default=1.0,type=float, help="Forget bias for BasicLSTMCell.")
     parser.add_argument('--embedding_dim', default=128,type=int, help='Dimension of input embedding')
@@ -58,7 +59,6 @@ def ParseParams():
     parser.add_argument('--random_seed', default=24601,type=int, help='')
     parser.add_argument('--max_grad_norm', default=2.0, type=float, help='Gradient clipping')
     parser.add_argument('--entropy_coeff', default=0.0, type=float, help='coefficient for entropy regularization')
-    # parser.add_argument('--loss_type', type=int, default=1, help='1,2,3')
 
     # inference
     parser.add_argument('--infer_type', default='batch', 
@@ -77,10 +77,14 @@ def ParseParams():
     parser.add_argument('--load_path', type=str, default='', help='Path to load trained variables')
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
     
+    # My implemented variables
     parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
 
     parser.add_argument('--decoder', default='pointer', help='pointer|self|beam_search')
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')
+    
+    parser.add_argument('--variation', default='DFT')
+
 
     args, unknown = parser.parse_known_args()
     args = vars(args)

@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=eval_A1_C1
+#SBATCH --job-name=Eval_C2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=40:00:00
+#SBATCH --time=1:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -106,8 +106,9 @@ echo "[$SHELL] ## Run script"
 
 ##### Eval-tsp10
 ##### Example: python main.py --task=tsp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
-python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
+# python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
 
+################# MAKE SURE TO PUT THE CORRECT ADDRESS!!!!
 ## Eval A1
 ## Single
 # python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
@@ -122,15 +123,15 @@ python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./o
 
 ## Eval A2
 ## Single
-# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
-## Batch
-# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='A2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp20/A2/model/agent_complete.pth --infer_type=single
+# ## Batch
+# python main.py --variation='A2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp20/A2/model/agent_complete.pth --infer_type=batch
 
 ## Eval C2
 ## Single
-# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
-## Batch
-# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
+python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=single
+# Batch
+python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=batch
 
 
 

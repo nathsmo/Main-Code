@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=eval_A1
+#SBATCH --job-name=eval_A1_C1
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -110,27 +110,27 @@ echo "[$SHELL] ## Run script"
 
 ## Eval A1
 ## Single
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=single
+python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
 ## Batch
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=batch
+python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
 
 ## Eval C1
 ## Single
-# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=single
+python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=single
 ## Batch
-# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=batch
+python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=batch
 
 ## Eval A2
 ## Single
-# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=single
+# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
 ## Batch
-# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./output_models/agent_complete.pth --infer_type=batch
+# python main.py --variation='A2' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
 
 ## Eval C2
 ## Single
-# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=single
+# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
 ## Batch
-# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./output_models/agent_complete.pth --infer_type=batch
+# python main.py --variation='C2' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
 
 
 

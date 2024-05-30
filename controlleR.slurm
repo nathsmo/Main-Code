@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Eval_C2
+#SBATCH --job-name=Variation_F10
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=1:00:00
+#SBATCH --time=36:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -65,39 +65,41 @@ echo "[$SHELL] ## Run script"
 # # F2: New combination + rnn
 # python main.py --variation='F2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
 
+
+
 # # For TSP size 50
 # # A5: Basic
 # python main.py --variation='A5' --task=tsp50 --decoder=pointer --emb_type=linear --n_glimpses=0 --rnn_layers=1 --n_train=35000
 
-# # B5: Decoder change + Basic
-# python main.py --variation='B5' --task=tsp50 --decoder=self --emb_type=linear --n_glimpses=0 --n_train=35000 --num_heads=1
+# # B5: Decoder change + Basic # something's wrong
+# python main.py --variation='B5' --task=tsp50 --decoder=self --emb_type=linear --n_glimpses=0 --n_train=35000 --num_heads=1 --embedding_dim=128
 
 # # C5: Emb type change + Basic
 # python main.py --variation='C5' --task=tsp50 --decoder=pointer --emb_type=enhanced --n_glimpses=0 --rnn_layers=1 --n_train=35000
 
-# # D5: New combination
-# python main.py --variation='AD5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --n_train=35000 --num_heads=1
+# # D5: New combination # something's wrong
+# python main.py --variation='D5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --n_train=35000 --num_heads=1
 
 # # E5: Enhanced emb + Glimpse
 # python main.py --variation='E5' --task=tsp50 --decoder=pointer --emb_type=enhanced --n_glimpses=3 --rnn_layers=1 --n_train=35000
 
-# # F5: New combination + rnn
+# # F5: New combination + rnn # something's wrong
 # python main.py --variation='F5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --rnn_layers=2 --n_train=35000 --num_heads=1
 
 # # For TSP size 100
 # # A10: Basic
 # python main.py --variation='A10' --task=tsp100 --decoder=pointer --emb_type=linear --n_glimpses=0 --rnn_layers=1 --n_train=10000
 
-# # B10: Decoder change + Basic
+# # B10: Decoder change + Basic # something's wrong
 # python main.py --variation='B10' --task=tsp100 --decoder=self --emb_type=linear --n_glimpses=0 --n_train=10000 --num_heads=1
 
 # # C10: Emb type change + Basic
 # python main.py --variation='C10' --task=tsp100 --decoder=pointer --emb_type=enhanced --n_glimpses=0 --rnn_layers=1 --n_train=10000
 
-# # D10: New combination
+# # D10: New combination # something's wrong
 # python main.py --variation='D10' --task=tsp100 --decoder=self --emb_type=enhanced --n_glimpses=0 --n_train=10000 --num_heads=1
 
-# # E10: Enhanced emb + Glimpse
+# # E10: Enhanced emb + Glimpse # out of memory
 # python main.py --variation='E10' --task=tsp100 --decoder=pointer --emb_type=enhanced --n_glimpses=3 --rnn_layers=1 --n_train=10000
 
 # # F10: New combination + rnn
@@ -129,9 +131,9 @@ echo "[$SHELL] ## Run script"
 
 ## Eval C2
 ## Single
-python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=single
+# python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=single
 # Batch
-python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=batch
 
 
 

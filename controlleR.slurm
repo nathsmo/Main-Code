@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Eval_B1
+#SBATCH --job-name=Eval_A1_true
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -28,7 +28,7 @@ echo "[$SHELL] ## Run script"
 # Training organized
 
 # A1: Basic
-# python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
 
 # B1: Decoder change + Basic
 # python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1

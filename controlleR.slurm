@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Eval_A1_true
+#SBATCH --job-name=Training_D1
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -28,7 +28,7 @@ echo "[$SHELL] ## Run script"
 # Training organized
 
 # A1: Basic
-python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
 
 # B1: Decoder change + Basic
 # python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
@@ -37,7 +37,7 @@ python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer 
 # python main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 
 # D1: New combination
-# python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
+python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
 
 # E1: Enhanced emb + Glimpse
 # python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
@@ -146,6 +146,14 @@ python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer 
 # python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
 # ## Batch
 # python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
+
+
+# TESTSTSTSTS
+# python main.py --variation='D1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced --num_heads=4 --model_dir=./totest/tsp10/D1/agent_complete.pth --infer_type=batch
+# python main.py --variation='D1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced --num_heads=4 --model_dir=./totest/tsp10/D1/agent_complete.pth --infer_type=single
+
+# python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=batch
+# python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=single
 
 
 echo "[$SHELL] ## Script finished"

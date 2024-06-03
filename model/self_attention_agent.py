@@ -208,7 +208,7 @@ class RLAgent(nn.Module):
                     for idx, action in enumerate(actions):
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, step))
+                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
                     self.prt.print_out('\nExample test input: {}'.format(example_input))
                     self.prt.print_out('\nExample test output: {}'.format(example_output))
                     self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))

@@ -154,6 +154,7 @@ python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --e
 
 # python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=batch
 # python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=single
+python main.py --variation='B2' --task=tsp20 --is_train=False --decoder=self --emb_type=enhanced_linear  --num_heads=1 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
 
 
 echo "[$SHELL] ## Script finished"

@@ -32,7 +32,7 @@ def ParseParams():
     parser.add_argument('--task', default='tsp10', help="Select the task to solve; i.e. tsp10")
     # Number of epochs = n_train/batch_size
     parser.add_argument('--batch_size', default=128,type=int, help='Batch size in training')
-    parser.add_argument('--n_train', default=25000,type=int, help='Number of training steps') # Original every: 2560 . 260,000 now: 10,000
+    parser.add_argument('--n_train', default=25000,type=int, help='Number of training steps') # Original every: 2,560 . 260,000 now: 100,000
     parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')# Keeping to the original 1000 for test size
     
     # Network

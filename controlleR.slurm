@@ -43,7 +43,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
 
 # F1: New combination + rnn
-# python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
 
 #### TSP20
 

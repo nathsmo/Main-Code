@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Variation_F10
+#SBATCH --job-name=Variation_F2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=36:00:00
+#SBATCH --time=48:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -135,6 +135,13 @@ echo "[$SHELL] ## Run script"
 # Batch
 # python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=batch
 
+###########################
+
+## Eval A1
+## Single
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
+# ## Batch
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
 
 
 echo "[$SHELL] ## Script finished"

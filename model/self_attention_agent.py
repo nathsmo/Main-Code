@@ -27,10 +27,7 @@ class RLAgent(nn.Module):
         self.clAttentionActor = clAttentionActor
         
         # Choose the type of embedding based on args
-        if args['emb_type'] == 'linear':
-            self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
-        else:
-            self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
         
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 

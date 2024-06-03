@@ -36,7 +36,7 @@ class principal(nn.Module):
                             self.AttentionActor,
                             self.AttentionCritic,
                             is_train=args['is_train']) # Model class
-        else:
+        elif args['decoder'] == 'pointer':
             # create an RL Agent (Network)
             self.agent = RLAgent(args,
                             prt,
@@ -46,6 +46,8 @@ class principal(nn.Module):
                             self.AttentionActor,
                             self.AttentionCritic,
                             is_train=args['is_train']) # Model class
+        else:
+            raise Exception('Decoder not implemented')
         
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 
@@ -55,7 +57,14 @@ class principal(nn.Module):
         # train or evaluate the agent
         start_time = time.time()
 
+        # print("Loaded keys:")
+        # state_dict = torch.load(args['model_dir'])
+        # print(state_dict.keys())
+
+        # sys.exit()
+        
         if args['is_train']:
+
             prt.print_out("Training started ...")
             self.train()
             torch.save(self.agent.state_dict(), f"{args['model_dir']}/agent_complete.pth")
@@ -64,7 +73,7 @@ class principal(nn.Module):
             prt.print_out('Evaluation started ...')
 
             # print("Loaded keys:")
-            state_dict = torch.load(args['model_dir'])
+            # state_dict = torch.load(args['model_dir'])
             # print(state_dict.keys())
             # print("Expected keys:")
             # print(self.agent.state_dict().keys())

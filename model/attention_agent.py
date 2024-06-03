@@ -26,7 +26,11 @@ class RLAgent(nn.Module):
         self.clAttentionActor = clAttentionActor
 
         # Embedding and Decoder setup
-        self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        if args['emb_type'] == 'linear':
+            self.embedding = LinearEmbedding(prt, args['embedding_dim'])
+        elif args['emb_type'] == 'enhanced_linear':
+            self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        # self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
 
         self.decodeStep = RNNDecodeStep(clAttentionActor, args['hidden_dim'],
                                         use_tanh=args['use_tanh'],

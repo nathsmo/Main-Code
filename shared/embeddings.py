@@ -55,22 +55,22 @@ class EnhancedLinearEmbedding(nn.Module):
 
 
     
-if __name__ == "__main__":
-    # Example usage
-    # embedding_dim = 64
-    embedding_dim = 128
+# if __name__ == "__main__":
+#     # Example usage
+#     # embedding_dim = 64
+#     embedding_dim = 128
 
-    # Create LinearEmbedding instance
-    # linear_embedding = LinearEmbedding(embedding_dim)
-    linear_embedding = EnhancedLinearEmbedding(2, embedding_dim)
+#     # Create LinearEmbedding instance
+#     # linear_embedding = LinearEmbedding(embedding_dim)
+#     linear_embedding = EnhancedLinearEmbedding(2, embedding_dim)
 
-    # Example input tensor
-    # input_pnt = torch.randn(32, 10, 2)  # Batch size 32, max_time 10, input_dim 2
-    input_pnt = torch.randn(2, 10, 2)  # Batch size 2, max_time 10, input_dim 2
+#     # Example input tensor
+#     # input_pnt = torch.randn(32, 10, 2)  # Batch size 32, max_time 10, input_dim 2
+#     input_pnt = torch.randn(2, 10, 2)  # Batch size 2, max_time 10, input_dim 2
 
-    # Obtain embedded tensor
-    emb_inp_pnt = linear_embedding.forward(input_pnt)
+#     # Obtain embedded tensor
+#     emb_inp_pnt = linear_embedding.forward(input_pnt)
 
-    # print("Embedded tensor shape:", emb_inp_pnt.shape)
-    # Results: Embedded tensor shape: torch.Size([2, 10, 128])
-    # Tested and verified behaviour
+#     # print("Embedded tensor shape:", emb_inp_pnt.shape)
+#     # Results: Embedded tensor shape: torch.Size([2, 10, 128])
+#     # Tested and verified behaviour

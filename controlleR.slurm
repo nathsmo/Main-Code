@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Variation_F2
+#SBATCH --job-name=Eval_B1
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -43,7 +43,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
 
 # F1: New combination + rnn
-python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+# python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
 
 #### TSP20
 
@@ -106,16 +106,20 @@ python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --e
 # python main.py --variation='F10' --task=tsp100 --decoder=self --emb_type=enhanced --n_glimpses=0 --rnn_layers=2 --n_train=10000 --num_heads=1
 
 
-##### Eval-tsp10
-##### Example: python main.py --task=tsp10 --is_train=False --model_dir=./path_to_your_saved_checkpoint
-# python main.py --task=tsp10 --is_train=False --emb_type=enhanced --model_dir=./output_models/agent_complete.pth
+##### EVAL
 
-################# MAKE SURE TO PUT THE CORRECT ADDRESS!!!!
 ## Eval A1
-## Single
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
 # ## Batch
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=batch
+## Single
+# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=single
+
+## Eval B1
+# ## Batch
+# python main.py --variation='B1' --task=tsp10 --is_train=False --decoder=self --emb_type=linear  --num_heads=1 --model_dir=./logs/tsp10/B1/model/agent_complete.pth --infer_type=batch
+## Single
+# python main.py --variation='B1' --task=tsp10 --is_train=False --decoder=self --emb_type=linear  --num_heads=1 --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=single
+
 
 # ## Eval C1
 # ## Single

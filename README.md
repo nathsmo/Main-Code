@@ -25,8 +25,8 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 - [x] Never makes a decision, always returns the same value.
 - [x] The model isn't being saved, therefore the variables arent being reused in the correct way (I think) (BUT, idk how to evaluate)
 - [x] We have to save the model and print the results
-- [ ] Evaluate the model to see performance
-- [ ] Run on cloud - LIACS servers
+- [x] Evaluate the model to see performance
+- [x] Run on cloud - LIACS servers
 - [ ] See tests for the model. (Test all parameters)
 - [ ] Create baselines for comparison -> from Github baseline
 - [ ] Create graph to show progress over time of the algorithm

@@ -1,0 +1,2053 @@
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced
+embedding_dim: 128
+entropy_coeff: 0.0
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: True
+load_path: 
+log_dir: logs/tsp10-2024-05-29_16-13-17
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: logs/tsp10-2024-05-29_16-13-17/model
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 100000
+num_heads: 4
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: D1
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    D1
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   enhanced
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      100000
+# num heads:    4
+Training the agent...
+Train Step: 0 -- Time: 00:00:00 -- Train reward: -4.195804595947266 -- Value: -0.1735207885503769
+    actor loss: 64.70247650146484 -- critic loss: 17.583303451538086
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011110305786132812 s
+##################################################################
+Train Step: 200 -- Time: 00:00:34 -- Train reward: -4.298983573913574 -- Value: -0.10473627597093582
+    actor loss: 67.28190612792969 -- critic loss: 19.044429779052734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 400 -- Time: 00:00:35 -- Train reward: -4.354919910430908 -- Value: -0.04184620827436447
+    actor loss: 69.17469024658203 -- critic loss: 20.223573684692383
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011515617370605469 s
+##################################################################
+Train Step: 600 -- Time: 00:00:36 -- Train reward: -4.214029312133789 -- Value: -0.06537364423274994
+    actor loss: 66.47808837890625 -- critic loss: 18.936412811279297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010347366333007812 s
+##################################################################
+Train Step: 800 -- Time: 00:00:36 -- Train reward: -4.2275872230529785 -- Value: -0.1250176578760147
+    actor loss: 65.7933349609375 -- critic loss: 18.365467071533203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 1000 -- Time: 00:00:36 -- Train reward: -4.253856658935547 -- Value: 0.033241450786590576
+    actor loss: 68.854248046875 -- critic loss: 19.89518165588379
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011682510375976562 s
+##################################################################
+Train Step: 1200 -- Time: 00:00:36 -- Train reward: -4.132746696472168 -- Value: -0.004517954774200916
+    actor loss: 66.2898941040039 -- critic loss: 18.312536239624023
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 1400 -- Time: 00:00:36 -- Train reward: -4.153914928436279 -- Value: -0.21306949853897095
+    actor loss: 63.271034240722656 -- critic loss: 17.18727684020996
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012826919555664062 s
+##################################################################
+Train Step: 1600 -- Time: 00:00:36 -- Train reward: -4.078983306884766 -- Value: 0.009090399369597435
+    actor loss: 65.59896087646484 -- critic loss: 18.305734634399414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010037422180175781 s
+##################################################################
+Train Step: 1800 -- Time: 00:00:36 -- Train reward: -4.274367332458496 -- Value: -0.11023225635290146
+    actor loss: 66.8569564819336 -- critic loss: 19.3394832611084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010895729064941406 s
+##################################################################
+Train Step: 2000 -- Time: 00:00:36 -- Train reward: -3.9778966903686523 -- Value: 0.124644935131073
+    actor loss: 65.77191162109375 -- critic loss: 18.629764556884766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010251998901367188 s
+##################################################################
+Train Step: 2200 -- Time: 00:00:36 -- Train reward: -4.2028350830078125 -- Value: 0.08350744098424911
+    actor loss: 68.87924194335938 -- critic loss: 20.027507781982422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010848045349121094 s
+##################################################################
+Train Step: 2400 -- Time: 00:00:36 -- Train reward: -4.043146133422852 -- Value: 0.12438607215881348
+    actor loss: 66.81453704833984 -- critic loss: 18.853012084960938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.703636169433594e-05 s
+##################################################################
+Train Step: 2600 -- Time: 00:00:36 -- Train reward: -4.286178112030029 -- Value: -0.12833891808986664
+    actor loss: 66.57136535644531 -- critic loss: 19.349529266357422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010442733764648438 s
+##################################################################
+Train Step: 2800 -- Time: 00:00:36 -- Train reward: -4.08755350112915 -- Value: 0.10039272159337997
+    actor loss: 67.15215301513672 -- critic loss: 18.855497360229492
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 3000 -- Time: 00:00:36 -- Train reward: -4.080382347106934 -- Value: -0.02661459892988205
+    actor loss: 65.11717987060547 -- critic loss: 17.473331451416016
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010776519775390625 s
+##################################################################
+Train Step: 3200 -- Time: 00:00:36 -- Train reward: -4.173219203948975 -- Value: 0.006006993819028139
+    actor loss: 67.24522399902344 -- critic loss: 19.135726928710938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011873245239257812 s
+##################################################################
+Train Step: 3400 -- Time: 00:00:36 -- Train reward: -4.2096123695373535 -- Value: 0.07652081549167633
+    actor loss: 68.6374740600586 -- critic loss: 20.16256332397461
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001049041748046875 s
+##################################################################
+Train Step: 3600 -- Time: 00:00:36 -- Train reward: -4.081423759460449 -- Value: -0.01544247753918171
+    actor loss: 65.36604309082031 -- critic loss: 18.2292423248291
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010466575622558594 s
+##################################################################
+Train Step: 3800 -- Time: 00:00:36 -- Train reward: -4.170328140258789 -- Value: -0.02433728612959385
+    actor loss: 66.64496612548828 -- critic loss: 18.6989803314209
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.298324584960938e-05 s
+##################################################################
+Train Step: 4000 -- Time: 00:00:36 -- Train reward: -4.07547664642334 -- Value: 0.053134847432374954
+    actor loss: 66.33352661132812 -- critic loss: 18.756935119628906
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010418891906738281 s
+##################################################################
+Train Step: 4200 -- Time: 00:00:36 -- Train reward: -4.161459922790527 -- Value: -0.08400090783834457
+    actor loss: 65.57759857177734 -- critic loss: 18.396442413330078
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010204315185546875 s
+##################################################################
+Train Step: 4400 -- Time: 00:00:36 -- Train reward: -4.151961326599121 -- Value: -0.17012687027454376
+    actor loss: 63.907936096191406 -- critic loss: 17.730300903320312
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 4600 -- Time: 00:00:36 -- Train reward: -4.202810287475586 -- Value: -0.059354402124881744
+    actor loss: 66.71390533447266 -- critic loss: 18.787670135498047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011968612670898438 s
+##################################################################
+Train Step: 4800 -- Time: 00:00:36 -- Train reward: -4.097934722900391 -- Value: -0.13773201406002045
+    actor loss: 63.52944564819336 -- critic loss: 17.241899490356445
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011348724365234375 s
+##################################################################
+Train Step: 5000 -- Time: 00:00:36 -- Train reward: -4.249173164367676 -- Value: 0.14942190051078796
+    actor loss: 70.57926940917969 -- critic loss: 20.993663787841797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012350082397460938 s
+##################################################################
+Train Step: 5200 -- Time: 00:00:36 -- Train reward: -4.150671005249023 -- Value: 0.07680008560419083
+    actor loss: 67.80705261230469 -- critic loss: 19.400009155273438
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 5400 -- Time: 00:00:36 -- Train reward: -4.0433268547058105 -- Value: 0.13828155398368835
+    actor loss: 67.14453125 -- critic loss: 19.071041107177734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001087188720703125 s
+##################################################################
+Train Step: 5600 -- Time: 00:00:36 -- Train reward: -3.914008140563965 -- Value: 0.10836014896631241
+    actor loss: 64.63697052001953 -- critic loss: 17.843456268310547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001285076141357422 s
+##################################################################
+Train Step: 5800 -- Time: 00:00:36 -- Train reward: -4.164177417755127 -- Value: 0.03614841029047966
+    actor loss: 67.41281127929688 -- critic loss: 19.113914489746094
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011587142944335938 s
+##################################################################
+Train Step: 6000 -- Time: 00:00:36 -- Train reward: -4.209522247314453 -- Value: -0.04912944510579109
+    actor loss: 66.78851318359375 -- critic loss: 19.06713104248047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 6200 -- Time: 00:00:36 -- Train reward: -4.235169410705566 -- Value: -0.0018895401153713465
+    actor loss: 68.0721435546875 -- critic loss: 19.600576400756836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011229515075683594 s
+##################################################################
+Train Step: 6400 -- Time: 00:00:36 -- Train reward: -4.138681888580322 -- Value: -0.004307116847485304
+    actor loss: 66.54068756103516 -- critic loss: 18.82714080810547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001399517059326172 s
+##################################################################
+Train Step: 6600 -- Time: 00:00:36 -- Train reward: -4.06119441986084 -- Value: 0.06950726360082626
+    actor loss: 66.31523132324219 -- critic loss: 18.57275390625
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 6800 -- Time: 00:00:36 -- Train reward: -4.241104602813721 -- Value: 0.032099515199661255
+    actor loss: 68.65676879882812 -- critic loss: 19.684152603149414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 7000 -- Time: 00:00:36 -- Train reward: -4.160867214202881 -- Value: 0.05861496925354004
+    actor loss: 67.8941879272461 -- critic loss: 19.22724151611328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010371208190917969 s
+##################################################################
+Train Step: 7200 -- Time: 00:00:36 -- Train reward: -4.13184118270874 -- Value: -0.08322788774967194
+    actor loss: 65.19530487060547 -- critic loss: 17.880807876586914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001125335693359375 s
+##################################################################
+Train Step: 7400 -- Time: 00:00:36 -- Train reward: -4.249882698059082 -- Value: -0.11211851984262466
+    actor loss: 66.6004409790039 -- critic loss: 19.11309814453125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011205673217773438 s
+##################################################################
+Train Step: 7600 -- Time: 00:00:36 -- Train reward: -4.287554740905762 -- Value: 0.1861584335565567
+    actor loss: 71.79737091064453 -- critic loss: 22.257293701171875
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012683868408203125 s
+##################################################################
+Train Step: 7800 -- Time: 00:00:36 -- Train reward: -4.034791946411133 -- Value: -0.00585802411660552
+    actor loss: 64.60770416259766 -- critic loss: 17.86199188232422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001347064971923828 s
+##################################################################
+Train Step: 8000 -- Time: 00:00:36 -- Train reward: -4.105922222137451 -- Value: -0.0082151023671031
+    actor loss: 65.71282196044922 -- critic loss: 18.338428497314453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 8200 -- Time: 00:00:36 -- Train reward: -4.273013591766357 -- Value: -0.113194540143013
+    actor loss: 66.88826751708984 -- critic loss: 19.16004180908203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.916854858398438e-05 s
+##################################################################
+Train Step: 8400 -- Time: 00:00:36 -- Train reward: -3.898958206176758 -- Value: -0.030445652082562447
+    actor loss: 62.228790283203125 -- critic loss: 16.506391525268555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011587142944335938 s
+##################################################################
+Train Step: 8600 -- Time: 00:00:36 -- Train reward: -4.0927228927612305 -- Value: 0.13629335165023804
+    actor loss: 67.98463439941406 -- critic loss: 19.475574493408203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012302398681640625 s
+##################################################################
+Train Step: 8800 -- Time: 00:00:36 -- Train reward: -3.9896080493927 -- Value: -0.09615881741046906
+    actor loss: 62.5546760559082 -- critic loss: 16.88134765625
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011992454528808594 s
+##################################################################
+Train Step: 9000 -- Time: 00:00:36 -- Train reward: -4.304736137390137 -- Value: 0.02510499581694603
+    actor loss: 69.56519317626953 -- critic loss: 20.53903579711914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012612342834472656 s
+##################################################################
+Train Step: 9200 -- Time: 00:00:36 -- Train reward: -4.057624816894531 -- Value: -0.06026618555188179
+    actor loss: 64.2608871459961 -- critic loss: 17.484384536743164
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 9400 -- Time: 00:00:36 -- Train reward: -4.213318347930908 -- Value: 0.14568063616752625
+    actor loss: 69.82303619384766 -- critic loss: 20.504688262939453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010919570922851562 s
+##################################################################
+Train Step: 9600 -- Time: 00:00:36 -- Train reward: -4.28171443939209 -- Value: 0.028476251289248466
+    actor loss: 69.23355102539062 -- critic loss: 20.27680206298828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001201629638671875 s
+##################################################################
+Train Step: 9800 -- Time: 00:00:36 -- Train reward: -4.198737144470215 -- Value: 0.10748998820781708
+    actor loss: 69.06912994384766 -- critic loss: 20.182785034179688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000110626220703125 s
+##################################################################
+Train Step: 10000 -- Time: 00:00:36 -- Train reward: -4.054067611694336 -- Value: -0.061362747102975845
+    actor loss: 64.05807495117188 -- critic loss: 17.32509994506836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010657310485839844 s
+##################################################################
+Train Step: 10200 -- Time: 00:00:36 -- Train reward: -4.352337837219238 -- Value: 0.012478574179112911
+    actor loss: 70.207763671875 -- critic loss: 20.351165771484375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011539459228515625 s
+##################################################################
+Train Step: 10400 -- Time: 00:00:36 -- Train reward: -4.091004371643066 -- Value: -0.16212612390518188
+    actor loss: 63.19501876831055 -- critic loss: 16.778724670410156
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.655952453613281e-05 s
+##################################################################
+Train Step: 10600 -- Time: 00:00:36 -- Train reward: -4.305872440338135 -- Value: -0.006744407117366791
+    actor loss: 69.04515075683594 -- critic loss: 20.416728973388672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 10800 -- Time: 00:00:36 -- Train reward: -4.196276664733887 -- Value: 0.11745543777942657
+    actor loss: 69.29955291748047 -- critic loss: 20.06154441833496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 11000 -- Time: 00:00:36 -- Train reward: -4.2434186935424805 -- Value: -0.05151700600981712
+    actor loss: 67.37394714355469 -- critic loss: 18.91009521484375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 11200 -- Time: 00:00:36 -- Train reward: -4.158479690551758 -- Value: -0.030110079795122147
+    actor loss: 66.28108215332031 -- critic loss: 18.543241500854492
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010633468627929688 s
+##################################################################
+Train Step: 11400 -- Time: 00:00:36 -- Train reward: -4.042847633361816 -- Value: -0.14867083728313446
+    actor loss: 62.543418884277344 -- critic loss: 16.678316116333008
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00014638900756835938 s
+##################################################################
+Train Step: 11600 -- Time: 00:00:36 -- Train reward: -4.157500743865967 -- Value: -0.006739454809576273
+    actor loss: 66.56659698486328 -- critic loss: 19.39146614074707
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.822845458984375e-05 s
+##################################################################
+Train Step: 11800 -- Time: 00:00:36 -- Train reward: -4.060878753662109 -- Value: -0.12139323353767395
+    actor loss: 63.151676177978516 -- critic loss: 17.421857833862305
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011157989501953125 s
+##################################################################
+Train Step: 12000 -- Time: 00:00:36 -- Train reward: -4.257238388061523 -- Value: 0.045811012387275696
+    actor loss: 69.21162414550781 -- critic loss: 20.2562198638916
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 12200 -- Time: 00:00:36 -- Train reward: -4.320296764373779 -- Value: -0.12500080466270447
+    actor loss: 67.42284393310547 -- critic loss: 19.31109046936035
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011134147644042969 s
+##################################################################
+Train Step: 12400 -- Time: 00:00:36 -- Train reward: -4.1942362785339355 -- Value: -0.024854762479662895
+    actor loss: 66.85198974609375 -- critic loss: 19.316009521484375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 12600 -- Time: 00:00:36 -- Train reward: -4.165410041809082 -- Value: -0.06419830024242401
+    actor loss: 65.86796569824219 -- critic loss: 18.460041046142578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.96453857421875e-05 s
+##################################################################
+Train Step: 12800 -- Time: 00:00:36 -- Train reward: -4.118423938751221 -- Value: 0.026025336235761642
+    actor loss: 66.53372955322266 -- critic loss: 18.82670021057129
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011014938354492188 s
+##################################################################
+Train Step: 13000 -- Time: 00:00:36 -- Train reward: -3.945223093032837 -- Value: 0.0406581312417984
+    actor loss: 63.98847198486328 -- critic loss: 17.92424964904785
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010585784912109375 s
+##################################################################
+Train Step: 13200 -- Time: 00:00:36 -- Train reward: -3.957944631576538 -- Value: 0.041134368628263474
+    actor loss: 64.3106460571289 -- critic loss: 17.368009567260742
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 13400 -- Time: 00:00:36 -- Train reward: -4.174755096435547 -- Value: 0.011961833573877811
+    actor loss: 67.20494079589844 -- critic loss: 19.25902557373047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.5367431640625e-05 s
+##################################################################
+Train Step: 13600 -- Time: 00:00:36 -- Train reward: -4.105544090270996 -- Value: 0.09472007304430008
+    actor loss: 67.491943359375 -- critic loss: 19.032318115234375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001087188720703125 s
+##################################################################
+Train Step: 13800 -- Time: 00:00:36 -- Train reward: -4.180656433105469 -- Value: 0.03632717579603195
+    actor loss: 67.72511291503906 -- critic loss: 19.438175201416016
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010013580322265625 s
+##################################################################
+Train Step: 14000 -- Time: 00:00:36 -- Train reward: -4.439141750335693 -- Value: 0.0674477070569992
+    actor loss: 72.64678955078125 -- critic loss: 22.061281204223633
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 14200 -- Time: 00:00:36 -- Train reward: -4.129479885101318 -- Value: -0.1138623058795929
+    actor loss: 64.3755874633789 -- critic loss: 18.06317710876465
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 14400 -- Time: 00:00:36 -- Train reward: -3.9753267765045166 -- Value: 0.08470604568719864
+    actor loss: 65.15489959716797 -- critic loss: 17.83514404296875
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010800361633300781 s
+##################################################################
+Train Step: 14600 -- Time: 00:00:36 -- Train reward: -4.038968563079834 -- Value: -0.048209644854068756
+    actor loss: 64.01725006103516 -- critic loss: 17.392024993896484
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010156631469726562 s
+##################################################################
+Train Step: 14800 -- Time: 00:00:36 -- Train reward: -3.9727630615234375 -- Value: -0.06216513738036156
+    actor loss: 62.848655700683594 -- critic loss: 16.88384437561035
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.5367431640625e-05 s
+##################################################################
+Train Step: 15000 -- Time: 00:00:36 -- Train reward: -4.093015670776367 -- Value: 0.10566861927509308
+    actor loss: 67.40917205810547 -- critic loss: 19.060781478881836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 15200 -- Time: 00:00:36 -- Train reward: -4.155606269836426 -- Value: 0.252788782119751
+    actor loss: 70.60343933105469 -- critic loss: 21.042795181274414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010776519775390625 s
+##################################################################
+Train Step: 15400 -- Time: 00:00:36 -- Train reward: -4.19316291809082 -- Value: -0.03003159537911415
+    actor loss: 66.78805541992188 -- critic loss: 19.15716552734375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012826919555664062 s
+##################################################################
+Train Step: 15600 -- Time: 00:00:36 -- Train reward: -4.419066429138184 -- Value: -0.1672423630952835
+    actor loss: 68.1778335571289 -- critic loss: 19.831430435180664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010943412780761719 s
+##################################################################
+Train Step: 15800 -- Time: 00:00:36 -- Train reward: -4.205691337585449 -- Value: 0.14576299488544464
+    actor loss: 69.8899154663086 -- critic loss: 20.584142684936523
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011324882507324219 s
+##################################################################
+Train Step: 16000 -- Time: 00:00:36 -- Train reward: -4.127041816711426 -- Value: 0.050071097910404205
+    actor loss: 66.99479675292969 -- critic loss: 18.912717819213867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 16200 -- Time: 00:00:36 -- Train reward: -4.16018533706665 -- Value: 0.05023699626326561
+    actor loss: 67.82698059082031 -- critic loss: 19.352039337158203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010442733764648438 s
+##################################################################
+Train Step: 16400 -- Time: 00:00:36 -- Train reward: -4.201244831085205 -- Value: -0.12213162332773209
+    actor loss: 65.57292175292969 -- critic loss: 18.044055938720703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011730194091796875 s
+##################################################################
+Train Step: 16600 -- Time: 00:00:36 -- Train reward: -4.35946798324585 -- Value: -0.05533222854137421
+    actor loss: 69.08712005615234 -- critic loss: 20.106584548950195
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010251998901367188 s
+##################################################################
+Train Step: 16800 -- Time: 00:00:36 -- Train reward: -4.044247627258301 -- Value: -0.15246331691741943
+    actor loss: 62.35694122314453 -- critic loss: 16.756364822387695
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010442733764648438 s
+##################################################################
+Train Step: 17000 -- Time: 00:00:36 -- Train reward: -4.149000644683838 -- Value: -0.11565478146076202
+    actor loss: 64.8311767578125 -- critic loss: 17.957321166992188
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.417533874511719e-05 s
+##################################################################
+Train Step: 17200 -- Time: 00:00:36 -- Train reward: -3.970986843109131 -- Value: 0.04957859590649605
+    actor loss: 64.50753784179688 -- critic loss: 17.71730613708496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010633468627929688 s
+##################################################################
+Train Step: 17400 -- Time: 00:00:36 -- Train reward: -4.186336040496826 -- Value: 0.051983579993247986
+    actor loss: 68.04660034179688 -- critic loss: 19.645484924316406
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011181831359863281 s
+##################################################################
+Train Step: 17600 -- Time: 00:00:36 -- Train reward: -4.2403340339660645 -- Value: 0.09293811768293381
+    actor loss: 69.44952392578125 -- critic loss: 20.81536293029785
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012993812561035156 s
+##################################################################
+Train Step: 17800 -- Time: 00:00:36 -- Train reward: -4.284938812255859 -- Value: -0.15802457928657532
+    actor loss: 66.38203430175781 -- critic loss: 19.289752960205078
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011444091796875 s
+##################################################################
+Train Step: 18000 -- Time: 00:00:36 -- Train reward: -4.199650287628174 -- Value: -0.09223809838294983
+    actor loss: 65.99897766113281 -- critic loss: 18.558244705200195
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010514259338378906 s
+##################################################################
+Train Step: 18200 -- Time: 00:00:36 -- Train reward: -4.329060077667236 -- Value: -0.014822092838585377
+    actor loss: 69.36512756347656 -- critic loss: 20.29157829284668
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 18400 -- Time: 00:00:36 -- Train reward: -4.203012466430664 -- Value: 0.03821192681789398
+    actor loss: 68.084716796875 -- critic loss: 19.36477279663086
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010061264038085938 s
+##################################################################
+Train Step: 18600 -- Time: 00:00:36 -- Train reward: -4.097466945648193 -- Value: 0.19958114624023438
+    actor loss: 69.02897644042969 -- critic loss: 19.958816528320312
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010180473327636719 s
+##################################################################
+Train Step: 18800 -- Time: 00:00:36 -- Train reward: -4.311741352081299 -- Value: -0.006691124755889177
+    actor loss: 69.1301040649414 -- critic loss: 20.16715431213379
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011229515075683594 s
+##################################################################
+Train Step: 19000 -- Time: 00:00:36 -- Train reward: -4.252203941345215 -- Value: 0.18662221729755402
+    actor loss: 71.40470886230469 -- critic loss: 21.279827117919922
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.942054748535156e-05 s
+##################################################################
+Train Step: 19200 -- Time: 00:00:36 -- Train reward: -4.135976791381836 -- Value: 0.03491123393177986
+    actor loss: 66.98614501953125 -- critic loss: 18.79254150390625
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.274482727050781e-05 s
+##################################################################
+Train Step: 19400 -- Time: 00:00:36 -- Train reward: -4.053715229034424 -- Value: -0.15198667347431183
+    actor loss: 62.4852180480957 -- critic loss: 16.7672176361084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011444091796875 s
+##################################################################
+Train Step: 19600 -- Time: 00:00:36 -- Train reward: -4.101082801818848 -- Value: -0.05014275759458542
+    actor loss: 65.0370864868164 -- critic loss: 18.1552734375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010085105895996094 s
+##################################################################
+Train Step: 19800 -- Time: 00:00:36 -- Train reward: -4.188026428222656 -- Value: -0.03971904516220093
+    actor loss: 66.45479583740234 -- critic loss: 18.61374282836914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00014328956604003906 s
+##################################################################
+Train Step: 20000 -- Time: 00:00:36 -- Train reward: -4.099039554595947 -- Value: -0.14412438869476318
+    actor loss: 63.7047004699707 -- critic loss: 17.181095123291016
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 20200 -- Time: 00:00:36 -- Train reward: -4.360509872436523 -- Value: 0.06758740544319153
+    actor loss: 71.21369934082031 -- critic loss: 21.431655883789062
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001125335693359375 s
+##################################################################
+Train Step: 20400 -- Time: 00:00:36 -- Train reward: -4.023521423339844 -- Value: -0.08809440582990646
+    actor loss: 63.324737548828125 -- critic loss: 17.278644561767578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 20600 -- Time: 00:00:36 -- Train reward: -4.184842586517334 -- Value: -0.020567338913679123
+    actor loss: 66.93535614013672 -- critic loss: 18.844858169555664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.822845458984375e-05 s
+##################################################################
+Train Step: 20800 -- Time: 00:00:36 -- Train reward: -3.9453773498535156 -- Value: -0.031769659370183945
+    actor loss: 62.963134765625 -- critic loss: 16.685283660888672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011110305786132812 s
+##################################################################
+Train Step: 21000 -- Time: 00:00:36 -- Train reward: -4.113588809967041 -- Value: 0.18928289413452148
+    actor loss: 69.15756225585938 -- critic loss: 20.16573143005371
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001347064971923828 s
+##################################################################
+Train Step: 21200 -- Time: 00:00:36 -- Train reward: -4.133533954620361 -- Value: 0.13184475898742676
+    actor loss: 68.42938232421875 -- critic loss: 19.463050842285156
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000125885009765625 s
+##################################################################
+Train Step: 21400 -- Time: 00:00:36 -- Train reward: -4.0227484703063965 -- Value: 0.029043689370155334
+    actor loss: 65.045166015625 -- critic loss: 17.91425323486328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.1552734375e-05 s
+##################################################################
+Train Step: 21600 -- Time: 00:00:36 -- Train reward: -4.369903564453125 -- Value: -0.056191086769104004
+    actor loss: 69.30348205566406 -- critic loss: 20.360654830932617
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010943412780761719 s
+##################################################################
+Train Step: 21800 -- Time: 00:00:36 -- Train reward: -4.363987445831299 -- Value: -0.05861390009522438
+    actor loss: 69.11217498779297 -- critic loss: 20.23432731628418
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.988380432128906e-05 s
+##################################################################
+Train Step: 22000 -- Time: 00:00:36 -- Train reward: -4.223326206207275 -- Value: -0.013725770637392998
+    actor loss: 67.55548095703125 -- critic loss: 19.33733558654785
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010418891906738281 s
+##################################################################
+Train Step: 22200 -- Time: 00:00:36 -- Train reward: -4.225337028503418 -- Value: 0.015808193013072014
+    actor loss: 68.02458953857422 -- critic loss: 19.524301528930664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.632110595703125e-05 s
+##################################################################
+Train Step: 22400 -- Time: 00:00:36 -- Train reward: -4.270643711090088 -- Value: 0.21711307764053345
+    actor loss: 72.07107543945312 -- critic loss: 21.54551124572754
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.918212890625e-05 s
+##################################################################
+Train Step: 22600 -- Time: 00:00:36 -- Train reward: -4.271677017211914 -- Value: -0.09171783924102783
+    actor loss: 66.83853149414062 -- critic loss: 19.278024673461914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001308917999267578 s
+##################################################################
+Train Step: 22800 -- Time: 00:00:36 -- Train reward: -4.052502155303955 -- Value: -0.12184271961450577
+    actor loss: 62.9541130065918 -- critic loss: 16.812044143676758
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012493133544921875 s
+##################################################################
+Train Step: 23000 -- Time: 00:00:36 -- Train reward: -4.046519756317139 -- Value: -0.09638501703739166
+    actor loss: 63.33490753173828 -- critic loss: 17.024473190307617
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010156631469726562 s
+##################################################################
+Train Step: 23200 -- Time: 00:00:36 -- Train reward: -4.1969499588012695 -- Value: -0.060590650886297226
+    actor loss: 66.50160217285156 -- critic loss: 18.822620391845703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010824203491210938 s
+##################################################################
+Train Step: 23400 -- Time: 00:00:36 -- Train reward: -4.2227864265441895 -- Value: 0.01045627985149622
+    actor loss: 67.97711181640625 -- critic loss: 19.396026611328125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012445449829101562 s
+##################################################################
+Train Step: 23600 -- Time: 00:00:36 -- Train reward: -4.174630165100098 -- Value: 0.009820989333093166
+    actor loss: 67.07563018798828 -- critic loss: 19.505857467651367
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.654594421386719e-05 s
+##################################################################
+Train Step: 23800 -- Time: 00:00:36 -- Train reward: -4.27092170715332 -- Value: 0.05673495680093765
+    actor loss: 69.53434753417969 -- critic loss: 20.296667098999023
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001068115234375 s
+##################################################################
+Train Step: 24000 -- Time: 00:00:36 -- Train reward: -4.252191543579102 -- Value: -0.08893059194087982
+    actor loss: 66.71630096435547 -- critic loss: 18.928470611572266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011110305786132812 s
+##################################################################
+Train Step: 24200 -- Time: 00:00:36 -- Train reward: -4.239107131958008 -- Value: -0.06197180598974228
+    actor loss: 67.02751922607422 -- critic loss: 19.254255294799805
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010919570922851562 s
+##################################################################
+Train Step: 24400 -- Time: 00:00:36 -- Train reward: -4.128087997436523 -- Value: -0.12099439650774002
+    actor loss: 64.43890380859375 -- critic loss: 18.00225067138672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011420249938964844 s
+##################################################################
+Train Step: 24600 -- Time: 00:00:36 -- Train reward: -3.876417875289917 -- Value: 0.07244018465280533
+    actor loss: 63.320465087890625 -- critic loss: 17.006004333496094
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011587142944335938 s
+##################################################################
+Train Step: 24800 -- Time: 00:00:36 -- Train reward: -4.167774677276611 -- Value: -0.0544954314827919
+    actor loss: 66.12439727783203 -- critic loss: 18.638601303100586
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.226799011230469e-05 s
+##################################################################
+Train Step: 25000 -- Time: 00:00:36 -- Train reward: -4.289592266082764 -- Value: -0.1427934467792511
+    actor loss: 66.67622375488281 -- critic loss: 18.801443099975586
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012946128845214844 s
+##################################################################
+Train Step: 25200 -- Time: 00:00:36 -- Train reward: -4.163956642150879 -- Value: -0.1548304706811905
+    actor loss: 64.34500885009766 -- critic loss: 17.367229461669922
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011968612670898438 s
+##################################################################
+Train Step: 25400 -- Time: 00:00:36 -- Train reward: -4.148466110229492 -- Value: -0.05867072567343712
+    actor loss: 65.62198638916016 -- critic loss: 18.47218894958496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.560585021972656e-05 s
+##################################################################
+Train Step: 25600 -- Time: 00:00:36 -- Train reward: -4.225175380706787 -- Value: -0.07522916793823242
+    actor loss: 66.82172393798828 -- critic loss: 18.96967887878418
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011181831359863281 s
+##################################################################
+Train Step: 25800 -- Time: 00:00:36 -- Train reward: -4.098796844482422 -- Value: 0.015439624898135662
+    actor loss: 66.13431549072266 -- critic loss: 18.364208221435547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010156631469726562 s
+##################################################################
+Train Step: 26000 -- Time: 00:00:36 -- Train reward: -4.131361484527588 -- Value: 0.054630666971206665
+    actor loss: 67.2231674194336 -- critic loss: 19.05034828186035
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011992454528808594 s
+##################################################################
+Train Step: 26200 -- Time: 00:00:36 -- Train reward: -4.170891761779785 -- Value: -0.011671224609017372
+    actor loss: 66.87954711914062 -- critic loss: 18.932456970214844
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00013399124145507812 s
+##################################################################
+Train Step: 26400 -- Time: 00:00:36 -- Train reward: -4.2974348068237305 -- Value: 0.03648264706134796
+    actor loss: 69.4379653930664 -- critic loss: 20.721385955810547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 26600 -- Time: 00:00:36 -- Train reward: -3.942749500274658 -- Value: -0.01619194820523262
+    actor loss: 63.226200103759766 -- critic loss: 16.899375915527344
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011110305786132812 s
+##################################################################
+Train Step: 26800 -- Time: 00:00:36 -- Train reward: -4.312648773193359 -- Value: 0.28483888506889343
+    actor loss: 73.82080841064453 -- critic loss: 22.766925811767578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011372566223144531 s
+##################################################################
+Train Step: 27000 -- Time: 00:00:36 -- Train reward: -4.14297342300415 -- Value: -0.1522550880908966
+    actor loss: 64.0777816772461 -- critic loss: 17.745983123779297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010037422180175781 s
+##################################################################
+Train Step: 27200 -- Time: 00:00:36 -- Train reward: -4.118622779846191 -- Value: 0.08785054832696915
+    actor loss: 67.6458511352539 -- critic loss: 19.609312057495117
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 27400 -- Time: 00:00:36 -- Train reward: -4.1859893798828125 -- Value: -0.08793019503355026
+    actor loss: 66.00699615478516 -- critic loss: 18.480966567993164
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012111663818359375 s
+##################################################################
+Train Step: 27600 -- Time: 00:00:36 -- Train reward: -4.249781131744385 -- Value: -0.07861796021461487
+    actor loss: 66.94892883300781 -- critic loss: 19.093364715576172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00013709068298339844 s
+##################################################################
+Train Step: 27800 -- Time: 00:00:36 -- Train reward: -3.9905269145965576 -- Value: -0.0025715925730764866
+    actor loss: 64.18942260742188 -- critic loss: 17.313678741455078
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010275840759277344 s
+##################################################################
+Train Step: 28000 -- Time: 00:00:36 -- Train reward: -4.374669551849365 -- Value: -0.025568701326847076
+    actor loss: 69.8645248413086 -- critic loss: 21.187698364257812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011277198791503906 s
+##################################################################
+Train Step: 28200 -- Time: 00:00:36 -- Train reward: -4.018204689025879 -- Value: 0.002338867634534836
+    actor loss: 64.59809875488281 -- critic loss: 17.761863708496094
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.821487426757812e-05 s
+##################################################################
+Train Step: 28400 -- Time: 00:00:36 -- Train reward: -4.085217475891113 -- Value: 0.06577573716640472
+    actor loss: 66.62203979492188 -- critic loss: 18.59327507019043
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011396408081054688 s
+##################################################################
+Train Step: 28600 -- Time: 00:00:36 -- Train reward: -4.160374641418457 -- Value: -0.011412950232625008
+    actor loss: 66.56643676757812 -- critic loss: 18.904220581054688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010895729064941406 s
+##################################################################
+Train Step: 28800 -- Time: 00:00:36 -- Train reward: -4.281841278076172 -- Value: 0.03676026314496994
+    actor loss: 69.11571502685547 -- critic loss: 20.477554321289062
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011706352233886719 s
+##################################################################
+Train Step: 29000 -- Time: 00:00:36 -- Train reward: -4.044295787811279 -- Value: 0.04128839448094368
+    actor loss: 65.61930847167969 -- critic loss: 18.1754093170166
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 29200 -- Time: 00:00:36 -- Train reward: -4.089692115783691 -- Value: -0.10322541743516922
+    actor loss: 64.04435729980469 -- critic loss: 17.48931312561035
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 29400 -- Time: 00:00:36 -- Train reward: -4.1906962394714355 -- Value: 0.1124671921133995
+    actor loss: 68.94316101074219 -- critic loss: 20.33828353881836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011920928955078125 s
+##################################################################
+Train Step: 29600 -- Time: 00:00:36 -- Train reward: -4.056674957275391 -- Value: 0.022391503676772118
+    actor loss: 65.50237274169922 -- critic loss: 18.2447566986084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00014162063598632812 s
+##################################################################
+Train Step: 29800 -- Time: 00:00:36 -- Train reward: -4.260763168334961 -- Value: 0.04285084083676338
+    actor loss: 69.10660552978516 -- critic loss: 20.304838180541992
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 30000 -- Time: 00:00:36 -- Train reward: -4.095429420471191 -- Value: 0.09583905339241028
+    actor loss: 67.03218078613281 -- critic loss: 19.575284957885742
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.846687316894531e-05 s
+##################################################################
+Train Step: 30200 -- Time: 00:00:36 -- Train reward: -4.260914325714111 -- Value: -0.004869849421083927
+    actor loss: 68.18392944335938 -- critic loss: 20.023204803466797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010418891906738281 s
+##################################################################
+Train Step: 30400 -- Time: 00:00:36 -- Train reward: -3.8104805946350098 -- Value: -0.22595645487308502
+    actor loss: 57.59440994262695 -- critic loss: 14.11491870880127
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010538101196289062 s
+##################################################################
+Train Step: 30600 -- Time: 00:00:36 -- Train reward: -4.221904754638672 -- Value: 0.11317417770624161
+    actor loss: 69.53555297851562 -- critic loss: 20.42091178894043
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011301040649414062 s
+##################################################################
+Train Step: 30800 -- Time: 00:00:36 -- Train reward: -4.344653606414795 -- Value: -0.017710765823721886
+    actor loss: 69.54865264892578 -- critic loss: 20.368640899658203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011157989501953125 s
+##################################################################
+Train Step: 31000 -- Time: 00:00:36 -- Train reward: -4.156438827514648 -- Value: 0.149356871843338
+    actor loss: 69.18875122070312 -- critic loss: 20.140369415283203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001201629638671875 s
+##################################################################
+Train Step: 31200 -- Time: 00:00:36 -- Train reward: -4.17803955078125 -- Value: 0.08114465326070786
+    actor loss: 68.44357299804688 -- critic loss: 19.918081283569336
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001251697540283203 s
+##################################################################
+Train Step: 31400 -- Time: 00:00:36 -- Train reward: -4.376861572265625 -- Value: 0.1818992644548416
+    actor loss: 73.36555480957031 -- critic loss: 22.550735473632812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010180473327636719 s
+##################################################################
+Train Step: 31600 -- Time: 00:00:36 -- Train reward: -4.087019920349121 -- Value: -0.013176340609788895
+    actor loss: 65.49299621582031 -- critic loss: 18.27336311340332
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011658668518066406 s
+##################################################################
+Train Step: 31800 -- Time: 00:00:36 -- Train reward: -4.306376934051514 -- Value: -0.06604822725057602
+    actor loss: 68.04615783691406 -- critic loss: 19.438312530517578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001125335693359375 s
+##################################################################
+Train Step: 32000 -- Time: 00:00:36 -- Train reward: -4.203716278076172 -- Value: -0.13980501890182495
+    actor loss: 65.44854736328125 -- critic loss: 18.07000160217285
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 32200 -- Time: 00:00:36 -- Train reward: -4.19414758682251 -- Value: 0.08316913992166519
+    actor loss: 68.74053192138672 -- critic loss: 20.026336669921875
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 32400 -- Time: 00:00:36 -- Train reward: -4.103598594665527 -- Value: -0.06818121671676636
+    actor loss: 64.91133117675781 -- critic loss: 17.86573028564453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011086463928222656 s
+##################################################################
+Train Step: 32600 -- Time: 00:00:36 -- Train reward: -4.161733150482178 -- Value: 0.052869465202093124
+    actor loss: 67.65550994873047 -- critic loss: 19.36151695251465
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.179115295410156e-05 s
+##################################################################
+Train Step: 32800 -- Time: 00:00:36 -- Train reward: -3.951742172241211 -- Value: 0.12678784132003784
+    actor loss: 65.3598861694336 -- critic loss: 18.256568908691406
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010180473327636719 s
+##################################################################
+Train Step: 33000 -- Time: 00:00:36 -- Train reward: -4.362712860107422 -- Value: -0.04161999374628067
+    actor loss: 69.51115417480469 -- critic loss: 20.63550567626953
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012350082397460938 s
+##################################################################
+Train Step: 33200 -- Time: 00:00:36 -- Train reward: -4.058375358581543 -- Value: 0.011832604184746742
+    actor loss: 65.31175231933594 -- critic loss: 18.413711547851562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011277198791503906 s
+##################################################################
+Train Step: 33400 -- Time: 00:00:37 -- Train reward: -4.1644487380981445 -- Value: -0.031462132930755615
+    actor loss: 66.23588562011719 -- critic loss: 18.87944984436035
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000110626220703125 s
+##################################################################
+Train Step: 33600 -- Time: 00:00:36 -- Train reward: -3.9966697692871094 -- Value: -0.15275704860687256
+    actor loss: 61.56477355957031 -- critic loss: 16.404787063598633
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010347366333007812 s
+##################################################################
+Train Step: 33800 -- Time: 00:00:36 -- Train reward: -4.172581672668457 -- Value: 0.022954659536480904
+    actor loss: 67.39899444580078 -- critic loss: 19.098033905029297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012040138244628906 s
+##################################################################
+Train Step: 34000 -- Time: 00:00:36 -- Train reward: -4.1994948387146 -- Value: 0.2280629575252533
+    actor loss: 71.11905670166016 -- critic loss: 21.25270652770996
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012230873107910156 s
+##################################################################
+Train Step: 34200 -- Time: 00:00:36 -- Train reward: -4.074568748474121 -- Value: 0.13483870029449463
+    actor loss: 67.47241973876953 -- critic loss: 18.974124908447266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011229515075683594 s
+##################################################################
+Train Step: 34400 -- Time: 00:00:36 -- Train reward: -4.395663738250732 -- Value: -0.19307151436805725
+    actor loss: 67.56403350830078 -- critic loss: 19.34288215637207
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011539459228515625 s
+##################################################################
+Train Step: 34600 -- Time: 00:00:36 -- Train reward: -4.068987846374512 -- Value: 0.18130312860012054
+    actor loss: 68.04622650146484 -- critic loss: 19.649831771850586
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010275840759277344 s
+##################################################################
+Train Step: 34800 -- Time: 00:00:36 -- Train reward: -4.263157844543457 -- Value: -0.09770936518907547
+    actor loss: 66.83269500732422 -- critic loss: 19.672548294067383
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.655952453613281e-05 s
+##################################################################
+Train Step: 35000 -- Time: 00:00:36 -- Train reward: -4.071621894836426 -- Value: -0.08810576796531677
+    actor loss: 63.94394302368164 -- critic loss: 17.396976470947266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010514259338378906 s
+##################################################################
+Train Step: 35200 -- Time: 00:00:36 -- Train reward: -4.044191837310791 -- Value: -0.005810276605188847
+    actor loss: 64.87291717529297 -- critic loss: 18.14385223388672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 35400 -- Time: 00:00:36 -- Train reward: -4.039939880371094 -- Value: 0.125449538230896
+    actor loss: 66.96369934082031 -- critic loss: 18.68309783935547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 35600 -- Time: 00:00:36 -- Train reward: -4.215699195861816 -- Value: 0.026679934933781624
+    actor loss: 68.26029968261719 -- critic loss: 19.821901321411133
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010800361633300781 s
+##################################################################
+Train Step: 35800 -- Time: 00:00:36 -- Train reward: -4.290223121643066 -- Value: -0.1438860446214676
+    actor loss: 66.4354248046875 -- critic loss: 19.094873428344727
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.894371032714844e-05 s
+##################################################################
+Train Step: 36000 -- Time: 00:00:36 -- Train reward: -4.154905319213867 -- Value: 0.05528459697961807
+    actor loss: 67.68287658691406 -- critic loss: 19.137033462524414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012350082397460938 s
+##################################################################
+Train Step: 36200 -- Time: 00:00:36 -- Train reward: -4.171178817749023 -- Value: 0.0276559516787529
+    actor loss: 67.4878921508789 -- critic loss: 19.60780143737793
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010275840759277344 s
+##################################################################
+Train Step: 36400 -- Time: 00:00:36 -- Train reward: -4.0581817626953125 -- Value: -0.0225750133395195
+    actor loss: 64.73509979248047 -- critic loss: 17.709396362304688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011467933654785156 s
+##################################################################
+Train Step: 36600 -- Time: 00:00:36 -- Train reward: -4.101509094238281 -- Value: 0.10387180745601654
+    actor loss: 67.52325439453125 -- critic loss: 19.42144775390625
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001125335693359375 s
+##################################################################
+Train Step: 36800 -- Time: 00:00:36 -- Train reward: -4.108555316925049 -- Value: -0.009812897071242332
+    actor loss: 65.81034851074219 -- critic loss: 18.364702224731445
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011038780212402344 s
+##################################################################
+Train Step: 37000 -- Time: 00:00:36 -- Train reward: -4.012129306793213 -- Value: -0.11094574630260468
+    actor loss: 62.511104583740234 -- critic loss: 16.980344772338867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.703636169433594e-05 s
+##################################################################
+Train Step: 37200 -- Time: 00:00:36 -- Train reward: -4.219448566436768 -- Value: -0.07016883045434952
+    actor loss: 66.68171691894531 -- critic loss: 18.75821304321289
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011873245239257812 s
+##################################################################
+Train Step: 37400 -- Time: 00:00:36 -- Train reward: -3.9223015308380127 -- Value: -0.04119409620761871
+    actor loss: 62.166622161865234 -- critic loss: 16.370119094848633
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010466575622558594 s
+##################################################################
+Train Step: 37600 -- Time: 00:00:36 -- Train reward: -3.9882054328918457 -- Value: -0.07023397833108902
+    actor loss: 63.030372619628906 -- critic loss: 16.98314666748047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000125885009765625 s
+##################################################################
+Train Step: 37800 -- Time: 00:00:36 -- Train reward: -4.143616199493408 -- Value: 0.11061716079711914
+    actor loss: 68.25829315185547 -- critic loss: 20.096782684326172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 38000 -- Time: 00:00:36 -- Train reward: -4.245416641235352 -- Value: -0.04285140335559845
+    actor loss: 67.4417953491211 -- critic loss: 19.650726318359375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011610984802246094 s
+##################################################################
+Train Step: 38200 -- Time: 00:00:36 -- Train reward: -3.983894109725952 -- Value: -0.07394665479660034
+    actor loss: 62.75664138793945 -- critic loss: 16.58824920654297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 38400 -- Time: 00:00:36 -- Train reward: -4.2332611083984375 -- Value: -0.1566312313079834
+    actor loss: 65.37747192382812 -- critic loss: 18.18344497680664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011467933654785156 s
+##################################################################
+Train Step: 38600 -- Time: 00:00:36 -- Train reward: -4.322076797485352 -- Value: 0.02239294722676277
+    actor loss: 69.84386444091797 -- critic loss: 20.33702850341797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011372566223144531 s
+##################################################################
+Train Step: 38800 -- Time: 00:00:36 -- Train reward: -4.067819595336914 -- Value: -0.018468860536813736
+    actor loss: 65.0140609741211 -- critic loss: 17.887388229370117
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010991096496582031 s
+##################################################################
+Train Step: 39000 -- Time: 00:00:36 -- Train reward: -4.468364238739014 -- Value: -0.0925396978855133
+    actor loss: 70.25627136230469 -- critic loss: 20.48544692993164
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 39200 -- Time: 00:00:36 -- Train reward: -4.066829681396484 -- Value: 0.08576276898384094
+    actor loss: 66.41240692138672 -- critic loss: 19.021968841552734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.131431579589844e-05 s
+##################################################################
+Train Step: 39400 -- Time: 00:00:36 -- Train reward: -4.004003524780273 -- Value: -0.057414378970861435
+    actor loss: 63.141868591308594 -- critic loss: 16.844375610351562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010275840759277344 s
+##################################################################
+Train Step: 39600 -- Time: 00:00:36 -- Train reward: -4.434138774871826 -- Value: -0.07996491342782974
+    actor loss: 69.92986297607422 -- critic loss: 20.896827697753906
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010919570922851562 s
+##################################################################
+Train Step: 39800 -- Time: 00:00:36 -- Train reward: -4.302085876464844 -- Value: -0.0871765986084938
+    actor loss: 67.83114624023438 -- critic loss: 19.273303985595703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010943412780761719 s
+##################################################################
+Train Step: 40000 -- Time: 00:00:36 -- Train reward: -4.100774765014648 -- Value: 0.14128130674362183
+    actor loss: 68.1487808227539 -- critic loss: 19.54751968383789
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00015497207641601562 s
+##################################################################
+Train Step: 40200 -- Time: 00:00:36 -- Train reward: -4.33989143371582 -- Value: -0.00294445245526731
+    actor loss: 69.65226745605469 -- critic loss: 20.879619598388672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 40400 -- Time: 00:00:36 -- Train reward: -4.108008861541748 -- Value: 0.11138901859521866
+    actor loss: 67.60455322265625 -- critic loss: 19.121896743774414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.298324584960938e-05 s
+##################################################################
+Train Step: 40600 -- Time: 00:00:36 -- Train reward: -4.257645606994629 -- Value: 0.09490698575973511
+    actor loss: 69.94588470458984 -- critic loss: 20.523319244384766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010156631469726562 s
+##################################################################
+Train Step: 40800 -- Time: 00:00:36 -- Train reward: -4.121809482574463 -- Value: -0.06617546826601028
+    actor loss: 65.04248809814453 -- critic loss: 18.224437713623047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 41000 -- Time: 00:00:36 -- Train reward: -3.945523262023926 -- Value: -0.014882739633321762
+    actor loss: 63.03399658203125 -- critic loss: 17.47275733947754
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 41200 -- Time: 00:00:36 -- Train reward: -4.183691024780273 -- Value: -0.16096729040145874
+    actor loss: 64.6046142578125 -- critic loss: 17.62055206298828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 41400 -- Time: 00:00:36 -- Train reward: -4.053897857666016 -- Value: -0.1503218412399292
+    actor loss: 62.6220703125 -- critic loss: 16.894115447998047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.226799011230469e-05 s
+##################################################################
+Train Step: 41600 -- Time: 00:00:36 -- Train reward: -4.159584999084473 -- Value: 0.07780063152313232
+    actor loss: 67.98223114013672 -- critic loss: 19.418521881103516
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.5367431640625e-05 s
+##################################################################
+Train Step: 41800 -- Time: 00:00:36 -- Train reward: -4.141789436340332 -- Value: 0.027739740908145905
+    actor loss: 66.95269012451172 -- critic loss: 18.700780868530273
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011610984802246094 s
+##################################################################
+Train Step: 42000 -- Time: 00:00:36 -- Train reward: -4.226257801055908 -- Value: 0.02740347571671009
+    actor loss: 68.40634155273438 -- critic loss: 19.874835968017578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010800361633300781 s
+##################################################################
+Train Step: 42200 -- Time: 00:00:36 -- Train reward: -4.083169460296631 -- Value: -0.13569438457489014
+    actor loss: 63.307044982910156 -- critic loss: 17.34996223449707
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001087188720703125 s
+##################################################################
+Train Step: 42400 -- Time: 00:00:36 -- Train reward: -3.9810588359832764 -- Value: -0.1196606457233429
+    actor loss: 62.04534149169922 -- critic loss: 16.486007690429688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011777877807617188 s
+##################################################################
+Train Step: 42600 -- Time: 00:00:36 -- Train reward: -4.243042945861816 -- Value: 0.033429957926273346
+    actor loss: 68.63491821289062 -- critic loss: 19.756635665893555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 42800 -- Time: 00:00:36 -- Train reward: -4.239562034606934 -- Value: 0.2664951682090759
+    actor loss: 72.34203338623047 -- critic loss: 22.08774185180664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 43000 -- Time: 00:00:36 -- Train reward: -4.207209587097168 -- Value: 0.06554024666547775
+    actor loss: 68.76453399658203 -- critic loss: 19.726890563964844
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.608268737792969e-05 s
+##################################################################
+Train Step: 43200 -- Time: 00:00:36 -- Train reward: -4.182591438293457 -- Value: 0.12122489511966705
+    actor loss: 69.09867858886719 -- critic loss: 19.869979858398438
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.894371032714844e-05 s
+##################################################################
+Train Step: 43400 -- Time: 00:00:37 -- Train reward: -4.071989059448242 -- Value: 0.02141694724559784
+    actor loss: 65.78341674804688 -- critic loss: 18.10625457763672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 43600 -- Time: 00:00:40 -- Train reward: -3.9496898651123047 -- Value: -0.12895546853542328
+    actor loss: 61.291812896728516 -- critic loss: 16.455150604248047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 43800 -- Time: 00:00:42 -- Train reward: -4.103784561157227 -- Value: 0.08641897886991501
+    actor loss: 67.41305541992188 -- critic loss: 19.093372344970703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.632110595703125e-05 s
+##################################################################
+Train Step: 44000 -- Time: 00:00:42 -- Train reward: -4.188894748687744 -- Value: -0.007168320007622242
+    actor loss: 67.05886840820312 -- critic loss: 19.15871238708496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.012222290039062e-05 s
+##################################################################
+Train Step: 44200 -- Time: 00:00:42 -- Train reward: -4.091177463531494 -- Value: -0.04912284389138222
+    actor loss: 64.8197250366211 -- critic loss: 17.990121841430664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 44400 -- Time: 00:00:42 -- Train reward: -4.162634372711182 -- Value: -0.09334558248519897
+    actor loss: 65.4081802368164 -- critic loss: 18.49669647216797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010442733764648438 s
+##################################################################
+Train Step: 44600 -- Time: 00:00:42 -- Train reward: -4.3091864585876465 -- Value: -0.0016505401581525803
+    actor loss: 69.14901733398438 -- critic loss: 20.225162506103516
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010013580322265625 s
+##################################################################
+Train Step: 44800 -- Time: 00:00:42 -- Train reward: -4.1297760009765625 -- Value: -0.051981981843709946
+    actor loss: 65.48574829101562 -- critic loss: 18.300119400024414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.918212890625e-05 s
+##################################################################
+Train Step: 45000 -- Time: 00:00:42 -- Train reward: -4.110028266906738 -- Value: 0.04952935129404068
+    actor loss: 66.89483642578125 -- critic loss: 18.788000106811523
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000118255615234375 s
+##################################################################
+Train Step: 45200 -- Time: 00:00:42 -- Train reward: -4.193459510803223 -- Value: 0.0642230287194252
+    actor loss: 68.25807189941406 -- critic loss: 19.809364318847656
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011968612670898438 s
+##################################################################
+Train Step: 45400 -- Time: 00:00:43 -- Train reward: -4.17335844039917 -- Value: -0.009281596168875694
+    actor loss: 66.8804702758789 -- critic loss: 19.126548767089844
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 45600 -- Time: 00:00:42 -- Train reward: -4.155794143676758 -- Value: 0.05540553480386734
+    actor loss: 67.67369079589844 -- critic loss: 19.084306716918945
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00029277801513671875 s
+##################################################################
+Train Step: 45800 -- Time: 00:00:42 -- Train reward: -4.099025726318359 -- Value: -0.06671146303415298
+    actor loss: 64.75153350830078 -- critic loss: 17.84374237060547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010180473327636719 s
+##################################################################
+Train Step: 46000 -- Time: 00:00:42 -- Train reward: -4.274530410766602 -- Value: 0.10170544683933258
+    actor loss: 70.3438720703125 -- critic loss: 20.592702865600586
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001087188720703125 s
+##################################################################
+Train Step: 46200 -- Time: 00:00:42 -- Train reward: -4.192739486694336 -- Value: -0.06795135885477066
+    actor loss: 66.2922134399414 -- critic loss: 18.731056213378906
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012969970703125 s
+##################################################################
+Train Step: 46400 -- Time: 00:00:42 -- Train reward: -4.149309158325195 -- Value: 0.04562270641326904
+    actor loss: 67.4596939086914 -- critic loss: 19.02322769165039
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001068115234375 s
+##################################################################
+Train Step: 46600 -- Time: 00:00:42 -- Train reward: -4.07147741317749 -- Value: -0.07330390065908432
+    actor loss: 64.21288299560547 -- critic loss: 17.86587905883789
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010323524475097656 s
+##################################################################
+Train Step: 46800 -- Time: 00:00:42 -- Train reward: -4.076137542724609 -- Value: 0.07952138781547546
+    actor loss: 66.86730194091797 -- critic loss: 18.965330123901367
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011420249938964844 s
+##################################################################
+Train Step: 47000 -- Time: 00:00:42 -- Train reward: -4.178538799285889 -- Value: -0.05048353970050812
+    actor loss: 66.20873260498047 -- critic loss: 18.90882110595703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010323524475097656 s
+##################################################################
+Train Step: 47200 -- Time: 00:00:42 -- Train reward: -4.279139041900635 -- Value: 0.0110603803768754
+    actor loss: 68.7912826538086 -- critic loss: 20.046062469482422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 47400 -- Time: 00:00:42 -- Train reward: -4.281425476074219 -- Value: 0.029235195368528366
+    actor loss: 69.33171081542969 -- critic loss: 20.209945678710938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010085105895996094 s
+##################################################################
+Train Step: 47600 -- Time: 00:00:42 -- Train reward: -4.08758020401001 -- Value: 0.039474476128816605
+    actor loss: 66.27493286132812 -- critic loss: 18.292600631713867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 47800 -- Time: 00:00:42 -- Train reward: -4.155884265899658 -- Value: -0.0039883023127913475
+    actor loss: 66.65435791015625 -- critic loss: 19.19989585876465
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001354217529296875 s
+##################################################################
+Train Step: 48000 -- Time: 00:00:42 -- Train reward: -4.356258392333984 -- Value: 0.20392195880413055
+    actor loss: 73.13360595703125 -- critic loss: 22.75342559814453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.489059448242188e-05 s
+##################################################################
+Train Step: 48200 -- Time: 00:00:42 -- Train reward: -4.052854061126709 -- Value: 0.12985394895076752
+    actor loss: 67.16312408447266 -- critic loss: 18.898479461669922
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 48400 -- Time: 00:00:42 -- Train reward: -4.290072441101074 -- Value: -0.05797988921403885
+    actor loss: 68.11235046386719 -- critic loss: 19.317968368530273
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011444091796875 s
+##################################################################
+Train Step: 48600 -- Time: 00:00:42 -- Train reward: -4.012895107269287 -- Value: -0.13652236759662628
+    actor loss: 62.14414978027344 -- critic loss: 16.44292449951172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.632110595703125e-05 s
+##################################################################
+Train Step: 48800 -- Time: 00:00:42 -- Train reward: -4.063416957855225 -- Value: 0.12964515388011932
+    actor loss: 67.3727035522461 -- critic loss: 19.491230010986328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 49000 -- Time: 00:00:42 -- Train reward: -4.199748516082764 -- Value: -0.06997846066951752
+    actor loss: 66.34210968017578 -- critic loss: 19.189123153686523
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.654594421386719e-05 s
+##################################################################
+Train Step: 49200 -- Time: 00:00:42 -- Train reward: -4.152285575866699 -- Value: -0.026518044993281364
+    actor loss: 66.4220962524414 -- critic loss: 18.584457397460938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 49400 -- Time: 00:00:42 -- Train reward: -4.1232590675354 -- Value: -0.11096878349781036
+    actor loss: 64.4410629272461 -- critic loss: 17.565465927124023
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 49600 -- Time: 00:00:42 -- Train reward: -4.362880706787109 -- Value: -0.00027571519603952765
+    actor loss: 70.12348937988281 -- critic loss: 20.84910011291504
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010395050048828125 s
+##################################################################
+Train Step: 49800 -- Time: 00:00:42 -- Train reward: -4.21080207824707 -- Value: 0.10194525122642517
+    actor loss: 69.34016418457031 -- critic loss: 19.961727142333984
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010752677917480469 s
+##################################################################
+Train Step: 50000 -- Time: 00:00:42 -- Train reward: -4.158326625823975 -- Value: 0.10037539154291153
+    actor loss: 68.33887481689453 -- critic loss: 19.902931213378906
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 50200 -- Time: 00:00:42 -- Train reward: -4.082638740539551 -- Value: 0.10322261601686478
+    actor loss: 67.34254455566406 -- critic loss: 19.029943466186523
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010156631469726562 s
+##################################################################
+Train Step: 50400 -- Time: 00:00:42 -- Train reward: -4.222329616546631 -- Value: 0.13328929245471954
+    actor loss: 69.78427124023438 -- critic loss: 20.774368286132812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.894371032714844e-05 s
+##################################################################
+Train Step: 50600 -- Time: 00:00:42 -- Train reward: -3.987415075302124 -- Value: 0.09485862404108047
+    actor loss: 65.52571105957031 -- critic loss: 18.378782272338867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.799003601074219e-05 s
+##################################################################
+Train Step: 50800 -- Time: 00:00:42 -- Train reward: -4.284894943237305 -- Value: 0.004342031665146351
+    actor loss: 69.06353759765625 -- critic loss: 20.04067039489746
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011897087097167969 s
+##################################################################
+Train Step: 51000 -- Time: 00:00:42 -- Train reward: -4.282146453857422 -- Value: -0.020765284076333046
+    actor loss: 68.65342712402344 -- critic loss: 19.660320281982422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 51200 -- Time: 00:00:42 -- Train reward: -4.2341084480285645 -- Value: -0.008443388156592846
+    actor loss: 67.74256134033203 -- critic loss: 19.536043167114258
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001227855682373047 s
+##################################################################
+Train Step: 51400 -- Time: 00:00:42 -- Train reward: -4.169149875640869 -- Value: 0.09862354397773743
+    actor loss: 68.43907165527344 -- critic loss: 19.695941925048828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 51600 -- Time: 00:00:42 -- Train reward: -4.069888591766357 -- Value: 0.09878193587064743
+    actor loss: 66.88623809814453 -- critic loss: 18.843631744384766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011110305786132812 s
+##################################################################
+Train Step: 51800 -- Time: 00:00:42 -- Train reward: -4.214742660522461 -- Value: -0.11569904536008835
+    actor loss: 65.73637390136719 -- critic loss: 18.707250595092773
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.417533874511719e-05 s
+##################################################################
+Train Step: 52000 -- Time: 00:00:42 -- Train reward: -3.9984583854675293 -- Value: -0.07661856710910797
+    actor loss: 62.69050979614258 -- critic loss: 16.829906463623047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 52200 -- Time: 00:00:42 -- Train reward: -4.3252668380737305 -- Value: 0.14409297704696655
+    actor loss: 71.73636627197266 -- critic loss: 21.730667114257812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 52400 -- Time: 00:00:42 -- Train reward: -3.966477870941162 -- Value: -0.06512739509344101
+    actor loss: 62.56377410888672 -- critic loss: 16.679981231689453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010848045349121094 s
+##################################################################
+Train Step: 52600 -- Time: 00:00:42 -- Train reward: -4.0362653732299805 -- Value: 0.025151047855615616
+    actor loss: 64.94963836669922 -- critic loss: 17.964433670043945
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010657310485839844 s
+##################################################################
+Train Step: 52800 -- Time: 00:00:42 -- Train reward: -4.145797252655029 -- Value: 0.036011192947626114
+    actor loss: 67.27642822265625 -- critic loss: 19.080204010009766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 53000 -- Time: 00:00:42 -- Train reward: -4.09517765045166 -- Value: 0.06000634282827377
+    actor loss: 66.64429473876953 -- critic loss: 18.940706253051758
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.202957153320312e-05 s
+##################################################################
+Train Step: 53200 -- Time: 00:00:42 -- Train reward: -4.220024108886719 -- Value: -0.06950215995311737
+    actor loss: 66.61430358886719 -- critic loss: 18.91112518310547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012040138244628906 s
+##################################################################
+Train Step: 53400 -- Time: 00:00:42 -- Train reward: -4.041109561920166 -- Value: -0.12143741548061371
+    actor loss: 62.833229064941406 -- critic loss: 17.041683197021484
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 53600 -- Time: 00:00:42 -- Train reward: -4.395834445953369 -- Value: 0.07044237852096558
+    actor loss: 71.70536041259766 -- critic loss: 21.9783992767334
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011205673217773438 s
+##################################################################
+Train Step: 53800 -- Time: 00:00:42 -- Train reward: -4.104135513305664 -- Value: -0.03261931240558624
+    actor loss: 65.24301147460938 -- critic loss: 17.878734588623047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.202957153320312e-05 s
+##################################################################
+Train Step: 54000 -- Time: 00:00:42 -- Train reward: -4.071379661560059 -- Value: 0.1178993508219719
+    actor loss: 67.4609603881836 -- critic loss: 19.140111923217773
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011205673217773438 s
+##################################################################
+Train Step: 54200 -- Time: 00:00:42 -- Train reward: -4.199352741241455 -- Value: -0.181551992893219
+    actor loss: 64.83326721191406 -- critic loss: 17.622207641601562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.799003601074219e-05 s
+##################################################################
+Train Step: 54400 -- Time: 00:00:42 -- Train reward: -4.340420722961426 -- Value: 0.04790489375591278
+    actor loss: 70.47868347167969 -- critic loss: 20.81599998474121
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010824203491210938 s
+##################################################################
+Train Step: 54600 -- Time: 00:00:42 -- Train reward: -4.270953178405762 -- Value: -0.05300493538379669
+    actor loss: 67.75534057617188 -- critic loss: 19.404895782470703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012540817260742188 s
+##################################################################
+Train Step: 54800 -- Time: 00:00:42 -- Train reward: -4.292518615722656 -- Value: -0.01492162887006998
+    actor loss: 68.60011291503906 -- critic loss: 20.265872955322266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010347366333007812 s
+##################################################################
+Train Step: 55000 -- Time: 00:00:42 -- Train reward: -4.121476650238037 -- Value: -0.01126039121299982
+    actor loss: 65.90177154541016 -- critic loss: 18.418699264526367
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012302398681640625 s
+##################################################################
+Train Step: 55200 -- Time: 00:00:42 -- Train reward: -4.22431755065918 -- Value: 0.10021984577178955
+    actor loss: 69.4996566772461 -- critic loss: 20.545825958251953
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010514259338378906 s
+##################################################################
+Train Step: 55400 -- Time: 00:00:42 -- Train reward: -4.206459045410156 -- Value: -0.18303364515304565
+    actor loss: 64.6198501586914 -- critic loss: 17.927059173583984
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011157989501953125 s
+##################################################################
+Train Step: 55600 -- Time: 00:00:42 -- Train reward: -4.226123809814453 -- Value: -0.11672629415988922
+    actor loss: 65.87788391113281 -- critic loss: 18.606298446655273
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 55800 -- Time: 00:00:42 -- Train reward: -4.035122871398926 -- Value: -0.10742203146219254
+    actor loss: 63.03910827636719 -- critic loss: 17.039995193481445
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010752677917480469 s
+##################################################################
+Train Step: 56000 -- Time: 00:00:42 -- Train reward: -4.205953121185303 -- Value: 0.052637506276369095
+    actor loss: 68.22480010986328 -- critic loss: 19.84015464782715
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 56200 -- Time: 00:00:42 -- Train reward: -4.065228462219238 -- Value: -0.1448993682861328
+    actor loss: 62.99951171875 -- critic loss: 17.078645706176758
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.179115295410156e-05 s
+##################################################################
+Train Step: 56400 -- Time: 00:00:42 -- Train reward: -4.349142551422119 -- Value: 0.047838881611824036
+    actor loss: 70.6515121459961 -- critic loss: 21.434646606445312
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.822845458984375e-05 s
+##################################################################
+Train Step: 56600 -- Time: 00:00:42 -- Train reward: -4.1073431968688965 -- Value: -0.025853445753455162
+    actor loss: 65.54815673828125 -- critic loss: 18.376752853393555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001163482666015625 s
+##################################################################
+Train Step: 56800 -- Time: 00:00:42 -- Train reward: -3.985198497772217 -- Value: -0.12818489968776703
+    actor loss: 61.88275146484375 -- critic loss: 16.512271881103516
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00013017654418945312 s
+##################################################################
+Train Step: 57000 -- Time: 00:00:42 -- Train reward: -4.122753143310547 -- Value: 0.012289958074688911
+    actor loss: 66.5210189819336 -- critic loss: 18.914037704467773
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 57200 -- Time: 00:00:42 -- Train reward: -4.3828630447387695 -- Value: 0.19581176340579987
+    actor loss: 73.36018371582031 -- critic loss: 22.655899047851562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 57400 -- Time: 00:00:42 -- Train reward: -4.270922660827637 -- Value: 0.0651373639702797
+    actor loss: 69.61373901367188 -- critic loss: 20.44994354248047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011897087097167969 s
+##################################################################
+Train Step: 57600 -- Time: 00:00:42 -- Train reward: -4.215806484222412 -- Value: -0.15114979445934296
+    actor loss: 65.22328186035156 -- critic loss: 17.882951736450195
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010204315185546875 s
+##################################################################
+Train Step: 57800 -- Time: 00:00:42 -- Train reward: -4.254901885986328 -- Value: 0.08962023258209229
+    actor loss: 69.88194274902344 -- critic loss: 20.45636558532715
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.799003601074219e-05 s
+##################################################################
+Train Step: 58000 -- Time: 00:00:42 -- Train reward: -4.105220794677734 -- Value: 0.024401666596531868
+    actor loss: 66.38986206054688 -- critic loss: 18.80377960205078
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 58200 -- Time: 00:00:42 -- Train reward: -4.236795902252197 -- Value: 0.09047161042690277
+    actor loss: 69.43069458007812 -- critic loss: 20.419401168823242
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010848045349121094 s
+##################################################################
+Train Step: 58400 -- Time: 00:00:42 -- Train reward: -4.049203872680664 -- Value: -0.03457994759082794
+    actor loss: 64.53516387939453 -- critic loss: 17.953767776489258
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010442733764648438 s
+##################################################################
+Train Step: 58600 -- Time: 00:00:42 -- Train reward: -4.093652248382568 -- Value: -0.05084361135959625
+    actor loss: 65.0317153930664 -- critic loss: 17.98163414001465
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001266002655029297 s
+##################################################################
+Train Step: 58800 -- Time: 00:00:42 -- Train reward: -4.4459052085876465 -- Value: 0.0717681422829628
+    actor loss: 72.55302429199219 -- critic loss: 22.197542190551758
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010013580322265625 s
+##################################################################
+Train Step: 59000 -- Time: 00:00:42 -- Train reward: -4.260379791259766 -- Value: 0.2420223504304886
+    actor loss: 72.27986907958984 -- critic loss: 21.87258529663086
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011944770812988281 s
+##################################################################
+Train Step: 59200 -- Time: 00:00:42 -- Train reward: -4.234419345855713 -- Value: 0.04538067430257797
+    actor loss: 68.64009094238281 -- critic loss: 19.77680206298828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012803077697753906 s
+##################################################################
+Train Step: 59400 -- Time: 00:00:42 -- Train reward: -4.217462062835693 -- Value: -0.13164056837558746
+    actor loss: 65.68303680419922 -- critic loss: 18.171741485595703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010251998901367188 s
+##################################################################
+Train Step: 59600 -- Time: 00:00:42 -- Train reward: -4.074660301208496 -- Value: 0.019607506692409515
+    actor loss: 65.62374877929688 -- critic loss: 18.16771697998047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011587142944335938 s
+##################################################################
+Train Step: 59800 -- Time: 00:00:42 -- Train reward: -4.217429161071777 -- Value: -0.05839836597442627
+    actor loss: 66.82696533203125 -- critic loss: 19.085479736328125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 60000 -- Time: 00:00:42 -- Train reward: -3.9039394855499268 -- Value: 0.08650252223014832
+    actor loss: 64.09910583496094 -- critic loss: 17.473581314086914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011324882507324219 s
+##################################################################
+Train Step: 60200 -- Time: 00:00:42 -- Train reward: -4.136227607727051 -- Value: -0.07689614593982697
+    actor loss: 65.1429672241211 -- critic loss: 17.851070404052734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011491775512695312 s
+##################################################################
+Train Step: 60400 -- Time: 00:00:42 -- Train reward: -4.019383907318115 -- Value: -0.05347763001918793
+    actor loss: 63.80147933959961 -- critic loss: 17.814809799194336
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.417533874511719e-05 s
+##################################################################
+Train Step: 60600 -- Time: 00:00:42 -- Train reward: -4.10119104385376 -- Value: -0.03390282392501831
+    actor loss: 65.37358093261719 -- critic loss: 18.254173278808594
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.751319885253906e-05 s
+##################################################################
+Train Step: 60800 -- Time: 00:00:42 -- Train reward: -4.172032356262207 -- Value: 0.00786284077912569
+    actor loss: 66.94659423828125 -- critic loss: 19.095783233642578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 61000 -- Time: 00:00:42 -- Train reward: -4.254629135131836 -- Value: 0.06612025201320648
+    actor loss: 69.32455444335938 -- critic loss: 20.41817283630371
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001385211944580078 s
+##################################################################
+Train Step: 61200 -- Time: 00:00:42 -- Train reward: -4.262922286987305 -- Value: -0.08758515119552612
+    actor loss: 66.85189819335938 -- critic loss: 19.056377410888672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 61400 -- Time: 00:00:42 -- Train reward: -4.123772144317627 -- Value: -0.13210256397724152
+    actor loss: 64.13417053222656 -- critic loss: 17.47317886352539
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010824203491210938 s
+##################################################################
+Train Step: 61600 -- Time: 00:00:42 -- Train reward: -4.150612831115723 -- Value: -0.06988045573234558
+    actor loss: 65.69601440429688 -- critic loss: 18.232954025268555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010752677917480469 s
+##################################################################
+Train Step: 61800 -- Time: 00:00:42 -- Train reward: -3.9449462890625 -- Value: 0.11838512867689133
+    actor loss: 65.09656524658203 -- critic loss: 18.41511344909668
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 62000 -- Time: 00:00:42 -- Train reward: -4.184728145599365 -- Value: 0.045209020376205444
+    actor loss: 67.97779846191406 -- critic loss: 19.548625946044922
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010633468627929688 s
+##################################################################
+Train Step: 62200 -- Time: 00:00:42 -- Train reward: -4.159008979797363 -- Value: -0.03995981067419052
+    actor loss: 66.2160415649414 -- critic loss: 18.8438720703125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010704994201660156 s
+##################################################################
+Train Step: 62400 -- Time: 00:00:42 -- Train reward: -4.317719459533691 -- Value: 0.2749078869819641
+    actor loss: 73.55370330810547 -- critic loss: 22.572246551513672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000102996826171875 s
+##################################################################
+Train Step: 62600 -- Time: 00:00:42 -- Train reward: -4.157285690307617 -- Value: 0.11332599073648453
+    actor loss: 68.30184173583984 -- critic loss: 20.185543060302734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011897087097167969 s
+##################################################################
+Train Step: 62800 -- Time: 00:00:42 -- Train reward: -4.22886848449707 -- Value: 0.00762916449457407
+    actor loss: 67.94694519042969 -- critic loss: 19.547426223754883
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 63000 -- Time: 00:00:42 -- Train reward: -4.164159774780273 -- Value: 0.029203273355960846
+    actor loss: 67.42051696777344 -- critic loss: 19.058780670166016
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 63200 -- Time: 00:00:42 -- Train reward: -4.22072172164917 -- Value: 0.1981433779001236
+    actor loss: 70.98818969726562 -- critic loss: 20.91093635559082
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00014209747314453125 s
+##################################################################
+Train Step: 63400 -- Time: 00:00:42 -- Train reward: -4.402761459350586 -- Value: 0.014186964370310307
+    actor loss: 71.04415130615234 -- critic loss: 21.191524505615234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011301040649414062 s
+##################################################################
+Train Step: 63600 -- Time: 00:00:42 -- Train reward: -4.218337059020996 -- Value: -0.06801420450210571
+    actor loss: 66.67617797851562 -- critic loss: 19.043548583984375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.822845458984375e-05 s
+##################################################################
+Train Step: 63800 -- Time: 00:00:42 -- Train reward: -4.293285369873047 -- Value: 0.10185112804174423
+    actor loss: 70.37020874023438 -- critic loss: 20.996257781982422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001246929168701172 s
+##################################################################
+Train Step: 64000 -- Time: 00:00:42 -- Train reward: -4.002626895904541 -- Value: -0.06086493283510208
+    actor loss: 63.157554626464844 -- critic loss: 17.067636489868164
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.560585021972656e-05 s
+##################################################################
+Train Step: 64200 -- Time: 00:00:42 -- Train reward: -4.033877372741699 -- Value: 0.04766692966222763
+    actor loss: 65.4141845703125 -- critic loss: 18.029762268066406
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00013494491577148438 s
+##################################################################
+Train Step: 64400 -- Time: 00:00:42 -- Train reward: -4.1555914878845215 -- Value: -0.00038118858356028795
+    actor loss: 66.83047485351562 -- critic loss: 18.819704055786133
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.012222290039062e-05 s
+##################################################################
+Train Step: 64600 -- Time: 00:00:42 -- Train reward: -4.224360942840576 -- Value: 0.10878478735685349
+    actor loss: 69.70681762695312 -- critic loss: 20.381175994873047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.940696716308594e-05 s
+##################################################################
+Train Step: 64800 -- Time: 00:00:42 -- Train reward: -4.084982872009277 -- Value: 0.16336467862129211
+    actor loss: 67.97589111328125 -- critic loss: 19.444908142089844
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011801719665527344 s
+##################################################################
+Train Step: 65000 -- Time: 00:00:42 -- Train reward: -4.133631229400635 -- Value: 0.0129572544246912
+    actor loss: 66.38786315917969 -- critic loss: 18.95084571838379
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 65200 -- Time: 00:00:42 -- Train reward: -4.28229284286499 -- Value: 0.20263753831386566
+    actor loss: 72.03633117675781 -- critic loss: 22.055246353149414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 65400 -- Time: 00:00:42 -- Train reward: -4.087926864624023 -- Value: 0.020481545478105545
+    actor loss: 65.89144134521484 -- critic loss: 18.58478355407715
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 65600 -- Time: 00:00:42 -- Train reward: -4.197618007659912 -- Value: 0.0001483564847148955
+    actor loss: 67.2408447265625 -- critic loss: 19.391281127929688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011706352233886719 s
+##################################################################
+Train Step: 65800 -- Time: 00:00:42 -- Train reward: -4.057055950164795 -- Value: -0.09320726990699768
+    actor loss: 63.58135986328125 -- critic loss: 17.34177017211914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010609626770019531 s
+##################################################################
+Train Step: 66000 -- Time: 00:00:42 -- Train reward: -4.101071357727051 -- Value: 0.013775826431810856
+    actor loss: 66.11189270019531 -- critic loss: 18.7518253326416
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 66200 -- Time: 00:00:42 -- Train reward: -4.188673496246338 -- Value: -0.1052301898598671
+    actor loss: 65.59761047363281 -- critic loss: 18.099515914916992
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.751319885253906e-05 s
+##################################################################
+Train Step: 66400 -- Time: 00:00:42 -- Train reward: -4.087727069854736 -- Value: 0.00702088326215744
+    actor loss: 65.58777618408203 -- critic loss: 18.418546676635742
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010895729064941406 s
+##################################################################
+Train Step: 66600 -- Time: 00:00:42 -- Train reward: -4.024609565734863 -- Value: -0.11409303545951843
+    actor loss: 62.823944091796875 -- critic loss: 16.884960174560547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010561943054199219 s
+##################################################################
+Train Step: 66800 -- Time: 00:00:42 -- Train reward: -4.1273980140686035 -- Value: 0.04076215252280235
+    actor loss: 67.00039672851562 -- critic loss: 19.018539428710938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001087188720703125 s
+##################################################################
+Train Step: 67000 -- Time: 00:00:42 -- Train reward: -4.263355731964111 -- Value: 0.035153888165950775
+    actor loss: 68.89063262939453 -- critic loss: 20.323762893676758
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 67200 -- Time: 00:00:42 -- Train reward: -4.007816314697266 -- Value: -0.1375531256198883
+    actor loss: 62.29730224609375 -- critic loss: 16.388349533081055
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010848045349121094 s
+##################################################################
+Train Step: 67400 -- Time: 00:00:42 -- Train reward: -4.231773376464844 -- Value: 0.10240474343299866
+    actor loss: 69.6283187866211 -- critic loss: 20.495134353637695
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00016260147094726562 s
+##################################################################
+Train Step: 67600 -- Time: 00:00:42 -- Train reward: -4.341220855712891 -- Value: 0.0020830868743360043
+    actor loss: 69.85840606689453 -- critic loss: 20.509784698486328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.894371032714844e-05 s
+##################################################################
+Train Step: 67800 -- Time: 00:00:42 -- Train reward: -4.073151588439941 -- Value: -0.030882075428962708
+    actor loss: 64.84718322753906 -- critic loss: 18.093246459960938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010371208190917969 s
+##################################################################
+Train Step: 68000 -- Time: 00:00:42 -- Train reward: -4.281261444091797 -- Value: -0.1072542816400528
+    actor loss: 66.93292236328125 -- critic loss: 19.037494659423828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012040138244628906 s
+##################################################################
+Train Step: 68200 -- Time: 00:00:42 -- Train reward: -4.23954439163208 -- Value: -0.09581343829631805
+    actor loss: 66.7049331665039 -- critic loss: 18.739166259765625
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.679794311523438e-05 s
+##################################################################
+Train Step: 68400 -- Time: 00:00:42 -- Train reward: -4.45292329788208 -- Value: 0.05173562467098236
+    actor loss: 72.16764068603516 -- critic loss: 22.022695541381836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 68600 -- Time: 00:00:42 -- Train reward: -4.149527549743652 -- Value: 0.10321129113435745
+    actor loss: 68.39662170410156 -- critic loss: 19.6685848236084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 68800 -- Time: 00:00:42 -- Train reward: -4.330592632293701 -- Value: -0.05400709807872772
+    actor loss: 68.66856384277344 -- critic loss: 20.220561981201172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 69000 -- Time: 00:00:42 -- Train reward: -4.392470359802246 -- Value: 0.03658067435026169
+    actor loss: 71.10252380371094 -- critic loss: 21.288772583007812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 69200 -- Time: 00:00:42 -- Train reward: -4.354002475738525 -- Value: 0.03638756647706032
+    actor loss: 70.57435607910156 -- critic loss: 20.917354583740234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001068115234375 s
+##################################################################
+Train Step: 69400 -- Time: 00:00:42 -- Train reward: -4.310587406158447 -- Value: 0.018286313861608505
+    actor loss: 69.58672332763672 -- critic loss: 20.347373962402344
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.1552734375e-05 s
+##################################################################
+Train Step: 69600 -- Time: 00:00:42 -- Train reward: -4.073596954345703 -- Value: 0.2747390568256378
+    actor loss: 69.73387145996094 -- critic loss: 20.923839569091797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000110626220703125 s
+##################################################################
+Train Step: 69800 -- Time: 00:00:42 -- Train reward: -4.23186731338501 -- Value: -0.010759705677628517
+    actor loss: 67.54562377929688 -- critic loss: 19.375782012939453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010943412780761719 s
+##################################################################
+Train Step: 70000 -- Time: 00:00:42 -- Train reward: -4.214909076690674 -- Value: -0.07633683830499649
+    actor loss: 66.42875671386719 -- critic loss: 19.110881805419922
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.822845458984375e-05 s
+##################################################################
+Train Step: 70200 -- Time: 00:00:42 -- Train reward: -4.145724773406982 -- Value: 0.05647720396518707
+    actor loss: 67.53111267089844 -- critic loss: 19.2584285736084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010371208190917969 s
+##################################################################
+Train Step: 70400 -- Time: 00:00:42 -- Train reward: -4.09638786315918 -- Value: 0.04699890315532684
+    actor loss: 66.58047485351562 -- critic loss: 19.176403045654297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011348724365234375 s
+##################################################################
+Train Step: 70600 -- Time: 00:00:42 -- Train reward: -4.141568660736084 -- Value: 0.0471978485584259
+    actor loss: 67.43043518066406 -- critic loss: 19.17484474182129
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.799003601074219e-05 s
+##################################################################
+Train Step: 70800 -- Time: 00:00:42 -- Train reward: -3.8047285079956055 -- Value: 0.11995100975036621
+    actor loss: 63.03418731689453 -- critic loss: 16.743776321411133
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.298324584960938e-05 s
+##################################################################
+Train Step: 71000 -- Time: 00:00:42 -- Train reward: -4.327431678771973 -- Value: -0.012935040518641472
+    actor loss: 69.25102233886719 -- critic loss: 19.88003921508789
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011205673217773438 s
+##################################################################
+Train Step: 71200 -- Time: 00:00:42 -- Train reward: -4.137084484100342 -- Value: -0.12591297924518585
+    actor loss: 64.52296447753906 -- critic loss: 17.7943115234375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011873245239257812 s
+##################################################################
+Train Step: 71400 -- Time: 00:00:42 -- Train reward: -3.9750804901123047 -- Value: -0.17433762550354004
+    actor loss: 60.83203887939453 -- critic loss: 16.010623931884766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.942054748535156e-05 s
+##################################################################
+Train Step: 71600 -- Time: 00:00:42 -- Train reward: -4.217466831207275 -- Value: 0.14101974666118622
+    actor loss: 69.89324951171875 -- critic loss: 20.832304000854492
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 71800 -- Time: 00:00:42 -- Train reward: -4.0517988204956055 -- Value: 0.009143276140093803
+    actor loss: 65.35570526123047 -- critic loss: 18.03423309326172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 72000 -- Time: 00:00:42 -- Train reward: -4.280816078186035 -- Value: -0.012832315638661385
+    actor loss: 68.54833984375 -- critic loss: 19.744482040405273
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011539459228515625 s
+##################################################################
+Train Step: 72200 -- Time: 00:00:42 -- Train reward: -4.148895263671875 -- Value: 0.07804853469133377
+    actor loss: 67.75302124023438 -- critic loss: 19.45125961303711
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.489059448242188e-05 s
+##################################################################
+Train Step: 72400 -- Time: 00:00:42 -- Train reward: -4.2546539306640625 -- Value: 0.07171542942523956
+    actor loss: 69.46015167236328 -- critic loss: 20.713600158691406
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010204315185546875 s
+##################################################################
+Train Step: 72600 -- Time: 00:00:42 -- Train reward: -4.327001571655273 -- Value: 0.005918668583035469
+    actor loss: 69.5538558959961 -- critic loss: 20.522846221923828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010633468627929688 s
+##################################################################
+Train Step: 72800 -- Time: 00:00:42 -- Train reward: -4.155274391174316 -- Value: -0.1048303171992302
+    actor loss: 65.03816986083984 -- critic loss: 17.768590927124023
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010013580322265625 s
+##################################################################
+Train Step: 73000 -- Time: 00:00:42 -- Train reward: -4.172779560089111 -- Value: -0.0643872320652008
+    actor loss: 65.8835220336914 -- critic loss: 18.560531616210938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011157989501953125 s
+##################################################################
+Train Step: 73200 -- Time: 00:00:42 -- Train reward: -3.951171398162842 -- Value: 0.02845962718129158
+    actor loss: 63.871925354003906 -- critic loss: 17.414518356323242
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.72747802734375e-05 s
+##################################################################
+Train Step: 73400 -- Time: 00:00:42 -- Train reward: -3.8950819969177246 -- Value: 0.06260036677122116
+    actor loss: 63.43865966796875 -- critic loss: 16.834632873535156
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.584426879882812e-05 s
+##################################################################
+Train Step: 73600 -- Time: 00:00:42 -- Train reward: -4.0728840827941895 -- Value: -0.10843531042337418
+    actor loss: 63.61952590942383 -- critic loss: 17.46562385559082
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010466575622558594 s
+##################################################################
+Train Step: 73800 -- Time: 00:00:42 -- Train reward: -4.123356819152832 -- Value: 0.027505889534950256
+    actor loss: 66.67623901367188 -- critic loss: 18.627290725708008
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001068115234375 s
+##################################################################
+Train Step: 74000 -- Time: 00:00:42 -- Train reward: -4.26039981842041 -- Value: 0.1704833209514618
+    actor loss: 71.04804229736328 -- critic loss: 21.114131927490234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011134147644042969 s
+##################################################################
+Train Step: 74200 -- Time: 00:00:42 -- Train reward: -4.24785041809082 -- Value: 0.008197755552828312
+    actor loss: 68.33069610595703 -- critic loss: 20.271289825439453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010395050048828125 s
+##################################################################
+Train Step: 74400 -- Time: 00:00:42 -- Train reward: -4.2013349533081055 -- Value: 0.02489197626709938
+    actor loss: 67.82384490966797 -- critic loss: 19.073604583740234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.988380432128906e-05 s
+##################################################################
+Train Step: 74600 -- Time: 00:00:42 -- Train reward: -4.061455726623535 -- Value: -0.12217041850090027
+    actor loss: 63.32656478881836 -- critic loss: 16.888246536254883
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011420249938964844 s
+##################################################################
+Train Step: 74800 -- Time: 00:00:42 -- Train reward: -4.280711650848389 -- Value: -0.03726304695010185
+    actor loss: 68.0815200805664 -- critic loss: 19.494199752807617
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010204315185546875 s
+##################################################################
+Train Step: 75000 -- Time: 00:00:42 -- Train reward: -4.220931053161621 -- Value: -0.00225363508798182
+    actor loss: 67.81990051269531 -- critic loss: 19.443729400634766
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 75200 -- Time: 00:00:42 -- Train reward: -4.374484539031982 -- Value: -0.07739025354385376
+    actor loss: 68.99222564697266 -- critic loss: 20.112442016601562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.894371032714844e-05 s
+##################################################################
+Train Step: 75400 -- Time: 00:00:42 -- Train reward: -3.9409263134002686 -- Value: -0.08399150520563126
+    actor loss: 61.92070770263672 -- critic loss: 16.60782241821289
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011181831359863281 s
+##################################################################
+Train Step: 75600 -- Time: 00:00:42 -- Train reward: -3.9671316146850586 -- Value: 0.024380307644605637
+    actor loss: 64.01254272460938 -- critic loss: 17.479137420654297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011920928955078125 s
+##################################################################
+Train Step: 75800 -- Time: 00:00:42 -- Train reward: -4.271309852600098 -- Value: 0.012988497503101826
+    actor loss: 68.53331756591797 -- critic loss: 20.724254608154297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010228157043457031 s
+##################################################################
+Train Step: 76000 -- Time: 00:00:42 -- Train reward: -4.059617519378662 -- Value: 0.12904545664787292
+    actor loss: 67.3055419921875 -- critic loss: 19.31053924560547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.322166442871094e-05 s
+##################################################################
+Train Step: 76200 -- Time: 00:00:42 -- Train reward: -4.363580703735352 -- Value: 0.0014857116620987654
+    actor loss: 70.16807556152344 -- critic loss: 20.6142578125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.632110595703125e-05 s
+##################################################################
+Train Step: 76400 -- Time: 00:00:42 -- Train reward: -4.094753742218018 -- Value: 0.0741180032491684
+    actor loss: 66.8677749633789 -- critic loss: 19.462663650512695
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.202957153320312e-05 s
+##################################################################
+Train Step: 76600 -- Time: 00:00:42 -- Train reward: -4.169964790344238 -- Value: 0.10911635309457779
+    actor loss: 68.52828979492188 -- critic loss: 20.175434112548828
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.560585021972656e-05 s
+##################################################################
+Train Step: 76800 -- Time: 00:00:42 -- Train reward: -4.0840654373168945 -- Value: -0.16596020758152008
+    actor loss: 63.09090805053711 -- critic loss: 16.874269485473633
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010633468627929688 s
+##################################################################
+Train Step: 77000 -- Time: 00:00:42 -- Train reward: -4.157370567321777 -- Value: 0.13339278101921082
+    actor loss: 68.9342041015625 -- critic loss: 19.994104385375977
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.0001010894775390625 s
+##################################################################
+Train Step: 77200 -- Time: 00:00:42 -- Train reward: -4.313605308532715 -- Value: -0.06170980632305145
+    actor loss: 68.36077117919922 -- critic loss: 19.542251586914062
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010657310485839844 s
+##################################################################
+Train Step: 77400 -- Time: 00:00:42 -- Train reward: -4.07130765914917 -- Value: 0.04745221510529518
+    actor loss: 66.2295150756836 -- critic loss: 18.87472152709961
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 77600 -- Time: 00:00:42 -- Train reward: -4.1435675621032715 -- Value: -0.06842946261167526
+    actor loss: 65.51663208007812 -- critic loss: 18.123348236083984
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 77800 -- Time: 00:00:42 -- Train reward: -4.333901405334473 -- Value: -0.19105996191501617
+    actor loss: 66.70213317871094 -- critic loss: 18.84067153930664
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010037422180175781 s
+##################################################################
+Train Step: 78000 -- Time: 00:00:42 -- Train reward: -4.028717517852783 -- Value: 0.03810223191976547
+    actor loss: 65.23576354980469 -- critic loss: 18.046262741088867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010991096496582031 s
+##################################################################
+Train Step: 78200 -- Time: 00:00:41 -- Train reward: -3.971909284591675 -- Value: 0.07607288658618927
+    actor loss: 65.02996826171875 -- critic loss: 17.970083236694336
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.416175842285156e-05 s
+##################################################################
+Train Step: 78400 -- Time: 00:00:41 -- Train reward: -4.233068943023682 -- Value: -0.14163494110107422
+    actor loss: 65.78111267089844 -- critic loss: 18.306276321411133
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.344650268554688e-05 s
+##################################################################
+Train Step: 78600 -- Time: 00:00:42 -- Train reward: -3.964390277862549 -- Value: 0.06488317996263504
+    actor loss: 64.6268310546875 -- critic loss: 17.650402069091797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012755393981933594 s
+##################################################################
+Train Step: 78800 -- Time: 00:00:42 -- Train reward: -4.207616329193115 -- Value: -0.09918299317359924
+    actor loss: 66.08963012695312 -- critic loss: 18.650577545166016
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.96453857421875e-05 s
+##################################################################
+Train Step: 79000 -- Time: 00:00:42 -- Train reward: -4.455628395080566 -- Value: -0.21123848855495453
+    actor loss: 68.20455169677734 -- critic loss: 19.31489372253418
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.630752563476562e-05 s
+##################################################################
+Train Step: 79200 -- Time: 00:00:41 -- Train reward: -4.208792209625244 -- Value: 0.10334433615207672
+    actor loss: 69.23454284667969 -- critic loss: 20.4615535736084
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010037422180175781 s
+##################################################################
+Train Step: 79400 -- Time: 00:00:41 -- Train reward: -4.0898308753967285 -- Value: -0.02388359047472477
+    actor loss: 65.19729614257812 -- critic loss: 17.975488662719727
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 79600 -- Time: 00:00:41 -- Train reward: -4.189628601074219 -- Value: -0.09980154782533646
+    actor loss: 65.57447814941406 -- critic loss: 18.466506958007812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.797645568847656e-05 s
+##################################################################
+Train Step: 79800 -- Time: 00:00:42 -- Train reward: -4.197734832763672 -- Value: -0.0987238958477974
+    actor loss: 65.72718048095703 -- critic loss: 18.882020950317383
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.059906005859375e-05 s
+##################################################################
+Train Step: 80000 -- Time: 00:00:42 -- Train reward: -4.070852756500244 -- Value: 0.025097504258155823
+    actor loss: 65.60856628417969 -- critic loss: 18.333471298217773
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.036064147949219e-05 s
+##################################################################
+Train Step: 80200 -- Time: 00:00:42 -- Train reward: -4.083291530609131 -- Value: -0.062107622623443604
+    actor loss: 64.55731201171875 -- critic loss: 17.77497673034668
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 80400 -- Time: 00:00:42 -- Train reward: -4.125664710998535 -- Value: 0.07574693113565445
+    actor loss: 67.34602355957031 -- critic loss: 19.68047332763672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.320808410644531e-05 s
+##################################################################
+Train Step: 80600 -- Time: 00:00:42 -- Train reward: -4.2682085037231445 -- Value: -0.09109565615653992
+    actor loss: 66.94404602050781 -- critic loss: 18.878156661987305
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.988380432128906e-05 s
+##################################################################
+Train Step: 80800 -- Time: 00:00:42 -- Train reward: -4.142823696136475 -- Value: 0.015230073593556881
+    actor loss: 66.80424499511719 -- critic loss: 19.147869110107422
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.131431579589844e-05 s
+##################################################################
+Train Step: 81000 -- Time: 00:00:42 -- Train reward: -4.150856971740723 -- Value: 0.05563988909125328
+    actor loss: 67.63468933105469 -- critic loss: 19.388111114501953
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.322166442871094e-05 s
+##################################################################
+Train Step: 81200 -- Time: 00:00:42 -- Train reward: -4.352928161621094 -- Value: -0.020775357261300087
+    actor loss: 69.52953338623047 -- critic loss: 20.60521125793457
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.7738037109375e-05 s
+##################################################################
+Train Step: 81400 -- Time: 00:00:42 -- Train reward: -4.2988667488098145 -- Value: -0.047928035259246826
+    actor loss: 68.34723663330078 -- critic loss: 19.290618896484375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.512901306152344e-05 s
+##################################################################
+Train Step: 81600 -- Time: 00:00:42 -- Train reward: -4.165825366973877 -- Value: 0.04235755279660225
+    actor loss: 67.5743408203125 -- critic loss: 19.092483520507812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.012222290039062e-05 s
+##################################################################
+Train Step: 81800 -- Time: 00:00:42 -- Train reward: -4.135653495788574 -- Value: 0.1118159294128418
+    actor loss: 68.27056121826172 -- critic loss: 19.635902404785156
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.7738037109375e-05 s
+##################################################################
+Train Step: 82000 -- Time: 00:00:41 -- Train reward: -4.189995765686035 -- Value: -0.015842974185943604
+    actor loss: 67.00812530517578 -- critic loss: 19.0518856048584
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.107589721679688e-05 s
+##################################################################
+Train Step: 82200 -- Time: 00:00:41 -- Train reward: -4.0927019119262695 -- Value: 0.10670126229524612
+    actor loss: 67.27660369873047 -- critic loss: 19.665163040161133
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.034706115722656e-05 s
+##################################################################
+Train Step: 82400 -- Time: 00:00:41 -- Train reward: -4.109152793884277 -- Value: -0.06882929056882858
+    actor loss: 64.76575469970703 -- critic loss: 17.932018280029297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.678436279296875e-05 s
+##################################################################
+Train Step: 82600 -- Time: 00:00:42 -- Train reward: -4.274242877960205 -- Value: 0.015897609293460846
+    actor loss: 69.07637023925781 -- critic loss: 19.701881408691406
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.559226989746094e-05 s
+##################################################################
+Train Step: 82800 -- Time: 00:00:42 -- Train reward: -4.1710004806518555 -- Value: 0.025144468992948532
+    actor loss: 67.34404754638672 -- critic loss: 19.813495635986328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.918212890625e-05 s
+##################################################################
+Train Step: 83000 -- Time: 00:00:42 -- Train reward: -4.274456977844238 -- Value: -0.06273549050092697
+    actor loss: 67.48175811767578 -- critic loss: 19.447547912597656
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.584426879882812e-05 s
+##################################################################
+Train Step: 83200 -- Time: 00:00:42 -- Train reward: -4.181027412414551 -- Value: 0.0914248377084732
+    actor loss: 68.75665283203125 -- critic loss: 20.3799991607666
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.465217590332031e-05 s
+##################################################################
+Train Step: 83400 -- Time: 00:00:41 -- Train reward: -4.085007667541504 -- Value: 0.18400290608406067
+    actor loss: 68.39822387695312 -- critic loss: 19.976362228393555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.989738464355469e-05 s
+##################################################################
+Train Step: 83600 -- Time: 00:00:41 -- Train reward: -4.149319171905518 -- Value: 0.12578849494457245
+    actor loss: 68.48667907714844 -- critic loss: 20.091384887695312
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.511543273925781e-05 s
+##################################################################
+Train Step: 83800 -- Time: 00:00:42 -- Train reward: -4.118801116943359 -- Value: -0.07929816097021103
+    actor loss: 64.85763549804688 -- critic loss: 18.140186309814453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.059906005859375e-05 s
+##################################################################
+Train Step: 84000 -- Time: 00:00:42 -- Train reward: -4.1853461265563965 -- Value: -0.08787858486175537
+    actor loss: 65.88440704345703 -- critic loss: 18.34536361694336
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.845329284667969e-05 s
+##################################################################
+Train Step: 84200 -- Time: 00:00:42 -- Train reward: -4.243791103363037 -- Value: -0.09790933132171631
+    actor loss: 66.65174102783203 -- critic loss: 19.199764251708984
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.797645568847656e-05 s
+##################################################################
+Train Step: 84400 -- Time: 00:00:42 -- Train reward: -4.30132532119751 -- Value: 0.08200959861278534
+    actor loss: 70.32428741455078 -- critic loss: 21.074682235717773
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.298324584960938e-05 s
+##################################################################
+Train Step: 84600 -- Time: 00:00:42 -- Train reward: -4.215819358825684 -- Value: 0.140573650598526
+    actor loss: 69.7669906616211 -- critic loss: 20.36531639099121
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.012222290039062e-05 s
+##################################################################
+Train Step: 84800 -- Time: 00:00:42 -- Train reward: -4.32236385345459 -- Value: -0.2791277766227722
+    actor loss: 64.84554290771484 -- critic loss: 17.82521629333496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.918212890625e-05 s
+##################################################################
+Train Step: 85000 -- Time: 00:00:42 -- Train reward: -3.9637839794158936 -- Value: 0.08790576457977295
+    actor loss: 65.264892578125 -- critic loss: 18.166263580322266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.654594421386719e-05 s
+##################################################################
+Train Step: 85200 -- Time: 00:00:42 -- Train reward: -4.1113409996032715 -- Value: -0.01266061794012785
+    actor loss: 65.86808776855469 -- critic loss: 18.63669204711914
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.702278137207031e-05 s
+##################################################################
+Train Step: 85400 -- Time: 00:00:42 -- Train reward: -4.21210241317749 -- Value: -0.030513035133481026
+    actor loss: 66.90357971191406 -- critic loss: 19.116214752197266
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.606910705566406e-05 s
+##################################################################
+Train Step: 85600 -- Time: 00:00:42 -- Train reward: -4.047731399536133 -- Value: 0.01872071996331215
+    actor loss: 65.0788803100586 -- critic loss: 18.051061630249023
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.58306884765625e-05 s
+##################################################################
+Train Step: 85800 -- Time: 00:00:41 -- Train reward: -4.141841411590576 -- Value: -0.10049743205308914
+    actor loss: 64.7646713256836 -- critic loss: 18.126846313476562
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.440017700195312e-05 s
+##################################################################
+Train Step: 86000 -- Time: 00:00:41 -- Train reward: -4.228774070739746 -- Value: 0.030880272388458252
+    actor loss: 68.32537841796875 -- critic loss: 19.921993255615234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.702278137207031e-05 s
+##################################################################
+Train Step: 86200 -- Time: 00:00:41 -- Train reward: -4.061445713043213 -- Value: -0.08556658774614334
+    actor loss: 63.940860748291016 -- critic loss: 17.057926177978516
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.606910705566406e-05 s
+##################################################################
+Train Step: 86400 -- Time: 00:00:41 -- Train reward: -4.19131326675415 -- Value: 0.1259445697069168
+    actor loss: 69.28689575195312 -- critic loss: 20.02583885192871
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.821487426757812e-05 s
+##################################################################
+Train Step: 86600 -- Time: 00:00:41 -- Train reward: -4.253003120422363 -- Value: 0.17910462617874146
+    actor loss: 71.21728515625 -- critic loss: 21.1466064453125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 86800 -- Time: 00:00:42 -- Train reward: -4.21976375579834 -- Value: 0.037482891231775284
+    actor loss: 68.41624450683594 -- critic loss: 19.845115661621094
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.440017700195312e-05 s
+##################################################################
+Train Step: 87000 -- Time: 00:00:42 -- Train reward: -4.078369140625 -- Value: -0.05331010743975639
+    actor loss: 64.65865325927734 -- critic loss: 17.98341941833496
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.702278137207031e-05 s
+##################################################################
+Train Step: 87200 -- Time: 00:00:41 -- Train reward: -4.22904109954834 -- Value: -0.009719864465296268
+    actor loss: 67.85935974121094 -- critic loss: 19.308090209960938
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.441375732421875e-05 s
+##################################################################
+Train Step: 87400 -- Time: 00:00:41 -- Train reward: -4.212373733520508 -- Value: -0.001033115666359663
+    actor loss: 67.79762268066406 -- critic loss: 19.490230560302734
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 87600 -- Time: 00:00:41 -- Train reward: -3.92260479927063 -- Value: -0.12477661669254303
+    actor loss: 60.779380798339844 -- critic loss: 16.11318588256836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 87800 -- Time: 00:00:41 -- Train reward: -4.097773551940918 -- Value: 0.03909220173954964
+    actor loss: 66.47731018066406 -- critic loss: 18.29922866821289
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.417533874511719e-05 s
+##################################################################
+Train Step: 88000 -- Time: 00:00:42 -- Train reward: -4.270047664642334 -- Value: -0.061484161764383316
+    actor loss: 67.57599639892578 -- critic loss: 19.318273544311523
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.5367431640625e-05 s
+##################################################################
+Train Step: 88200 -- Time: 00:00:42 -- Train reward: -4.234540939331055 -- Value: -0.0828159898519516
+    actor loss: 66.55863952636719 -- critic loss: 19.219345092773438
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.107589721679688e-05 s
+##################################################################
+Train Step: 88400 -- Time: 00:00:42 -- Train reward: -4.015375137329102 -- Value: -0.10934425890445709
+    actor loss: 62.73164367675781 -- critic loss: 16.8294677734375
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00011229515075683594 s
+##################################################################
+Train Step: 88600 -- Time: 00:00:42 -- Train reward: -4.138400077819824 -- Value: -0.03934432938694954
+    actor loss: 65.77193450927734 -- critic loss: 18.418607711791992
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010776519775390625 s
+##################################################################
+Train Step: 88800 -- Time: 00:00:42 -- Train reward: -4.259571552276611 -- Value: -0.03691712021827698
+    actor loss: 67.6811752319336 -- critic loss: 19.485183715820312
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.584426879882812e-05 s
+##################################################################
+Train Step: 89000 -- Time: 00:00:42 -- Train reward: -4.259092330932617 -- Value: -0.08208378404378891
+    actor loss: 67.24444580078125 -- critic loss: 19.336240768432617
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.893013000488281e-05 s
+##################################################################
+Train Step: 89200 -- Time: 00:00:42 -- Train reward: -4.237576961517334 -- Value: -0.014915638603270054
+    actor loss: 67.77706909179688 -- critic loss: 19.82779884338379
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.7738037109375e-05 s
+##################################################################
+Train Step: 89400 -- Time: 00:00:42 -- Train reward: -4.207808971405029 -- Value: 0.13721318542957306
+    actor loss: 69.8468017578125 -- critic loss: 20.21846580505371
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.296966552734375e-05 s
+##################################################################
+Train Step: 89600 -- Time: 00:00:41 -- Train reward: -4.083314895629883 -- Value: 0.09472718834877014
+    actor loss: 67.19117736816406 -- critic loss: 18.88409423828125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000102996826171875 s
+##################################################################
+Train Step: 89800 -- Time: 00:00:42 -- Train reward: -4.051836013793945 -- Value: -0.07089167088270187
+    actor loss: 63.76931381225586 -- critic loss: 17.292354583740234
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.440017700195312e-05 s
+##################################################################
+Train Step: 90000 -- Time: 00:00:42 -- Train reward: -4.172482013702393 -- Value: -0.16947200894355774
+    actor loss: 64.24009704589844 -- critic loss: 17.828798294067383
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.202957153320312e-05 s
+##################################################################
+Train Step: 90200 -- Time: 00:00:42 -- Train reward: -4.149357795715332 -- Value: 0.03178463131189346
+    actor loss: 67.17356872558594 -- critic loss: 19.46115493774414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.940696716308594e-05 s
+##################################################################
+Train Step: 90400 -- Time: 00:00:41 -- Train reward: -4.101551055908203 -- Value: -0.19968433678150177
+    actor loss: 62.89999008178711 -- critic loss: 17.060346603393555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.036064147949219e-05 s
+##################################################################
+Train Step: 90600 -- Time: 00:00:42 -- Train reward: -4.111893653869629 -- Value: -0.04208257049322128
+    actor loss: 65.37777709960938 -- critic loss: 18.19875717163086
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.083747863769531e-05 s
+##################################################################
+Train Step: 90800 -- Time: 00:00:42 -- Train reward: -4.229307174682617 -- Value: 0.1093139573931694
+    actor loss: 69.66875457763672 -- critic loss: 20.295000076293945
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.559226989746094e-05 s
+##################################################################
+Train Step: 91000 -- Time: 00:00:41 -- Train reward: -4.104290008544922 -- Value: -0.07715517282485962
+    actor loss: 64.47200012207031 -- critic loss: 17.886520385742188
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.846687316894531e-05 s
+##################################################################
+Train Step: 91200 -- Time: 00:00:42 -- Train reward: -4.298795223236084 -- Value: -0.00907987542450428
+    actor loss: 69.00215148925781 -- critic loss: 20.121807098388672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 91400 -- Time: 00:00:42 -- Train reward: -4.115306854248047 -- Value: -0.048486240208148956
+    actor loss: 65.2798843383789 -- critic loss: 17.965185165405273
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.179115295410156e-05 s
+##################################################################
+Train Step: 91600 -- Time: 00:00:42 -- Train reward: -4.200129985809326 -- Value: 0.051074281334877014
+    actor loss: 68.23279571533203 -- critic loss: 20.12657928466797
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.940696716308594e-05 s
+##################################################################
+Train Step: 91800 -- Time: 00:00:42 -- Train reward: -4.187385082244873 -- Value: 0.03277060016989708
+    actor loss: 67.67569732666016 -- critic loss: 19.631816864013672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.296966552734375e-05 s
+##################################################################
+Train Step: 92000 -- Time: 00:00:42 -- Train reward: -4.169312953948975 -- Value: -0.07464775443077087
+    actor loss: 65.69709777832031 -- critic loss: 18.3077335357666
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.511543273925781e-05 s
+##################################################################
+Train Step: 92200 -- Time: 00:00:42 -- Train reward: -4.189133644104004 -- Value: 0.06365849822759628
+    actor loss: 68.32524871826172 -- critic loss: 19.69245147705078
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.107589721679688e-05 s
+##################################################################
+Train Step: 92400 -- Time: 00:00:41 -- Train reward: -4.169034957885742 -- Value: -0.07960446178913116
+    actor loss: 65.78606414794922 -- critic loss: 18.63613510131836
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.393692016601562e-05 s
+##################################################################
+Train Step: 92600 -- Time: 00:00:41 -- Train reward: -4.18980598449707 -- Value: 0.06020946055650711
+    actor loss: 68.2276840209961 -- critic loss: 19.317901611328125
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010132789611816406 s
+##################################################################
+Train Step: 92800 -- Time: 00:00:42 -- Train reward: -4.066876411437988 -- Value: 0.02818497270345688
+    actor loss: 65.79828643798828 -- critic loss: 18.333650588989258
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.893013000488281e-05 s
+##################################################################
+Train Step: 93000 -- Time: 00:00:42 -- Train reward: -4.276098251342773 -- Value: 0.06342077255249023
+    actor loss: 69.6487045288086 -- critic loss: 20.609657287597656
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.1552734375e-05 s
+##################################################################
+Train Step: 93200 -- Time: 00:00:41 -- Train reward: -4.258601665496826 -- Value: 0.06725431233644485
+    actor loss: 69.32302856445312 -- critic loss: 20.234844207763672
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00016832351684570312 s
+##################################################################
+Train Step: 93400 -- Time: 00:00:42 -- Train reward: -4.201023101806641 -- Value: -0.09439271688461304
+    actor loss: 65.82062530517578 -- critic loss: 18.471521377563477
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.036064147949219e-05 s
+##################################################################
+Train Step: 93600 -- Time: 00:00:41 -- Train reward: -4.187137603759766 -- Value: 0.10250580310821533
+    actor loss: 68.76377868652344 -- critic loss: 19.877723693847656
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.5367431640625e-05 s
+##################################################################
+Train Step: 93800 -- Time: 00:00:42 -- Train reward: -4.118462085723877 -- Value: -0.012408735230565071
+    actor loss: 66.02411651611328 -- critic loss: 18.422664642333984
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.000102996826171875 s
+##################################################################
+Train Step: 94000 -- Time: 00:00:42 -- Train reward: -4.134467601776123 -- Value: 0.045539237558841705
+    actor loss: 67.0157470703125 -- critic loss: 18.80567169189453
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00015401840209960938 s
+##################################################################
+Train Step: 94200 -- Time: 00:00:41 -- Train reward: -3.9921510219573975 -- Value: 0.030067669227719307
+    actor loss: 64.63076782226562 -- critic loss: 17.780029296875
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.654594421386719e-05 s
+##################################################################
+Train Step: 94400 -- Time: 00:00:42 -- Train reward: -4.276044845581055 -- Value: 0.014852026477456093
+    actor loss: 68.83515930175781 -- critic loss: 20.3155574798584
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.775161743164062e-05 s
+##################################################################
+Train Step: 94600 -- Time: 00:00:42 -- Train reward: -4.118406772613525 -- Value: -0.0012887738412246108
+    actor loss: 66.15184020996094 -- critic loss: 18.634719848632812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.940696716308594e-05 s
+##################################################################
+Train Step: 94800 -- Time: 00:00:42 -- Train reward: -4.26521110534668 -- Value: -0.08033480495214462
+    actor loss: 67.12681579589844 -- critic loss: 19.445621490478516
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.726119995117188e-05 s
+##################################################################
+Train Step: 95000 -- Time: 00:00:42 -- Train reward: -4.1440019607543945 -- Value: -0.022364333271980286
+    actor loss: 66.24140930175781 -- critic loss: 18.505659103393555
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.606910705566406e-05 s
+##################################################################
+Train Step: 95200 -- Time: 00:00:42 -- Train reward: -4.2660627365112305 -- Value: -0.008367648348212242
+    actor loss: 68.28270721435547 -- critic loss: 19.728404998779297
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010013580322265625 s
+##################################################################
+Train Step: 95400 -- Time: 00:00:42 -- Train reward: -4.067410945892334 -- Value: -0.013516407459974289
+    actor loss: 65.01034545898438 -- critic loss: 18.333515167236328
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.702278137207031e-05 s
+##################################################################
+Train Step: 95600 -- Time: 00:00:42 -- Train reward: -4.182672500610352 -- Value: 0.0639519989490509
+    actor loss: 68.21715545654297 -- critic loss: 19.521408081054688
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.799003601074219e-05 s
+##################################################################
+Train Step: 95800 -- Time: 00:00:42 -- Train reward: -4.200095176696777 -- Value: -0.09249696880578995
+    actor loss: 65.99822998046875 -- critic loss: 18.62179946899414
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.965896606445312e-05 s
+##################################################################
+Train Step: 96000 -- Time: 00:00:42 -- Train reward: -4.206955909729004 -- Value: 0.09118503332138062
+    actor loss: 68.91568756103516 -- critic loss: 20.105945587158203
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.250640869140625e-05 s
+##################################################################
+Train Step: 96200 -- Time: 00:00:42 -- Train reward: -4.086643218994141 -- Value: 0.04416647553443909
+    actor loss: 66.29883575439453 -- critic loss: 18.666702270507812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.58306884765625e-05 s
+##################################################################
+Train Step: 96400 -- Time: 00:00:42 -- Train reward: -4.23214054107666 -- Value: -0.07333018630743027
+    actor loss: 66.90261840820312 -- critic loss: 18.52893829345703
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.083747863769531e-05 s
+##################################################################
+Train Step: 96600 -- Time: 00:00:42 -- Train reward: -4.3439741134643555 -- Value: 0.12901732325553894
+    actor loss: 71.64054107666016 -- critic loss: 21.539875030517578
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.417533874511719e-05 s
+##################################################################
+Train Step: 96800 -- Time: 00:00:42 -- Train reward: -4.0500640869140625 -- Value: -0.17704176902770996
+    actor loss: 62.225074768066406 -- critic loss: 16.50493621826172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.893013000488281e-05 s
+##################################################################
+Train Step: 97000 -- Time: 00:00:41 -- Train reward: -4.4629411697387695 -- Value: 0.013418365269899368
+    actor loss: 71.72383880615234 -- critic loss: 21.84242820739746
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.606910705566406e-05 s
+##################################################################
+Train Step: 97200 -- Time: 00:00:41 -- Train reward: -4.177605152130127 -- Value: -0.08650825172662735
+    actor loss: 65.81844329833984 -- critic loss: 18.113401412963867
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.107589721679688e-05 s
+##################################################################
+Train Step: 97400 -- Time: 00:00:42 -- Train reward: -4.195765972137451 -- Value: 0.03969531133770943
+    actor loss: 67.81804656982422 -- critic loss: 19.627967834472656
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.369850158691406e-05 s
+##################################################################
+Train Step: 97600 -- Time: 00:00:41 -- Train reward: -4.070280075073242 -- Value: 0.10264778137207031
+    actor loss: 66.99300384521484 -- critic loss: 18.97261619567871
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.870529174804688e-05 s
+##################################################################
+Train Step: 97800 -- Time: 00:00:41 -- Train reward: -4.071660995483398 -- Value: 0.11301344633102417
+    actor loss: 67.37854766845703 -- critic loss: 19.098779678344727
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010251998901367188 s
+##################################################################
+Train Step: 98000 -- Time: 00:00:42 -- Train reward: -4.202013969421387 -- Value: 0.008572527207434177
+    actor loss: 67.6209945678711 -- critic loss: 19.42745590209961
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00012826919555664062 s
+##################################################################
+Train Step: 98200 -- Time: 00:00:41 -- Train reward: -4.100597381591797 -- Value: 0.028821108862757683
+    actor loss: 66.4419174194336 -- critic loss: 18.666213989257812
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010418891906738281 s
+##################################################################
+Train Step: 98400 -- Time: 00:00:41 -- Train reward: -4.170570373535156 -- Value: 0.08730961382389069
+    actor loss: 68.23991394042969 -- critic loss: 19.654735565185547
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.512901306152344e-05 s
+##################################################################
+Train Step: 98600 -- Time: 00:00:42 -- Train reward: -4.205713748931885 -- Value: 0.09387862682342529
+    actor loss: 69.06254577636719 -- critic loss: 19.71263885498047
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.416175842285156e-05 s
+##################################################################
+Train Step: 98800 -- Time: 00:00:41 -- Train reward: -4.326425552368164 -- Value: -0.1779489517211914
+    actor loss: 66.56561279296875 -- critic loss: 18.862075805664062
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.179115295410156e-05 s
+##################################################################
+Train Step: 99000 -- Time: 00:00:41 -- Train reward: -4.373081207275391 -- Value: -0.13156750798225403
+    actor loss: 68.08355712890625 -- critic loss: 19.58359718322754
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 8.749961853027344e-05 s
+##################################################################
+Train Step: 99200 -- Time: 00:00:41 -- Train reward: -4.265965461730957 -- Value: 0.19246110320091248
+    actor loss: 71.46452331542969 -- critic loss: 21.296537399291992
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.250640869140625e-05 s
+##################################################################
+Train Step: 99400 -- Time: 00:00:42 -- Train reward: -4.232374668121338 -- Value: -0.10035659372806549
+    actor loss: 66.28688049316406 -- critic loss: 18.705957412719727
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010728836059570312 s
+##################################################################
+Train Step: 99600 -- Time: 00:00:42 -- Train reward: -4.008066177368164 -- Value: -0.024233972653746605
+    actor loss: 64.01887512207031 -- critic loss: 17.265972137451172
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 0.00010895729064941406 s
+##################################################################
+Train Step: 99800 -- Time: 00:00:42 -- Train reward: -4.101496696472168 -- Value: 0.05990522727370262
+    actor loss: 67.03324127197266 -- critic loss: 19.207422256469727
+Average of greedy in batch-mode: 0.0 -- std R: 0.0 -- time 9.059906005859375e-05 s
+##################################################################
+Total time is 05:32:09

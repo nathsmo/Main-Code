@@ -26,9 +26,13 @@ class RLAgent(nn.Module):
         self.clAttentionCritic = clAttentionCritic
         self.clAttentionActor = clAttentionActor
         
-        # Choose the type of embedding based on args
-        self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
-        
+        # Embedding and Decoder setup
+        if args['emb_type'] == 'linear':
+            self.embedding = LinearEmbedding(prt, args['embedding_dim'])
+        elif args['emb_type'] == 'enhanced_linear' or args['emb_type'] == 'enhanced':
+            self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        # self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 
                                            num_heads=args['num_heads'], num_actions=5, beam_width=args['beam_width'])
@@ -143,14 +147,15 @@ class RLAgent(nn.Module):
 
         R, v, log_probs, actions, idxs , batch , probs = self.build_model(eval_type='stochastic') 
         v_nograd = v.detach()
-        R_nograd = R.detach()
+        # R_nograd = R.detach()
 
         # Actor and Critic
         actor = self.clAttentionActor(self.args['hidden_dim'])
         critic = self.clAttentionCritic(self.args['hidden_dim'])
+        
         # Losses
-        actor_loss = torch.mean((R_nograd - v_nograd) * torch.sum(torch.stack(log_probs), dim=0))
-        critic_loss = F.mse_loss(R_nograd, v)
+        actor_loss = torch.mean((R - v_nograd) * torch.sum(torch.stack(log_probs), dim=0))
+        critic_loss = F.mse_loss(R, v)
         
         # Optimizers
         actor_optim = optim.Adam(actor.parameters(), lr=self.args['actor_net_lr'])
@@ -227,7 +232,7 @@ class RLAgent(nn.Module):
         
         self.env.reset()
 
-        summary = self.build_model(eval_type)
+        # summary = self.build_model(eval_type)
 
         data = self.dataGen.get_test_data()
         
@@ -239,7 +244,7 @@ class RLAgent(nn.Module):
 
         self.env.input_data = data
 
-        R, v, log_probs, actions, idxs, batch, _ = summary
+        R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
 
         if len(R.size()) == 0:
             self.prt.print_out("This is the std of R: ", R.std())

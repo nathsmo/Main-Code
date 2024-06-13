@@ -28,7 +28,7 @@ class RLAgent(nn.Module):
         # Embedding and Decoder setup
         if args['emb_type'] == 'linear':
             self.embedding = LinearEmbedding(prt, args['embedding_dim'])
-        elif args['emb_type'] == 'enhanced_linear':
+        elif args['emb_type'] == 'enhanced_linear' or args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
         # self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
 
@@ -286,7 +286,7 @@ class RLAgent(nn.Module):
 
         start_time = time.time()
         avg_reward = []
-        summary = self.build_model(eval_type)
+        # summary = self.build_model(eval_type)
 
 
         self.dataGen.reset()
@@ -298,7 +298,7 @@ class RLAgent(nn.Module):
             for data in test_loader:                
                 self.env.input_data = data
 
-                R, v, log_probs, actions, idxs, batch, _ = summary
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
 
                 if eval_type == 'greedy':
                     avg_reward.append(R)

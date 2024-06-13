@@ -37,7 +37,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 
 # D1: New combination
-python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
+# python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
 
 # E1: Enhanced emb + Glimpse
 # python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
@@ -154,7 +154,9 @@ python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --e
 
 # python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=batch
 # python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=single
-# python main.py --variation='B2' --task=tsp20 --is_train=False --decoder=self --emb_type=enhanced_linear  --num_heads=1 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
+# python main.py --variation='B2' --task=tsp20 --is_train=False --decoder=self --emb_type=enhanced  --num_heads=1 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
 # python main.py --variation='E2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=enhanced --n_glimpses=3 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
+
+python main.py --variation='C10' --task=tsp100 --is_train=False --decoder=self --emb_type=linear --model_dir=./totest/New_test/tsp100/B10/model/agent_complete.pth --infer_type=batch
 
 echo "[$SHELL] ## Script finished"

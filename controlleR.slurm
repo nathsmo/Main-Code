@@ -12,6 +12,7 @@
 # in case the default settings change
 module load Python/3.11.3-GCCcore-12.3.0
 module load Miniconda3/23.9.0-0
+module load TensorFlow/2.6.0-foss-2021a-CUDA-11.3.1
 
 # Source the Python virtual environment
 # source $HOME/user_guide_tutorials/thesis/torch_thesis_server/bin/activate

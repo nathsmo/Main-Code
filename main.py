@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.tensorboard import SummaryWriter
 
 import numpy as np
 import time
@@ -14,7 +15,6 @@ from model.attention_agent import RLAgent
 from model.self_attention_agent import RLAgent as SelfAttentionAgent
 
 from configs import ParseParams
-from shared.model_manager import ModelManager
 
 class principal(nn.Module):
     def __init__(self, args, prt):
@@ -51,33 +51,19 @@ class principal(nn.Module):
         
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 
-        # self.manager = ModelManager(self.agent, self.optimizer, args)
-        # self.manager.initialize()
+        # Set up TensorBoard SummaryWriter
+        self.writer = SummaryWriter()
 
         # train or evaluate the agent
         start_time = time.time()
-
-        # print("Loaded keys:")
-        # state_dict = torch.load(args['model_dir'])
-        # print(state_dict.keys())
-
-        # sys.exit()
         
         if args['is_train']:
-
             prt.print_out("Training started ...")
             self.train()
             torch.save(self.agent.state_dict(), f"{args['model_dir']}/agent_complete.pth")
 
         else: # inference/ evaluation
             prt.print_out('Evaluation started ...')
-
-            # print("Loaded keys:")
-            # state_dict = torch.load(args['model_dir'])
-            # print(state_dict.keys())
-            # print("Expected keys:")
-            # print(self.agent.state_dict().keys())
-
             self.agent.load_state_dict(torch.load(args['model_dir']))
             self.agent.eval()
             self.agent.inference(args['infer_type'])
@@ -85,24 +71,22 @@ class principal(nn.Module):
         prt.print_out(f'Total time is {time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))}')
 
     def train(self):
-
         prt.print_out('Training the agent...')
-        # print("Amount of training steps: ", args['n_train'])
-
         train_time_beg = time.time()
         
         for step in range(args['n_train']):
-
             actor_loss_val, critic_loss_val, R_val, v_val = self.agent.run_train_step()
+            # Logging to TensorBoard
+            self.writer.add_scalar('Train/Reward', R_val.mean().item(), step)
+            self.writer.add_scalar('Train/Value', v_val.mean().item(), step)
+            self.writer.add_scalar('Train/Actor_Loss', np.mean(actor_loss_val), step)
+            self.writer.add_scalar('Train/Critic_Loss', np.mean(critic_loss_val), step)
             
             if step % args['save_interval'] == 0:
-                # ModelManager.save_model(self.agent, self.optimizer, step+1, args['model_dir'])
                 torch.save(self.agent.state_dict(), f"{args['model_dir']}/model_{step}.pth")
 
             if step % args['log_interval'] == 0:    
-
                 train_time_end = time.time()-train_time_beg
-
                 prt.print_out('Train Step: {} -- Time: {} -- Train reward: {} -- Value: {}'.format(step,time.strftime("%H:%M:%S", time.gmtime(train_time_end)), R_val.mean().item(), v_val.mean().item()))
                 prt.print_out('    actor loss: {} -- critic loss: {}'.format(np.mean(actor_loss_val),np.mean(critic_loss_val)))
                 
@@ -111,13 +95,14 @@ class principal(nn.Module):
             if step % args['test_interval'] == 0:
                 self.agent.inference(args['infer_type'])
 
+        # Close the SummaryWriter
+        self.writer.close()
+
 if __name__ == "__main__":
     args, prt = ParseParams()
 
     if args['random_seed'] is not None and args['random_seed'] > 0:
-
         prt.print_out(f"# Set random seed to {args['random_seed']}")
-
         prt.print_out(f"# Set parameters for this run:")
         prt.print_out(f"# Variation:    {args['variation']}")
         prt.print_out(f"# Task:         {args['task']}")
@@ -130,5 +115,5 @@ if __name__ == "__main__":
 
         np.random.seed(args['random_seed'])
         torch.manual_seed(args['random_seed'])
-        
+
     run_code = principal(args, prt)  # Create an instance

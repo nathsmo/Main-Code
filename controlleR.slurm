@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_D1
+#SBATCH --job-name=Training_A1_B1_tensorboard
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=48:00:00
+#SBATCH --time=24:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -12,7 +12,6 @@
 # in case the default settings change
 module load Python/3.11.3-GCCcore-12.3.0
 module load Miniconda3/23.9.0-0
-module load TensorFlow/2.6.0-foss-2021a-CUDA-11.3.1
 
 # Source the Python virtual environment
 # source $HOME/user_guide_tutorials/thesis/torch_thesis_server/bin/activate
@@ -29,10 +28,10 @@ echo "[$SHELL] ## Run script"
 # Training organized
 
 # A1: Basic
-# python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
 
 # B1: Decoder change + Basic
-# python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
 
 # C1: Emb type change + Basic
 # python main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
@@ -158,6 +157,6 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='B2' --task=tsp20 --is_train=False --decoder=self --emb_type=enhanced  --num_heads=1 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
 # python main.py --variation='E2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=enhanced --n_glimpses=3 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
 
-python main.py --variation='C10' --task=tsp100 --is_train=False --decoder=self --emb_type=linear --model_dir=./totest/New_test/tsp100/B10/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='C10' --task=tsp100 --is_train=False --decoder=self --emb_type=linear --model_dir=./totest/New_test/tsp100/B10/model/agent_complete.pth --infer_type=batch
 
 echo "[$SHELL] ## Script finished"

@@ -62,8 +62,7 @@ class RLAgent(nn.Module):
         # input_pnt: [batch_size x max_time x input_dim=2]
         input_pnt = env.input_pnt
         if not isinstance(input_pnt, torch.Tensor):
-            input_pnt = torch.tensor(input_pnt, dtype=torch.double).float()
-
+            input_pnt = torch.tensor(input_pnt, dtype=torch.float).float()
         # encoder_emb_inp: [batch_size x max_time x embedding_dim]
         encoder_emb_inp = self.embedding.forward(input_pnt)
 

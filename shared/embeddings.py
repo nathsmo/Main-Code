@@ -47,8 +47,9 @@ class EnhancedLinearEmbedding(nn.Module):
 
     def forward(self, input_pnt):
         # Transpose input to match Conv1d expected input shape (batch, channels, sequence length)
-        input_pnt = input_pnt.transpose(1, 2)
+        input_pnt = input_pnt.transpose(1, 2).float()
         # Pass through first layer and activate
+
         x = self.activation(self.layer1(input_pnt))
         # Add the output of the second layer to the residual path output
         x = self.layer2(x) + self.residual(input_pnt)

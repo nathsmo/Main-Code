@@ -402,11 +402,10 @@ class RLAgent(nn.Module):
         
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
-            # self.evaluate_batch('greedy')
             self.evaluate_batch('greedy')
             # self.evaluate_batch('beam_search')
         elif infer_type == 'single':
-            self.evaluate_single('greedy')
+            self.evaluate_single('single')
             # self.evaluate_single('beam_search')
         
         self.prt.print_out("##################################################################")
@@ -442,6 +441,7 @@ class RLAgent(nn.Module):
             # print('Data shape: ', data.size())
             if data.size(0) != self.args['batch_size']:
                 # Fix this! as we are not testing the total amount of data
+                # Remember to fix also in self attention
                 break
             self.env.input_data = data  # Set the environment's input data to the batch provided by DataLoader
             
@@ -461,8 +461,6 @@ class RLAgent(nn.Module):
 
         return R, v, log_probs, actions, idxs, batch, _
     
-
-
 
 class MyNetwork(nn.Module):
     def __init__(self, input_dim, hidden_dim):

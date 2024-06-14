@@ -286,8 +286,6 @@ class RLAgent(nn.Module):
 
         start_time = time.time()
         avg_reward = []
-        # summary = self.build_model(eval_type)
-
 
         self.dataGen.reset()
         test_df = self.dataGen.get_test_data()
@@ -343,11 +341,9 @@ class RLAgent(nn.Module):
         self.prt.print_out("Finished evaluation with %d steps in %s." % (problem_count\
                            ,time.strftime("%H:%M:%S", time.gmtime(end_time))))
         
-    
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
-        summary = self.build_model(eval_type)
         if eval_type == 'greedy':
             beam_width = 1
         elif eval_type == 'beam_search':
@@ -362,7 +358,7 @@ class RLAgent(nn.Module):
 
         self.env.input_data = data
 
-        R, v, log_probs, actions, idxs, batch, _ = summary
+        R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
 
         if len(R.size()) == 0:
             self.prt.print_out("This is the std of R: ", R.std())

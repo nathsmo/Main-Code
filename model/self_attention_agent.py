@@ -186,7 +186,6 @@ class RLAgent(nn.Module):
 
         start_time = time.time()
         avg_reward = []
-        summary = self.build_model(eval_type)
 
         self.dataGen.reset()
         test_df = self.dataGen.get_test_data()
@@ -197,7 +196,7 @@ class RLAgent(nn.Module):
             for data in test_loader:                
                 self.env.input_data = data
 
-                R, v, log_probs, actions, idxs, batch, _ = summary
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
 
                 avg_reward.append(R)
                 R_ind0 = 0
@@ -231,8 +230,6 @@ class RLAgent(nn.Module):
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
-
-        # summary = self.build_model(eval_type)
 
         data = self.dataGen.get_test_data()
         

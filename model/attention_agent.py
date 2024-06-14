@@ -115,9 +115,21 @@ class RLAgent(nn.Module):
             prob = F.softmax(logit, dim=-1)
             # print("Probabilities: ", prob)
             beam_parent = None
+
             if decode_type == "greedy":
-                idx = torch.argmax(prob, dim=1).unsqueeze(1)
-            
+                # Generate random numbers for each element in the batch
+                random_values = torch.rand(prob.size(0))
+
+                # Calculate the index of the maximum probability (greedy action)
+                greedy_idx = torch.argmax(prob, dim=1).unsqueeze(1)
+
+                random_values = torch.rand(prob.size(0), 1)
+                # Decide between the greedy action and a random action
+                idx = torch.where(random_values < self.args['epsilon'],
+                  torch.randint(prob.size(1), (prob.size(0), 1), device=prob.device),  # Random action
+                  greedy_idx)   # Greedy action
+                self.args['epsilon'] *= 0.9999  # Decay epsilon
+
             elif decode_type == "stochastic":
                 # Select stochastic actions.
                 # print("Prob: ", prob.shape)

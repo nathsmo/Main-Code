@@ -51,6 +51,7 @@ def ParseParams():
     parser.add_argument('--mask_glimpses', type=str2bool, default=True, help='')
     parser.add_argument('--mask_pointer', type=str2bool, default=True, help='')
     parser.add_argument('--dropout', default=0.1, type=float, help='The dropout prob')
+    parser.add_argument('--epsilon', default=0.15, type=float, help='The exploration set for greedy')
 
     # Training
     parser.add_argument('--is_train', default=True,type=str2bool, help="whether to do the training or not")

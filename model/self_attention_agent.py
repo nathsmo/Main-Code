@@ -212,10 +212,10 @@ class RLAgent(nn.Module):
                     for idx, action in enumerate(actions):
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
-                    self.prt.print_out('\nExample test input: {}'.format(example_input))
-                    self.prt.print_out('\nExample test output: {}'.format(example_output))
-                    self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))
+                    # self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
+                    # self.prt.print_out('\nExample test input: {}'.format(example_input))
+                    # self.prt.print_out('\nExample test output: {}'.format(example_output))
+                    self.prt.print_out('\Sample test reward: {} - best: {}'.format(R[0],R_ind0))
                 
         end_time = time.time() - start_time
                 
@@ -230,15 +230,12 @@ class RLAgent(nn.Module):
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
-
         data = self.dataGen.get_test_data()
         
         start_time = time.time()
-
         if np.array_equal(self.env.input_data, data):
             self.prt.print_out("The data is the same.!!!!!!")
             sys.exit()
-
         self.env.input_data = data
 
         R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
@@ -257,13 +254,13 @@ class RLAgent(nn.Module):
         self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} -- time {} s'.format(eval_type, R.mean().numpy(), str(std_r), end_time))  
         
     def inference(self, infer_type='batch'):
-        if infer_type == 'batch':
-            self.evaluate_batch('greedy')
-            # self.evaluate_batch('beam_search')
-        
-        elif infer_type == 'single':
-            self.evaluate_single('greedy')
-            # self.evaluate_single('beam_search')
+        # if infer_type == 'batch':
+        # self.evaluate_batch('greedy')
+        # self.evaluate_batch('beam_search')
+        self.evaluate_single('greedy')
+        # elif infer_type == 'single':
+        # self.evaluate_single('greedy')
+        # self.evaluate_single('beam_search')
         
         self.prt.print_out("##################################################################")
 

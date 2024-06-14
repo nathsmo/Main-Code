@@ -117,7 +117,7 @@ class RLAgent(nn.Module):
             beam_parent = None
             if decode_type == "greedy":
                 idx = torch.argmax(prob, dim=1).unsqueeze(1)
-
+            
             elif decode_type == "stochastic":
                 # Select stochastic actions.
                 # print("Prob: ", prob.shape)
@@ -247,6 +247,10 @@ class RLAgent(nn.Module):
         """
 
         R, v, log_probs, actions, idxs , batch , probs = self.build_model("stochastic") # self.train_model
+
+        R = R.float()
+        v = v.float()
+        
         v_nograd = v.detach()
         R_nograd = R.detach()
 
@@ -326,10 +330,10 @@ class RLAgent(nn.Module):
                         here = list(action[R_ind0*np.shape(batch)[0]])
                         example_output.append(list(action[R_ind0*np.shape(batch)[0]]))
                     
-                    self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
-                    self.prt.print_out('\nExample test input: {}'.format(example_input))
-                    self.prt.print_out('\nExample test output: {}'.format(example_output))
-                    self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0],R_ind0))
+                    # self.prt.print_out('\n\nVal-Step of {}: {}'.format(eval_type, problem_count))
+                    # self.prt.print_out('\nExample test input: {}'.format(example_input))
+                    # self.prt.print_out('\nExample test output: {}'.format(example_output))
+                    self.prt.print_out('\nExample test reward: {} - best: {}'.format(R[0], R_ind0))
                 
                 
         end_time = time.time() - start_time
@@ -358,7 +362,7 @@ class RLAgent(nn.Module):
 
         self.env.input_data = data
 
-        R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
+        R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type)
 
         if len(R.size()) == 0:
             self.prt.print_out("This is the std of R: ", R.std())
@@ -386,6 +390,7 @@ class RLAgent(nn.Module):
         
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
+            # self.evaluate_batch('greedy')
             self.evaluate_batch('greedy')
             # self.evaluate_batch('beam_search')
         elif infer_type == 'single':
@@ -396,13 +401,55 @@ class RLAgent(nn.Module):
 
     def run_train_step(self):
         data = self.dataGen.get_train_next()
-
         self.env.input_data = data
-        
         train_results = self.build_train_step()
-
         return train_results
+
+    def evaluate_model(self, eval_type='greedy'):
+        """
+        Evaluate the model on the provided DataLoader with a specific evaluation type.
+        
+        Parameters:
+            agent (RLAgent): The agent to evaluate.
+            data_loader (DataLoader): DataLoader providing the test dataset.
+            eval_type (str): Type of evaluation, e.g., 'greedy', 'beam_search'.
+        
+        Returns:
+            Tuple containing average reward and standard deviation of rewards.
+        """
+
+        total_reward = []
+
+        self.dataGen.reset()
+
+        test_df = self.dataGen.get_test_data()
+        test_loader = DataLoader(test_df, batch_size=self.args['batch_size']) #, collate_fn=lambda x: padded_collate(x, self.args['batch_size'])) 
+        start_time = time.time()
+
+        for data in test_loader:
+            # print('Data shape: ', data.size())
+            if data.size(0) != self.args['batch_size']:
+                # Fix this! as we are not testing the total amount of data
+                break
+            self.env.input_data = data  # Set the environment's input data to the batch provided by DataLoader
+            
+            # Run model evaluation for the current batch
+            R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
+
+            if eval_type == 'beam_search':
+                # For beam search, handling multiple paths per instance
+                R = R.view(-1, self.args['beam_width'])  # Reshape R assuming it is flat with all paths
+                R_val, _ = torch.min(R, dim=1)  # Find the minimum reward across beams
+                total_reward.extend(R_val.tolist())  # Append to total rewards list
+            else:
+                total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
+        end_time = time.time() - start_time
+
+        # self.prt.print_out(f'Average Reward: {R.mean().numpy()}, Reward Std Dev: {R.std().item()}, -- time {end_time} s')
+
+        return R, v, log_probs, actions, idxs, batch, _
     
+
 
 
 class MyNetwork(nn.Module):

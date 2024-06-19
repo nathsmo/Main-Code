@@ -14,7 +14,7 @@ class SelfAttention(nn.Module):
         return attn_output.transpose(0, 1), attn_weights  # Convert back to (batch, seq_len, dim)
 
 class AttentionDecoder(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_heads, num_actions, num_layers=1, dropout=0.1, beam_width=1):
+    def __init__(self, input_dim, hidden_dim, num_heads, num_actions, args, num_layers=1, dropout=0.1, beam_width=1):
         super(AttentionDecoder, self).__init__()
         self.rnn = nn.LSTM(input_size=input_dim, hidden_size=hidden_dim, num_layers=num_layers,
                            batch_first=True, dropout=dropout if num_layers > 1 else 0)
@@ -23,6 +23,7 @@ class AttentionDecoder(nn.Module):
         self.rnn_layers = num_layers
         self.hidden_dim = hidden_dim
         self.beam_width = beam_width  # Beam width
+        self.args = args
 
     def forward(self, inputs, context, mask=None):
         rnn_out, _ = self.rnn(inputs)
@@ -33,11 +34,30 @@ class AttentionDecoder(nn.Module):
     def select_action(self, action_logits, method='greedy'):
         if method == 'beam_search':
             return self.beam_search(action_logits, self.beam_width)
-        probabilities = F.softmax(action_logits, dim=-1)
-        if method == 'greedy':
-            return probabilities, torch.argmax(probabilities, dim=-1)  # Greedy selection
-        elif method == 'stochastic':
-            return probabilities, torch.multinomial(probabilities, 1).squeeze(-1)  # Stochastic selection
+        prob = F.softmax(action_logits, dim=-1)
+        if method == "greedy":
+            # Generate random numbers for each element in the batch
+            random_values = torch.rand(prob.size(0))
+
+            # Calculate the index of the maximum probability (greedy action)
+            greedy_idx = torch.argmax(prob, dim=1).unsqueeze(1)
+
+            random_values = torch.rand(prob.size(0), 1)
+            # Decide between the greedy action and a random action
+            idx = torch.where(random_values < self.args['epsilon'],
+                torch.randint(prob.size(1), (prob.size(0), 1), device=prob.device),  # Random action
+                greedy_idx)   # Greedy action
+            self.args['epsilon'] *= 0.9999  # Decay epsilon
+
+        elif method == "stochastic":
+            # Select stochastic actions.
+            # print("Prob: ", prob.shape)
+            idx = torch.multinomial(prob, num_samples=1, replacement=True)
+
+        #Action selection
+        return prob, idx 
+        
+
 
     def beam_search(self, logits, beam_width):
         # Start with an empty beam

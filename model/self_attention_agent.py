@@ -32,7 +32,7 @@ class RLAgent(nn.Module):
 
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 
-                                           num_heads=args['num_heads'], num_actions=5, beam_width=args['beam_width'])
+                                           num_heads=args['num_heads'], num_actions=5, beam_width=args['beam_width'], args=args)
 
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
         # Alternative to the random initialization
@@ -67,10 +67,18 @@ class RLAgent(nn.Module):
         for i in range(args['decode_len']):
             # Get logit and attention weights
             action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
+            # ab = self.decodeStep.select_action(action_logits, eval_type)   
+            # print('Action selected shape: ', [len(a) for a in ab])
             prob, action_selected = self.decodeStep.select_action(action_logits, eval_type)   
+            # print('Action selected: ', action_selected)
+            # print("Action selected shape: ", action_selected.shape)
+            # print('BatchSequence shape: ', BatchSequence.shape)
 
-            action_selected = action_selected.unsqueeze(1)
+            # action_selected = action_selected.unsqueeze(1)
+            # print("Action selected shape: ", action_selected.shape)
             state = self.env.step(action_selected)
+
+            # print('This is the state: ', state)
 
             batched_idx = torch.cat([BatchSequence, action_selected], dim=1).long()
 
@@ -86,7 +94,7 @@ class RLAgent(nn.Module):
             selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]] 
             # print("Selected probs: ", selected_probs)
             # Taking logarithm of the gathered elements
-            log_prob = torch.log(selected_probs)
+            log_prob = torch.log1p(selected_probs)
 
             probs.append(prob)
             idxs.append(action_selected)
@@ -97,8 +105,8 @@ class RLAgent(nn.Module):
             actions_tmp.append(action)
             actions = actions_tmp
             if show:
-                R = self.reward_func(actions, show=True)
-                print("Build Model Reward: ", R)
+                R = self.reward_func(actions, show=False)
+                # print("Build Model Reward: ", R)
             else:
                 R = self.reward_func(actions)
             

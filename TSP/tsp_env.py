@@ -79,7 +79,7 @@ class VRPEnvironment:
 
         return state
     
-def reward_func(sample_solution=None):
+def reward_func(sample_solution, show=False):
     """The reward for the TSP task is defined as the 
     negative value of the route length. This function gets the decoded
     actions and computed the reward.
@@ -107,10 +107,11 @@ def reward_func(sample_solution=None):
     """
     # Stack the list of coordinate tensors to form a tensor of shape [decode_len, batch_size, input_dim]
     route = torch.stack(sample_solution)
-
     # Compute Euclidean distances between consecutive points, considering the route as circular
     distances = torch.norm(route - torch.roll(route, -1, 0), dim=2)
-
+    if show:
+        print('Route:', route)
+        print('Distances:', distances)
     # Calculate total distance for each route in the batch and negate to form the reward
     rewards = -distances.sum(0)
 

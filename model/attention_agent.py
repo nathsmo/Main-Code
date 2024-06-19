@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import sys
 import torch.nn.init as init
 
-from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding
+from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
 from shared.decode_step import RNNDecodeStep
 
 class RLAgent(nn.Module):
@@ -30,8 +30,11 @@ class RLAgent(nn.Module):
             self.embedding = LinearEmbedding(prt, args['embedding_dim'])
         elif args['emb_type'] == 'enhanced_linear' or args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
-        # self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
-
+        elif args['emb_type'] == 'enhanced2':
+            self.embedding = Enhanced__LinearEmbedding(prt, 2, args['embedding_dim'])
+        elif args['emb_type'] == 'minimal':
+            self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
+            
         self.decodeStep = RNNDecodeStep(clAttentionActor, args['hidden_dim'],
                                         use_tanh=args['use_tanh'],
                                         tanh_exploration=args['tanh_exploration'],
@@ -99,7 +102,7 @@ class RLAgent(nn.Module):
             # Decoder State
             # Initialize LSTM state tensors for hidden (h) and cell (c) states
             decoder_state = self.decodeStep._init_hidden(batch_size)
-
+            # print('---Shape of encoder_embedding input: ', encoder_emb_inp.shape)
             # Start from trainable nodes in TSP
             decoder_input = encoder_emb_inp[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
 

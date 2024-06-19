@@ -10,7 +10,7 @@ class DataGenerator():
             args: the parameter dictionary. It should include:
                 args['random_seed']: random seed
                 args['test_size']: number of problems to test (n_problems)
-                args['n_nodes']: number of packages/nodes
+                args['n_nodes']: number of nodes in the problem. (ex.:locations)
                 args['batch_size']: batch size for training
         """
         self.args = args

@@ -35,11 +35,14 @@ class RLAgent(nn.Module):
                                            num_heads=args['num_heads'], num_actions=5, beam_width=args['beam_width'])
 
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
+        # Alternative to the random initialization
+        # self.decoder_input = nn.Parameter(torch.zeros(1, 1, args['embedding_dim']))
+
         init.xavier_uniform_(self.decoder_input)
         
         self.prt.print_out("Agent created - Self Attention.")
 
-    def build_model(self, eval_type= "greedy"): #prev -> forward
+    def build_model(self, eval_type= "greedy", show=False): #prev -> forward
         args = self.args
         env = self.env
         input_pnt = env.input_pnt  # input_pnt: [batch_size x max_time x hidden_dim]
@@ -93,9 +96,11 @@ class RLAgent(nn.Module):
             action = input_pnt[batched_idx[:, 0], batched_idx[:, 1]]
             actions_tmp.append(action)
             actions = actions_tmp
-            
-            R = self.reward_func(actions)
-            # print("Reward: ", R)
+            if show:
+                R = self.reward_func(actions, show=True)
+                print("Build Model Reward: ", R)
+            else:
+                R = self.reward_func(actions)
             
             # Critic
             v = torch.tensor(0)
@@ -300,8 +305,9 @@ class RLAgent(nn.Module):
             self.env.input_data = data  # Set the environment's input data to the batch provided by DataLoader
             
             # Run model evaluation for the current batch
-            R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
-
+            R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True)
+            # print('EM - Actions: ', actions)
+            # print('EM - Rewards: ', R) # -> A lot of rewards are 0.0
             if eval_type == 'beam_search':
                 # For beam search, handling multiple paths per instance
                 R = R.view(-1, self.args['beam_width'])  # Reshape R assuming it is flat with all paths
@@ -309,8 +315,8 @@ class RLAgent(nn.Module):
                 total_reward.extend(R_val.tolist())  # Append to total rewards list
             else:
                 total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
-        end_time = time.time() - start_time
-
+        
+        # end_time = time.time() - start_time
         # self.prt.print_out(f'Average Reward: {R.mean().numpy()}, Reward Std Dev: {R.std().item()}, -- time {end_time} s')
 
         return R, v, log_probs, actions, idxs, batch, _

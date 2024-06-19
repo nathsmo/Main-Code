@@ -9,22 +9,11 @@ class Attention(nn.Module):
         self.use_tanh = use_tanh        # Set use_tanh flag
         self.C = C          # Set scaling factor C # tanh exploration parameter
         self.tanh = nn.Tanh() # Define hyperbolic tangent function
-        
-        """
-        # Define the parameter with a specific size, here [1, dim]
-        # Before it was supposed to get the variable v from somewhere else... but I just didn't know how to do that
-        # self.v = nn.Parameter(torch.empty(1, dim))
-        # Initialize it with Xavier initializer
-        # init.xavier_uniform_(self.v)
-        # Expand dimensions: now shape will be [1, dim, 1]
-        # self.v = self.v.unsqueeze(2)
-        # Replaced with: 
-        self.v = nn.Parameter(torch.randn(1, dim, 1))
-        """
+
         # Define linear layers for projection
         self.project_query = nn.Linear(dim, dim)
         self.project_ref = nn.Linear(dim, dim)
-
+        #Could've been this too:         self.project_ref = nn.Conv1d(in_channels=dim, out_channels=dim, kernel_size=1)
         self.v = nn.Parameter(torch.randn(1, dim, 1))
 
 
@@ -46,18 +35,7 @@ class Attention(nn.Module):
 
         # Apply convolution along the time dimension
         e = self.project_ref(ref)  # [batch_size x max_time x dim]
-        """
-        Comments from code before, and just in case it doesn't work.
-
-        # expanded_q,e: [batch_size x max_time x dim]
-        # expanded_q = q.unsqueeze(1).expand(-1, e.size(1), -1)  # [batch_size, max_time, dim]
-
-        # Expand v to match the shape of e
-        # v_view = self.v.expand(e.size(0), -1, -1)  # [batch_size x dim x 1]
-
-        # Compute u: [batch_size x max_time x dim] * [batch_size x dim x 1] = [batch_size x max_time]
-        # u = torch.matmul(self.tanh(expanded_q + e), v_view).squeeze(2)  
-        """
+        
         # Expand dimensions of q to match the shape of e
         expanded_q = q.unsqueeze(1) # [batch_size, max_time, dim]
 

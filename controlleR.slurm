@@ -28,13 +28,13 @@ echo "[$SHELL] ## Run script"
 # Training organized
 
 # A1: Basic
-python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
 
 # B1: Decoder change + Basic
 python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
 
 # C1: Emb type change + Basic
-# python main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+# python3 main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 
 # D1: New combination
 # python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4

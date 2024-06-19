@@ -27,6 +27,7 @@ class principal(nn.Module):
         
         self.AttentionActor = Attention
         self.AttentionCritic = Attention
+
         if args['decoder'] == 'self':
             self.agent = SelfAttentionAgent(args,
                             prt,
@@ -36,6 +37,7 @@ class principal(nn.Module):
                             self.AttentionActor,
                             self.AttentionCritic,
                             is_train=args['is_train']) # Model class
+            
         elif args['decoder'] == 'pointer':
             # create an RL Agent (Network)
             self.agent = RLAgent(args,

@@ -93,7 +93,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='F2_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
 # python main.py --variation='F2_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
 # python main.py --variation='F2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
-python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
+# python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
 
 
 

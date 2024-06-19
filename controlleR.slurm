@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_A1_B1_tensorboard
+#SBATCH --job-name=Training_F2_min_and_F2_en2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -26,7 +26,6 @@ echo "[$SHELL] ## current working directory: "$CWD
 echo "[$SHELL] ## Run script"
 
 # Training organized
-
 
 # A1: Basic
 # python main.py --variation='A1_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 

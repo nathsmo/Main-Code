@@ -105,7 +105,7 @@ class RLAgent(nn.Module):
             actions_tmp.append(action)
             actions = actions_tmp
             if show:
-                R = self.reward_func(actions, show=False)
+                R = self.reward_func(actions, show=True)
                 # print("Build Model Reward: ", R)
             else:
                 R = self.reward_func(actions)

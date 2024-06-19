@@ -108,10 +108,14 @@ def reward_func(sample_solution, show=False):
     # Stack the list of coordinate tensors to form a tensor of shape [decode_len, batch_size, input_dim]
     route = torch.stack(sample_solution)
     # Compute Euclidean distances between consecutive points, considering the route as circular
-    distances = torch.norm(route - torch.roll(route, -1, 0), dim=2)
+    distances = torch.norm(route - torch.roll(route, -1, 1), dim=2)
+    # print('Distances tsp env rewards:', distances)
     if show:
-        print('Route:', route)
-        print('Distances:', distances)
+        # print('Route:', route)
+        # print('Distances:', distances)
+        zero_count = torch.sum(distances == 0)
+        if zero_count > 0:
+            print("Number of zeros in the tensor:", zero_count.item())
     # Calculate total distance for each route in the batch and negate to form the reward
     rewards = -distances.sum(0)
 

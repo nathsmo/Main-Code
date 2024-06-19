@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_F2_min_and_F2_en2
+#SBATCH --job-name=Training_F2_min
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -93,7 +93,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='F2_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
 # python main.py --variation='F2_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
 # python main.py --variation='F2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
-# python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
+python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
 
 
 

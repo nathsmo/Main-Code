@@ -116,7 +116,7 @@ class Enhanced__LinearEmbedding(nn.Module):
     def __init__(self, prt, num_channels, embedding_dim):
         super(Enhanced__LinearEmbedding, self).__init__()
         # Initialize the first convolution layer with padding to maintain dimension
-        prt.print_out("Embedding - enhanced")
+        prt.print_out("Embedding - enhanced og")
         self.layer1 = nn.Conv1d(num_channels, embedding_dim, kernel_size=3, padding=1)
         # ReLU activation
         self.activation = nn.ReLU()

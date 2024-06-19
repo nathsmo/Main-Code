@@ -28,7 +28,7 @@ class RLAgent(nn.Module):
         # Embedding and Decoder setup
         if args['emb_type'] == 'linear':
             self.embedding = LinearEmbedding(prt, args['embedding_dim'])
-        elif args['emb_type'] == 'enhanced_linear' or args['emb_type'] == 'enhanced':
+        elif args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
         elif args['emb_type'] == 'enhanced2':
             self.embedding = Enhanced__LinearEmbedding(prt, 2, args['embedding_dim'])

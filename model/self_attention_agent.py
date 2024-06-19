@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import sys
 import torch.nn.init as init
 
-from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding
+from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
 from shared.self_decode_step import AttentionDecoder
 
 class RLAgent(nn.Module):
@@ -26,9 +26,12 @@ class RLAgent(nn.Module):
         # Embedding and Decoder setup
         if args['emb_type'] == 'linear':
             self.embedding = LinearEmbedding(prt, args['embedding_dim'])
-        elif args['emb_type'] == 'enhanced_linear' or args['emb_type'] == 'enhanced':
+        elif args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
-        # self.embedding = LinearEmbedding(prt, args['embedding_dim']) if args['emb_type'] == 'linear' else EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        elif args['emb_type'] == 'enhanced2':
+            self.embedding = Enhanced__LinearEmbedding(prt, 2, args['embedding_dim'])
+        elif args['emb_type'] == 'minimal':
+            self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
 
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(input_dim=args['embedding_dim'], hidden_dim=args['hidden_dim'], 

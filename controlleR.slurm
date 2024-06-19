@@ -27,45 +27,79 @@ echo "[$SHELL] ## Run script"
 
 # Training organized
 
+
 # A1: Basic
-# python main.py --variation='A1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='A1_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
+# called C1 previously
+# python main.py --variation='A1_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+# python main.py --variation='A1_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
+# python main.py --variation='A1_min' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=minimal 
 
 # B1: Decoder change + Basic
-python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+# Also test with big epsilon if bad results
+# python main.py --variation='B1_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+# called D1 previously
+# python main.py --variation='B1_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='B1_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=1
+# python main.py --variation='B1_min' --task=tsp10 --n_train=100000 --decoder=self --emb_type=minimal  --num_heads=1
 
-# C1: Emb type change + Basic
-# python3 main.py --variation='C1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+# D1: Heads alteration - self
+# python main.py --variation='D1_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=4
+# python main.py --variation='D1_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
+# python main.py --variation='D1_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=4
+# python main.py --variation='D1_min' --task=tsp10 --n_train=100000 --decoder=self --emb_type=minimal  --num_heads=4
 
-# D1: New combination
-# python main.py --variation='D1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced --num_heads=4
+# E1: Emb var + Glimpse
+# python main.py --variation='E1_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3 
+# python main.py --variation='E1_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='E1_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3 
+# python main.py --variation='E1_min' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=minimal --n_glimpses=3 
 
-# E1: Enhanced emb + Glimpse
-# python main.py --variation='E1' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
-
-# F1: New combination + rnn
-# python main.py --variation='F1' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
+# F1: Rnn layers + self
+# python main.py --variation='F1_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --rnn_layers=2 --num_heads=4 
+# python main.py --variation='F1_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 
+# python main.py --variation='F1_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --rnn_layers=2 --num_heads=4 
+# python main.py --variation='F1_min' --task=tsp10 --n_train=100000 --decoder=self --emb_type=minimal  --rnn_layers=2 --num_heads=4 
 
 #### TSP20
 
 # A2: Basic
-# python main.py --variation='A2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear  
+# python main.py --variation='A2_lin' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear 
+# called C2 previously
+# python main.py --variation='A2_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+# python main.py --variation='A2_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
+# python main.py --variation='A2_min' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=minimal 
 
 # B2: Decoder change + Basic
-# python main.py --variation='B2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+# Also test with big epsilon if bad results
+# python main.py --variation='B2_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
+# called D2 previously
+# python main.py --variation='B2_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='B2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=1
+# python main.py --variation='B2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal  --num_heads=1
 
-# C2: Emb type change + Basic
-# python main.py --variation='C2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced  
+# D2: Heads alteration - self
+# python main.py --variation='D2_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=4
+# python main.py --variation='D2_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
+# python main.py --variation='D2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=4
+# python main.py --variation='D2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal  --num_heads=4
 
-# # D2: New combination
-# python main.py --variation='D2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
+# E2: Emb var + Glimpse
+# python main.py --variation='E2_lin' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3 
+# python main.py --variation='E2_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='E2_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3
+# python main.py --variation='E2_min' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=minimal --n_glimpses=3
 
-# # E2: Enhanced emb + Glimpse
-# python main.py --variation='E2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# F2: Rnn layers + self
+# python main.py --variation='F2_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
+# python main.py --variation='F2_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
+# python main.py --variation='F2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
+# python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
 
-# # F2: New combination + rnn
-# python main.py --variation='F2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4
 
 
+# _______________________________________________________
+# _______________________________________________________
 
 # # For TSP size 50
 # # A5: Basic
@@ -85,6 +119,16 @@ python main.py --variation='B1' --task=tsp10 --n_train=100000 --decoder=self --e
 
 # # F5: New combination + rnn # something's wrong
 # python main.py --variation='F5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --rnn_layers=2 --n_train=35000 --num_heads=1
+
+# G5: New combination + enhanced version 2
+# python main.py --variation='G5' --task=tsp50 --n_train=100000 --decoder=pointer --emb_type=enhanced2  
+
+# H5: New combination + minimal version
+# python main.py --variation='H5' --task=tsp50 --n_train=100000 --decoder=pointer --emb_type=minimal  
+
+
+
+
 
 # # For TSP size 100
 # # A10: Basic

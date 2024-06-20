@@ -3,6 +3,7 @@
 /past_logs
 /outputs
 /runs
+/cplex_env
 
 /model/__pycache__
 /shared/__pycache__

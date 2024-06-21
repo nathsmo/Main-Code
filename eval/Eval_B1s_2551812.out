@@ -1,0 +1,252 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node876 and this job has the ID 2551812
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: linear
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_16-47-49
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/D1_lin/model/agent_complete.pth
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 4
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: D1_lin
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    D1_lin
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   linear
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      25000
+# num heads:    4
+Embedding - linear
+Agent created - Self Attention.
+Evaluation started ...
+Traceback (most recent call last):
+  File "/data1/s3516423/Main-Code/main.py", line 121, in <module>
+    run_code = principal(args, prt)  # Create an instance
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/data1/s3516423/Main-Code/main.py", line 69, in __init__
+    self.agent.load_state_dict(torch.load(args['model_dir']))
+  File "/home/s3516423/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2189, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for RLAgent:
+	Missing key(s) in state_dict: "embedding.project_emb.weight", "embedding.project_emb.bias". 
+	Unexpected key(s) in state_dict: "embedding.layer1.weight", "embedding.layer1.bias", "embedding.layer2.weight", "embedding.layer2.bias", "embedding.residual.weight", "embedding.residual.bias". 
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_16-47-52
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/D1_en/model/agent_complete.pth
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 4
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: D1_en
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    D1_en
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   enhanced
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      25000
+# num heads:    4
+Embedding - enhanced 2
+Agent created - Self Attention.
+Evaluation started ...
+Average of greedy in batch-mode: -5.130060788020646 -- std R: 1.6325962844998771 -- time 0.30136609077453613 s
+##################################################################
+Total time is 00:00:00
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced2
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_16-47-54
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/D1_en2/model/agent_complete.pth
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 4
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: D1_en2
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    D1_en2
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   enhanced2
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      25000
+# num heads:    4
+Embedding - enhanced og
+Agent created - Self Attention.
+Evaluation started ...
+Traceback (most recent call last):
+  File "/data1/s3516423/Main-Code/main.py", line 121, in <module>
+    run_code = principal(args, prt)  # Create an instance
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/data1/s3516423/Main-Code/main.py", line 69, in __init__
+    self.agent.load_state_dict(torch.load(args['model_dir']))
+  File "/home/s3516423/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2189, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for RLAgent:
+	Unexpected key(s) in state_dict: "embedding.bn1.weight", "embedding.bn1.bias", "embedding.bn1.running_mean", "embedding.bn1.running_var", "embedding.bn1.num_batches_tracked", "embedding.bn2.weight", "embedding.bn2.bias", "embedding.bn2.running_mean", "embedding.bn2.running_var", "embedding.bn2.num_batches_tracked", "embedding.layer3.weight", "embedding.layer3.bias", "embedding.bn3.weight", "embedding.bn3.bias", "embedding.bn3.running_mean", "embedding.bn3.running_var", "embedding.bn3.num_batches_tracked". 
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: minimal
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_16-47-56
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/D1_min/model/agent_complete.pth
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 4
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: D1_min
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    D1_min
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   minimal
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      25000
+# num heads:    4
+Embedding - Minimal
+Agent created - Self Attention.
+Evaluation started ...
+Average of greedy in batch-mode: -5.019712721146646 -- std R: 1.949477732111472 -- time 0.24749207496643066 s
+##################################################################
+Total time is 00:00:00
+[/bin/bash] ## Script finished

@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_F2_min
+#SBATCH --job-name=Training_F1_lin
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=48:00:00
+#SBATCH --time=60:00:00
 #SBATCH --partition=amd-gpu-long
 #SBATCH --ntasks=1
 
@@ -125,81 +125,5 @@ echo "[$SHELL] ## Run script"
 # H5: New combination + minimal version
 # python main.py --variation='H5' --task=tsp50 --n_train=100000 --decoder=pointer --emb_type=minimal  
 
-
-
-
-
-# # For TSP size 100
-# # A10: Basic
-# python main.py --variation='A10' --task=tsp100 --decoder=pointer --emb_type=linear --n_glimpses=0 --rnn_layers=1 --n_train=10000
-
-# # B10: Decoder change + Basic # something's wrong
-# python main.py --variation='B10' --task=tsp100 --decoder=self --emb_type=linear --n_glimpses=0 --n_train=10000 --num_heads=1
-
-# # C10: Emb type change + Basic
-# python main.py --variation='C10' --task=tsp100 --decoder=pointer --emb_type=enhanced --n_glimpses=0 --rnn_layers=1 --n_train=10000
-
-# # D10: New combination # something's wrong
-# python main.py --variation='D10' --task=tsp100 --decoder=self --emb_type=enhanced --n_glimpses=0 --n_train=10000 --num_heads=1
-
-# # E10: Enhanced emb + Glimpse # out of memory
-# python main.py --variation='E10' --task=tsp100 --decoder=pointer --emb_type=enhanced --n_glimpses=3 --rnn_layers=1 --n_train=10000
-
-# # F10: New combination + rnn
-# python main.py --variation='F10' --task=tsp100 --decoder=self --emb_type=enhanced --n_glimpses=0 --rnn_layers=2 --n_train=10000 --num_heads=1
-
-
-##### EVAL
-
-## Eval A1
-# ## Batch
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=batch
-## Single
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=single
-
-## Eval B1
-# ## Batch
-# python main.py --variation='B1' --task=tsp10 --is_train=False --decoder=self --emb_type=linear  --num_heads=1 --model_dir=./logs/tsp10/B1/model/agent_complete.pth --infer_type=batch
-## Single
-# python main.py --variation='B1' --task=tsp10 --is_train=False --decoder=self --emb_type=linear  --num_heads=1 --model_dir=./logs/tsp10/A1/model/agent_complete.pth --infer_type=single
-
-
-# ## Eval C1
-# ## Single
-# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=single
-# ## Batch
-# python main.py --variation='C1' --task=tsp10 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/C1/model/agent_complete.pth --infer_type=batch
-
-## Eval A2
-## Single
-# python main.py --variation='A2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp20/A2/model/agent_complete.pth --infer_type=single
-# ## Batch
-# python main.py --variation='A2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/tsp20/A2/model/agent_complete.pth --infer_type=batch
-
-## Eval C2
-## Single
-# python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=single
-# Batch
-# python main.py --variation='C2' --task=tsp20 --is_train=False  --decoder=pointer --emb_type=enhanced --model_dir=./logs/tsp20/C2/model/agent_complete.pth --infer_type=batch
-
-###########################
-
-## Eval A1
-## Single
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=single
-# ## Batch
-# python main.py --variation='A1' --task=tsp10 --is_train=False --decoder=pointer --emb_type=linear --model_dir=./logs/A1/model/agent_complete.pth --infer_type=batch
-
-
-# TESTSTSTSTS
-# python main.py --variation='D1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced --num_heads=4 --model_dir=./totest/tsp10/D1/agent_complete.pth --infer_type=batch
-# python main.py --variation='D1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced --num_heads=4 --model_dir=./totest/tsp10/D1/agent_complete.pth --infer_type=single
-
-# python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=batch
-# python main.py --variation='F1' --task=tsp10 --is_train=False --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 --model_dir=./totest/tsp10/F1/agent_complete.pth --infer_type=single
-# python main.py --variation='B2' --task=tsp20 --is_train=False --decoder=self --emb_type=enhanced  --num_heads=1 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
-# python main.py --variation='E2' --task=tsp20 --is_train=False --decoder=pointer --emb_type=enhanced --n_glimpses=3 --model_dir=./totest/tsp20/B2/agent_complete.pth --infer_type=batch
-
-# python main.py --variation='C10' --task=tsp100 --is_train=False --decoder=self --emb_type=linear --model_dir=./totest/New_test/tsp100/B10/model/agent_complete.pth --infer_type=batch
 
 echo "[$SHELL] ## Script finished"

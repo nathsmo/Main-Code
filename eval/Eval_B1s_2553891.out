@@ -1,0 +1,361 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node876 and this job has the ID 2553891
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: linear
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-20
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_lin/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_lin
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_lin
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   linear
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - linear
+Agent created - Pointer Network.
+Evaluation started ...
+Average of greedy in batch-mode: -4.164065928056797 -- std R: 0.8460234280492998 -- time 0.6325583457946777 s
+##################################################################
+Total time is 00:00:00
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-24
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_en/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_en
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_en
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   enhanced
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - enhanced 2
+Agent created - Pointer Network.
+Evaluation started ...
+Average of greedy in batch-mode: -5.195593062652353 -- std R: 0.8830082069039988 -- time 0.6822896003723145 s
+##################################################################
+Total time is 00:00:00
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-27
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_en_2/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_en
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_en
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   enhanced
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - enhanced 2
+Agent created - Pointer Network.
+Evaluation started ...
+Average of greedy in batch-mode: -5.195593062652353 -- std R: 0.8830082069039988 -- time 0.6805477142333984 s
+##################################################################
+Total time is 00:00:00
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced2
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-30
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_en2/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_en2
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_en2
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   enhanced2
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - enhanced og
+Agent created - Pointer Network.
+Evaluation started ...
+Average of greedy in batch-mode: -4.8821786043317115 -- std R: 0.9310990656104436 -- time 0.6550559997558594 s
+##################################################################
+Total time is 00:00:00
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: minimal
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-33
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_min/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_min
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_min
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   minimal
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - Minimal
+Agent created - Pointer Network.
+Evaluation started ...
+Traceback (most recent call last):
+  File "/data1/s3516423/Main-Code/main.py", line 121, in <module>
+    run_code = principal(args, prt)  # Create an instance
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/data1/s3516423/Main-Code/main.py", line 69, in __init__
+    self.agent.load_state_dict(torch.load(args['model_dir']))
+  File "/home/s3516423/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2189, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for RLAgent:
+	Missing key(s) in state_dict: "embedding.linear.weight", "embedding.linear.bias". 
+	Unexpected key(s) in state_dict: "embedding.layer1.weight", "embedding.layer1.bias", "embedding.layer2.weight", "embedding.layer2.bias", "embedding.residual.weight", "embedding.residual.bias". 
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: minimal
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-06-21_18-01-36
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/E1_min_2/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 10
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: E1_min
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    E1_min
+# Task:         tsp10
+# Decoder:      pointer
+# Embed type:   minimal
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - Minimal
+Agent created - Pointer Network.
+Evaluation started ...
+Average of greedy in batch-mode: -4.164065928056797 -- std R: 0.8460234280492998 -- time 0.5794298648834229 s
+##################################################################
+Total time is 00:00:00
+[/bin/bash] ## Script finished

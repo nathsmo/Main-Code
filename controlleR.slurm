@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=Training_F1_lin
+#SBATCH --job-name=Training_B10_en
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=60:00:00
-#SBATCH --partition=amd-gpu-long
+#SBATCH --time=120:00:00
+#SBATCH --partition=gpu-long
 #SBATCH --ntasks=1
 
 # load modules (assuming you start from the default environment)
@@ -24,6 +24,12 @@ echo "[$SHELL] ## current working directory: "$CWD
 
 # Run the file
 echo "[$SHELL] ## Run script"
+
+
+
+
+echo "[$SHELL] ## Script finished"
+
 
 # Training organized
 
@@ -95,35 +101,70 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='F2_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
 # python main.py --variation='F2_min' --task=tsp20 --n_train=100000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
 
-
-
 # _______________________________________________________
 # _______________________________________________________
 
-# # For TSP size 50
-# # A5: Basic
-# python main.py --variation='A5' --task=tsp50 --decoder=pointer --emb_type=linear --n_glimpses=0 --rnn_layers=1 --n_train=35000
+#### TSP50
+# A5: Basic
+# python main.py --variation='A5_lin' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='A5_en' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced  
+# python main.py --variation='A5_en2' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced2 
+# python main.py --variation='A5_min' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=minimal 
 
-# # B5: Decoder change + Basic # something's wrong
-# python main.py --variation='B5' --task=tsp50 --decoder=self --emb_type=linear --n_glimpses=0 --n_train=35000 --num_heads=1 --embedding_dim=128
+# B5: Decoder change + Basic
+# Also test with big epsilon if bad results
+# python main.py --variation='B5_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear  --num_heads=1
+# python main.py --variation='B5_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='B5_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2  --num_heads=1
+# python main.py --variation='B5_min' --task=tsp50 --n_train=35000 --decoder=self --emb_type=minimal  --num_heads=1
 
-# # C5: Emb type change + Basic
-# python main.py --variation='C5' --task=tsp50 --decoder=pointer --emb_type=enhanced --n_glimpses=0 --rnn_layers=1 --n_train=35000
+# D5: Heads alteration - self
+# python main.py --variation='D5_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear  --num_heads=4
+# python main.py --variation='D5_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced  --num_heads=4
+# python main.py --variation='D5_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2  --num_heads=4
+# python main.py --variation='D5_min' --task=tsp50 --n_train=35000 --decoder=self --emb_type=minimal  --num_heads=4
 
-# # D5: New combination # something's wrong
-# python main.py --variation='D5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --n_train=35000 --num_heads=1
+# E5: Emb var + Glimpse
+# python main.py --variation='E5_lin' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=linear --n_glimpses=3 
+# python main.py --variation='E5_en' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='E5_en2' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3
+# python main.py --variation='E5_min' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=minimal --n_glimpses=3
 
-# # E5: Enhanced emb + Glimpse
-# python main.py --variation='E5' --task=tsp50 --decoder=pointer --emb_type=enhanced --n_glimpses=3 --rnn_layers=1 --n_train=35000
-
-# # F5: New combination + rnn # something's wrong
-# python main.py --variation='F5' --task=tsp50 --decoder=self --emb_type=enhanced --n_glimpses=0 --rnn_layers=2 --n_train=35000 --num_heads=1
-
-# G5: New combination + enhanced version 2
-# python main.py --variation='G5' --task=tsp50 --n_train=100000 --decoder=pointer --emb_type=enhanced2  
-
-# H5: New combination + minimal version
-# python main.py --variation='H5' --task=tsp50 --n_train=100000 --decoder=pointer --emb_type=minimal  
+# F5: Rnn layers + self
+# python main.py --variation='F5_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
+# python main.py --variation='F5_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
+# python main.py --variation='F5_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
+# python main.py --variation='F5_min' --task=tsp50 --n_train=35000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4
 
 
-echo "[$SHELL] ## Script finished"
+#### TSP100
+
+# A10: Basic
+# python main.py --variation='A10_lin' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='A10_en' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=enhanced  
+# python main.py --variation='A10_en2' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=enhanced2 
+# python main.py --variation='A10_min' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=minimal 
+
+# B10: Decoder change + Basic
+# python main.py --variation='B10_lin' --task=tsp100 --n_train=15000 --decoder=self --emb_type=linear  --num_heads=1
+# python main.py --variation='B10_en' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='B10_en2' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced2  --num_heads=1
+# python main.py --variation='B10_min' --task=tsp100 --n_train=15000 --decoder=self --emb_type=minimal  --num_heads=1
+
+# D10: Heads alteration - self
+# python main.py --variation='D10_lin' --task=tsp100 --n_train=15000 --decoder=self --emb_type=linear  --num_heads=4
+# python main.py --variation='D10_en' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced  --num_heads=4
+# python main.py --variation='D10_en2' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced2  --num_heads=4
+# python main.py --variation='D10_min' --task=tsp100 --n_train=15000 --decoder=self --emb_type=minimal  --num_heads=4
+
+# E10: Emb var + Glimpse
+# python main.py --variation='E10_lin' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=linear --n_glimpses=3 
+# python main.py --variation='E10_en' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='E10_en2' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3
+# python main.py --variation='E10_min' --task=tsp100 --n_train=15000 --decoder=pointer --emb_type=minimal --n_glimpses=3
+
+# F10: Rnn layers + self
+# python main.py --variation='F10_lin' --task=tsp100 --n_train=15000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
+# python main.py --variation='F10_en' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
+# python main.py --variation='F10_en2' --task=tsp100 --n_train=15000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
+# python main.py --variation='F10_min' --task=tsp100 --n_train=15000 --decoder=self --emb_type=minimal --rnn_layers=2 --num_heads=4

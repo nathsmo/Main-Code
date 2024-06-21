@@ -48,6 +48,15 @@ class RLAgent(nn.Module):
         init.xavier_uniform_(self.decoder_input)
         self.prt.print_out("Agent created - Pointer Network.")
 
+       # Initialize actor and critic networks
+        self.actor = clAttentionActor(self.args['hidden_dim'])
+        self.critic = clAttentionCritic(self.args['hidden_dim'])
+
+        # Define optimizers for actor and critic
+        self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.args['actor_net_lr'])
+        self.critic_optim = optim.Adam(self.critic.parameters(), lr=self.args['critic_net_lr'])
+
+
     def build_model(self, decode_type= "greedy"):
         # Builds the model
         args = self.args
@@ -64,6 +73,7 @@ class RLAgent(nn.Module):
 
         # input_pnt: [batch_size x max_time x input_dim=2]
         input_pnt = env.input_pnt
+        
         if not isinstance(input_pnt, torch.Tensor):
             input_pnt = torch.tensor(input_pnt, dtype=torch.float).float()
         # encoder_emb_inp: [batch_size x max_time x embedding_dim]
@@ -268,33 +278,26 @@ class RLAgent(nn.Module):
         v_nograd = v.detach()
         R_nograd = R.detach()
 
-        # Actor and Critic
-        actor = self.clAttentionActor(self.args['hidden_dim'])
-        critic = self.clAttentionCritic(self.args['hidden_dim'])
         # Losses
         actor_loss = torch.mean((R_nograd - v_nograd) * torch.sum(torch.stack(log_probs), dim=0))
         critic_loss = F.mse_loss(R_nograd, v)
-        
-        # Optimizers
-        actor_optim = optim.Adam(actor.parameters(), lr=self.args['actor_net_lr'])
-        critic_optim = optim.Adam(critic.parameters(), lr=self.args['critic_net_lr'])
-        
+    
         # Compute gradients
         # Clear previous gradients
-        actor_optim.zero_grad()
-        critic_optim.zero_grad()
+        self.actor_optim.zero_grad()
+        self.critic_optim.zero_grad()
 
         # Compute gradients
         actor_loss.backward(retain_graph=True) # Retain graph to compute gradients for critic
-        critic_loss.backward(retain_graph=True)
+        critic_loss.backward()
 
         # # Clip gradients (optional, if args['max_grad_norm'] is set)
-        # torch.nn.utils.clip_grad_norm_(actor.parameters(), self.args['max_grad_norm'])
-        # torch.nn.utils.clip_grad_norm_(critic.parameters(), self.args['max_grad_norm'])
+        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])
+        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args['max_grad_norm'])
 
         # Apply gradients
-        actor_optim.step()
-        critic_optim.step()
+        self.actor_optim.step()
+        self.critic_optim.step()
         
         train_step = [actor_loss.item(), critic_loss.item(), R, v]
         

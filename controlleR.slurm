@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_B10_en
+#SBATCH --job-name=Training_A1_min
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -38,7 +38,7 @@ echo "[$SHELL] ## Script finished"
 # called C1 previously
 # python main.py --variation='A1_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 # python main.py --variation='A1_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
-# python main.py --variation='A1_min' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=minimal 
+python main.py --variation='A1_min' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=minimal 
 
 # B1: Decoder change + Basic
 # Also test with big epsilon if bad results

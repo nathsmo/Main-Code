@@ -5,7 +5,7 @@ import time
 import cplex
 from cplex.exceptions import CplexError
 import time
-
+# Use venv cplex_env - activate
 
 # Approved functions
 

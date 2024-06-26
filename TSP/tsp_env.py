@@ -19,7 +19,7 @@ class VRPEnvironment:
         
         Inputs: 
             args: the parameter dictionary. It should include:
-                args['n_nodes']: number of packages in VRP
+                args['n_nodes']: number of tsp problems
                 args['input_dim']: dimension of the problem which is 2 (coordinates)
         """
         self.args = args

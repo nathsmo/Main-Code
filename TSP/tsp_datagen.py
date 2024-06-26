@@ -26,13 +26,20 @@ class DataGenerator():
         self.count = 0
 
     def get_train_next(self):
+        """
+        Gets the next batch of training data for the TSP
+        Returns:
+            input_data: a random torch tensor with shape [batch_size, n_nodes, 2] so for tsp with batch_size=128, n_nodes=10, 2D coordinates
+        """
         input_data = torch.rand(self.args['batch_size'], self.args['n_nodes'], 2)
         
         return input_data
 
     def get_train_data(self):
         """
-        Get the test data
+        Get the train data. 
+        Returns:
+            
         """
         return self.create_dataset(self.args['batch_size'], self.args['n_nodes'], self.data_dir, seed=self.args['random_seed'], data_type='train')
     

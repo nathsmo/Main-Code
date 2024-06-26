@@ -68,7 +68,8 @@ class VRPEnvironment:
 
         # Convert idx to a one-hot tensor
         # Remove the unnecessary dimension and ensure it's a long tensor
-        idx = idx.squeeze(1).long()  # idx: [batch_size, 1] with indices of nodes
+        # print('idx shape:', idx.shape)
+        # idx = idx.squeeze(1).long()  # idx: [batch_size, 1] with indices of nodes
         
         # PyTorch one_hot requires the indices tensor to be in 'Long' datatype
         one_hot = F.one_hot(idx, num_classes=self.args['n_nodes'])
@@ -106,7 +107,9 @@ def reward_func(sample_solution, show=False):
                                                     #  [4,4]] ]
     """
     # Stack the list of coordinate tensors to form a tensor of shape [decode_len, batch_size, input_dim]
-    route = torch.stack(sample_solution)
+    # route = torch.stack(sample_solution)
+    route = sample_solution
+    print('Route shape:', route.shape)
     # Compute Euclidean distances between consecutive points, considering the route as circular
     distances = torch.norm(route - torch.roll(route, -1, 1), dim=2)
     # print('Distances tsp env rewards:', distances)

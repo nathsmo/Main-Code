@@ -145,10 +145,9 @@ class RLAgent(nn.Module):
 
             # Decode step
             logit, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
-            logprob = tf.nn.log_softmax(logit)
-            prob = tf.exp(logprob)
-
             states.append(new_state)
+
+            logprob = F.log_softmax(logit, dim=-1)
 
             #Change this to epsilon greedy
             if decode_type == "greedy":
@@ -159,28 +158,33 @@ class RLAgent(nn.Module):
                 # idx = torch.multinomial(prob, num_samples=1, replacement=True)
 
             # It doesn't return the index of the chosen output.
-            # Maybe state is the index of the chosen output.
-
-            state = self.env.step(new_state)
-            print("State: ", state)
+            state = self.env.step(chosen_action)
             batched_idx = torch.cat([BatchSequence, idx], dim=1).long()
-            # gathered = encoder_emb_inp[batched_idx[:, 0], batched_idx[:, 1]]
-
 
             actions.append(chosen_action)
             logits.append(logit)
             logprobs.append(logprob)
-            probs.append(prob)
-    
-    return logits, actions, states
+            probs.append(probabilities)
+        
 
-"""
+        logits = torch.stack(logits, dim=1)
+        actions = torch.stack(actions, dim=1)
+        logprobs = torch.stack(logprobs, dim=1)
+        probs = torch.stack(probs, dim=1)
+        print('R actions shape: ', actions.shape)
+############# We're working here
+        R = self.reward_func(actions)
+        sys.exit()
+
+        return logits, actions, states
+
+    def evaluate_build_model_results(self, logits, actions, states):
+        """
             R = self.reward_func(actions)
             v = torch.tensor(0)
 
         # Convert lists to tensors
-        logits = torch.stack(logits, dim=1)
-        actions = torch.stack(actions, dim=1)
+        
 
         # return logits, actions, states
 
@@ -273,6 +277,7 @@ class RLAgent(nn.Module):
         # print('Indices selected: ', idxs[9])
         # sys.exit()
         return (R, v, log_probs, actions, idxs, self.env.input_pnt , probs)
+        """
     
     def stochastic_process(self, batch_size, encoder_emb_inp):
         # Init States

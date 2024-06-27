@@ -120,7 +120,9 @@ class RLAgent(nn.Module):
         states = [initial_state]
 
         #old code - batchsequence --------------------------------
+        # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
         BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+        # print('BatchSequence size: ', BatchSequence.size())
 
         # create tensors and lists
         actions_tmp = []
@@ -129,51 +131,66 @@ class RLAgent(nn.Module):
         idxs = []
 
         # Start from depot
+        # This should be a tensor of size [batch_size, 1] with values of (n_nodes - 1)
         idx = (self.env.n_nodes - 1) * torch.ones([batch_size, 1])
-        action = self.env.input_pnt[:, self.env.n_nodes - 1].unsqueeze(1) 
+        # print('Index size: ', idx.size())
+
+        #List with selected coodinate, size [batch_size, 1, 2]
+        action = self.env.input_pnt[:, self.env.n_nodes - 1].unsqueeze(1)
 
         #Decoding loop
         for step in range(self.args['decode_len']):
             # Update the decoder input at each step
+            # decoder_input: [batch_size, 1, hidden_dim]
             if step == 0:
                 # Start from trainable nodes in TSP
-                # decoder_input: [batch_size, 1, hidden_dim]
                 decoder_input = self.decoder_input.expand(batch_size, 1, -1)
             else:
                 # Subsequent inputs come from the context based on previous action
-                decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
+                # decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
+                decoder_input = self.decoder_input.repeat(batch_size, 1, 1)
+            # print('Decoder input shape', decoder_input.size()) 
+            # print('Mask size: ', self.env.mask.size()) # Mask size should be [batch_size, n_nodes]
 
-            # Decode step
+            # Send to Decode step
             logit, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
+
+            # States is list of shape (num-states-appended, 2, hidden_states) where hidden_states = [1, 128, 128] 
             states.append(new_state)
-
             logprob = F.log_softmax(logit, dim=-1)
+            probabilities = F.softmax(logit, dim=1)
 
-            #Change this to epsilon greedy
+            #Chosen action size:  torch.Size([batch_size, 1])
+            #Change this to epsilon greedy !!!!!!
             if decode_type == "greedy":
-                _, chosen_action = logit.max(dim=1)
+                _, chosen_action = probabilities.max(dim=1)
             elif decode_type == "stochastic":
-                probabilities = F.softmax(logit, dim=1)
-                chosen_action = probabilities.multinomial(num_samples=1).squeeze(1)
-                # idx = torch.multinomial(prob, num_samples=1, replacement=True)
-
-            # It doesn't return the index of the chosen output.
+                chosen_action = probabilities.multinomial(num_samples=1)            
+            # print('Chosen action: ', chosen_action)
+            
             state = self.env.step(chosen_action)
-            batched_idx = torch.cat([BatchSequence, idx], dim=1).long()
 
-            actions.append(chosen_action)
+            #Batched index: torch.Size([batch_size, 2])
+            batched_idx = torch.cat([BatchSequence, chosen_action], dim=1).long()
+
+            actions.append(chosen_action) #replaces idxs
             logits.append(logit)
             logprobs.append(logprob)
             probs.append(probabilities)
-        
+
+            # Given action:  torch.Size([batch_size, 2]) (For batch size, coordinates obtained.)
+            given_action = self.env.input_pnt[batched_idx[:, 0], batched_idx[:, 1]]
+            actions_tmp.append(given_action)
+            # print('Given action: ', given_action.shape)
 
         logits = torch.stack(logits, dim=1)
         actions = torch.stack(actions, dim=1)
         logprobs = torch.stack(logprobs, dim=1)
         probs = torch.stack(probs, dim=1)
-        print('R actions shape: ', actions.shape)
-############# We're working here
-        R = self.reward_func(actions)
+        actions_tmp = torch.stack(actions_tmp, dim=1) # on past code named actions
+
+        R = self.reward_func(actions_tmp)
+        print('Reward: ', R)
         sys.exit()
 
         return logits, actions, states

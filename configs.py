@@ -15,14 +15,6 @@ def initialize_task_settings(args,task):
 
     for name, value in task_params._asdict().items():
     	args[name] = value
-
-
-    # args['task_name'] = task_params.task_name
-    # args['input_dim'] = task_params.input_dim
-    # args['n_nodes'] = task_params.n_nodes
-    # if args['decode_len'] == None:
-    #     args['decode_len'] = task_params.decode_len
-
     return args
 
 def ParseParams():
@@ -81,11 +73,11 @@ def ParseParams():
     # My implemented variables
     parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
 
-    parser.add_argument('--decoder', default='pointer', help='pointer|self|beam_search')
+    parser.add_argument('--decoder', default='pointer', help='pointer|self')
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')
     
     parser.add_argument('--variation', default='DFT')
-
+    parser.add_argument('--print_route', default=True)
 
     args, unknown = parser.parse_known_args()
     args = vars(args)

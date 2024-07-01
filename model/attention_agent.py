@@ -7,14 +7,14 @@ import numpy as np
 import time
 from torch.utils.data import DataLoader
 import sys
-import torch.nn.init as init
 
 from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
-from shared.decode_step import RNNDecodeStep
+from shared.decode_step import DecodeStep
+from shared.attention import Attention
 
 class RLAgent(nn.Module):
 
-    def __init__(self, args, prt, env, dataGen, reward_func, clAttentionActor, clAttentionCritic, is_train=True):
+    def __init__(self, args, prt, env, dataGen, reward_func, is_train=True):
         super().__init__()
 
         self.args = args
@@ -22,265 +22,237 @@ class RLAgent(nn.Module):
         self.env = env
         self.dataGen = dataGen
         self.reward_func = reward_func
-        self.clAttentionCritic = clAttentionCritic
-        self.clAttentionActor = clAttentionActor
 
         # Embedding and Decoder setup
         if args['emb_type'] == 'linear':
             self.embedding = LinearEmbedding(prt, args['embedding_dim'])
+        elif args['emb_type'] == 'minimal':
+            self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
         elif args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
         elif args['emb_type'] == 'enhanced2':
             self.embedding = Enhanced__LinearEmbedding(prt, 2, args['embedding_dim'])
-        elif args['emb_type'] == 'minimal':
-            self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
-            
-        self.decodeStep = RNNDecodeStep(clAttentionActor, args['hidden_dim'],
-                                        use_tanh=args['use_tanh'],
-                                        tanh_exploration=args['tanh_exploration'],
+
+        # Separate attention mechanisms
+        self.actor_attention = Attention(args['hidden_dim'])
+        # self.critic_attention = Attention(args['hidden_dim'], use_tanh=args['use_tanh'], C=args['tanh_exploration'])
+
+        self.decodeStep = DecodeStep(self.actor_attention, args['hidden_dim'],
                                         n_glimpses=args['n_glimpses'],
                                         mask_glimpses=args['mask_glimpses'],
                                         mask_pointer=args['mask_pointer'],
-                                        forget_bias=args['forget_bias'],
                                         rnn_layers=args['rnn_layers'])
-        
-        self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
-        init.xavier_uniform_(self.decoder_input)
-        self.prt.print_out("Agent created - Pointer Network.")
 
-       # Initialize actor and critic networks
-        self.actor = clAttentionActor(self.args['hidden_dim'])
-        self.critic = clAttentionCritic(self.args['hidden_dim'])
+        """ nn.Sequential container. This container is used to encapsulate a sequence of layers through which the 
+        input data will pass in a straightforward, sequential manner. Each layer or module processes the output 
+        of the previous one, culminating in an output that reflects the combined operations of all layers in the sequence.
+
+        For the actor a critic definition:
+        The input data first gets transformed into an embedding space, then re-mapped linearly to potentially another dimension, 
+        and finally processed through an attention mechanism that focuses on the most relevant aspects of the data.
+        """
+
+        self.actor = nn.Sequential(
+            self.embedding,
+            nn.Linear(args['embedding_dim'], args['hidden_dim']),
+            self.actor_attention
+        )
+
+        # self.critic = nn.Sequential(
+        #     self.embedding,
+        #     nn.Linear(args['embedding_dim'], args['hidden_dim']),
+        #     self.critic_attention
+        # )
+        self.critic = Critic(args, 2) #args and input_dim
+
+        self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
+        nn.init.xavier_uniform_(self.decoder_input)
+
+        # Initialize actor and critic networks
+        # self.actor = clAttentionActor(self.args['hidden_dim'])
+        # self.critic = clAttentionCritic(self.args['hidden_dim'])
 
         # Define optimizers for actor and critic
         self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.args['actor_net_lr'])
         self.critic_optim = optim.Adam(self.critic.parameters(), lr=self.args['critic_net_lr'])
 
+        self.prt.print_out("Agent created - Pointer Network.")
 
     def build_model(self, decode_type= "greedy"):
+        """
+        Could be seen as the forward pass function.
+
+        The build_model function constructs the computation graph (or computational steps) for the model. 
+        It initializes and prepares all necessary inputs, embeddings, and settings for the batch processing of 
+        data through the neural network, particularly focusing on the decoding or inference of the next actions 
+        (or steps) given the current environment's state.
+
+        Parameters:
+        env.n_nodes are the tsp nodes = 10, 20 or 50
+
+        Returns:
+        R: The reward for the current batch of data.
+        v: The value of the critic network.
+        log_probs: The log probabilities of the actions taken.
+        actions: The actions taken by the agent.
+        idxs (list): The indices of the actions taken. (tsp, batch_size)
+            idx might look like [5, 2, 6, ..., 1] (with values for all 128 instances).
+        """
         # Builds the model
-        args = self.args
-        env = self.env
-        batch_size = env.input_pnt.shape[0]
-        
-        if decode_type == 'beam_search':
-            beam_width = args['beam_width']
-        else:
-            beam_width = 1
-
-        # print("Batch size: ", batch_size)
-        # print("env.input_pnt shape: ", env.input_pnt.shape)
-
-        # input_pnt: [batch_size x max_time x input_dim=2]
-        input_pnt = env.input_pnt
-        
-        if not isinstance(input_pnt, torch.Tensor):
-            input_pnt = torch.tensor(input_pnt, dtype=torch.float).float()
-        # encoder_emb_inp: [batch_size x max_time x embedding_dim]
-        encoder_emb_inp = self.embedding.forward(input_pnt)
+        batch_size = self.env.input_pnt.shape[0]
+        # We disabled the beam_width from the original code
+        beam_width = 1
 
         # Reset the Environment.
-        env.reset(beam_width)
+        self.env.reset(beam_width)
 
-        # Create tensors and lists
+        # self.env.input_pnt: [batch_size x max_time x input_dim=2]
+        if not isinstance(self.env.input_pnt, torch.Tensor):
+            self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float).float()
+
+        # encoder_emb_inp: [batch_size x max_time x embedding_dim]
+        context = self.embedding(self.env.input_pnt) # this is a forward pass
+
+        # Code tryout
+        # Decoder State -> First: initial_state -> Then -> new_state (in loop)
+        initial_state = self.decodeStep._init_hidden(batch_size)
+        
+        logits, actions = [], []
+        states = [initial_state]
+
+        #old code - batchsequence --------------------------------
+        # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
+        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
+        # print('BatchSequence size: ', BatchSequence.size())
+
+        # create tensors and lists
         actions_tmp = []
-        log_probs = []
+        logprobs = []
         probs = []
         idxs = []
 
-        if beam_width > 1:
-            BatchSequence = torch.arange(0, batch_size * beam_width, dtype=torch.int64).unsqueeze(1)
-            # Start from depot
-            idx = (env.n_nodes - 1) * torch.ones(batch_size * beam_width, 1, dtype=torch.int64)
+        # Start from depot
+        # This should be a tensor of size [batch_size, 1] with values of (n_nodes - 1)
+        chosen_action = (self.env.n_nodes - 1) * torch.ones([batch_size, 1]) # Before called idx
+        # print('chosen_action size: ', chosen_action.size())
 
-            # Assuming 'input_pnt' is a PyTorch tensor and is correctly dimensioned
-            # Repeat the last node's input points to match beam width
-            # Ensure that input_pnt[:, env.n_nodes - 1] is 2D by unsqueezing if necessary
-            if input_pnt[:, env.n_nodes - 1].dim() == 1:
-                input_pnt = input_pnt[:, env.n_nodes - 1].unsqueeze(1)  # Make it [batch_size, 1] if it's not
-            action = input_pnt.repeat(1, beam_width, 1)
-            decoder_state = self.decodeStep._init_hidden(batch_size*beam_width)
-            decoder_input = self.decoder_input.repeat(batch_size * beam_width, 1, 1)
-            context = encoder_emb_inp.repeat(beam_width, 1, 1)
+        #List with selected coodinate, size [batch_size, 1, 2]
+        action = self.env.input_pnt[:, self.env.n_nodes - 1].unsqueeze(1)
 
-        else:
-            BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
-            # Start from depot
-            idx = (env.n_nodes - 1) * torch.ones([batch_size, 1])
-            action = input_pnt[:, env.n_nodes - 1].unsqueeze(1)
-
-            # Decoder State
-            # Initialize LSTM state tensors for hidden (h) and cell (c) states
-            decoder_state = self.decodeStep._init_hidden(batch_size)
-            # print('---Shape of encoder_embedding input: ', encoder_emb_inp.shape)
-            # Start from trainable nodes in TSP
-            decoder_input = encoder_emb_inp[:, env.n_nodes - 1].unsqueeze(1) # decoder_input: [batch_size, 1, hidden_dim]
-
-            # Decoding loop
-            context = encoder_emb_inp
-
-        
-        for i in range(args['decode_len']):
-            # Get logit and decoder_state
-            logit, decoder_state = self.decodeStep.forward(decoder_input, context, self.env, decoder_state)
-            # print('Logit shape: ', logit.shape)
-            prob = F.softmax(logit, dim=-1)
-            # print("Probabilities: ", prob)
-            beam_parent = None
-
-            if decode_type == "greedy":
-                # Generate random numbers for each element in the batch
-                random_values = torch.rand(prob.size(0))
-
-                # Calculate the index of the maximum probability (greedy action)
-                greedy_idx = torch.argmax(prob, dim=1).unsqueeze(1)
-
-                random_values = torch.rand(prob.size(0), 1)
-                # Decide between the greedy action and a random action
-                idx = torch.where(random_values < self.args['epsilon'],
-                  torch.randint(prob.size(1), (prob.size(0), 1), device=prob.device),  # Random action
-                  greedy_idx)   # Greedy action
-                self.args['epsilon'] *= 0.9999  # Decay epsilon
-
-            elif decode_type == "stochastic":
-                # Select stochastic actions.
-                # print("Prob: ", prob.shape)
-                idx = torch.multinomial(prob, num_samples=1, replacement=True)
-
-            elif decode_type == "beam_search":
-                if i == 0:
-                    # Create a sequence for batch_beam index calculation
-                    batchBeamSeq = torch.arange(batch_size).unsqueeze(1).repeat(1, beam_width).view(-1, 1)
-                    beam_path = []
-                    log_beam_probs = []
-                    # Log probabilities for selecting beam_width different branches initially
-                    log_beam_prob = torch.log(torch.chunk(prob, beam_width, dim=0)[0])
-
-                elif i > 0:
-                    log_beam_prob = torch.log(prob) + log_beam_probs[-1]
-                    # Reshape to align for beam_width grouping
-                    log_beam_prob = torch.cat(torch.chunk(log_beam_prob, beam_width, dim=0), dim=1)
-
-                # Get top k probabilities and indices
-                topk_logprob_val, topk_logprob_ind = torch.topk(log_beam_prob, beam_width, dim=1)
-
-                # Reshape for correct beam search tracking
-                topk_logprob_val = topk_logprob_val.transpose(0, 1).contiguous().view(-1, 1)
-                topk_logprob_ind = topk_logprob_ind.transpose(0, 1).contiguous().view(-1, 1)
-
-                # Compute new indices for the next step and trace back the beam parents
-                idx = (topk_logprob_ind % env.n_nodes).long()  # Which city in the route.
-                beam_parent = (topk_logprob_ind // env.n_nodes).long()  # Which hypothesis it came from.
-
-                # Update batchBeamSeq for next usage and gather new probs
-                batchedBeamIdx = batchBeamSeq + batch_size * beam_parent
-                prob = prob.view(-1)[batchedBeamIdx.squeeze()]
-
-                beam_path.append(beam_parent)
-                log_beam_probs.append(topk_logprob_val)
-                #------ ending of beam search
-
-            state = self.env.step(idx, beam_parent)
-            # print("State: ", state)
-            batched_idx = torch.cat([BatchSequence, idx], dim=1).long()
-            if decode_type == "beam_search":
-                encoder_emb_inp = encoder_emb_inp.repeat(beam_width, 1, 1)
-
-            gathered = encoder_emb_inp[batched_idx[:, 0], batched_idx[:, 1]]
-
-            # Expanding dimensions: Adding a dimension at axis 1
-            decoder_input = gathered.unsqueeze(1)
-
-            # Advanced indexing in PyTorch to replace gather_nd
-            selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]]  # Adjust this based on your actual index structure
-            # print("Selected probs: ", selected_probs)
-            # Taking logarithm of the gathered elements
-            log_prob = torch.log(selected_probs)
-
-            probs.append(prob)
-            idxs.append(idx)
-            log_probs.append(log_prob)
-
-            if decode_type == "beam_search":
-                input_pnt = input_pnt.repeat(beam_width, 1, 1)
-
-            # Gather using the constructed indices
-            action = input_pnt[batched_idx[:, 0], batched_idx[:, 1]]
-            actions_tmp.append(action)
-            if decode_type == "beam_search":
-                tmplst = []
-                tmpind = [BatchSequence]  # Ensure BatchSequence is properly initialized, e.g., torch.arange(batch_size * beam_width).view(-1, 1)
-                for k in reversed(range(len(actions_tmp))):
-                    # Gather from actions_tmp using the last element of tmpind as indices
-                    current_indices = tmpind[-1].squeeze()  # Remove any singleton dimensions for indexing
-                    selected_actions = actions_tmp[k][current_indices]
-                    tmplst = [selected_actions] + tmplst
-
-                    # Update indices for the next iteration
-                    new_indices = batchBeamSeq[current_indices] + batch_size * beam_path[k][current_indices]
-                    tmpind.append(new_indices)
-
-                actions = tmplst
+        #Decoding loop
+        for step in range(self.args['decode_len']):
+            # Update the decoder input at each step
+            # decoder_input: [batch_size, 1, hidden_dim]
+            if step == 0:
+                # Start from trainable nodes in TSP
+                decoder_input = self.decoder_input.expand(batch_size, 1, -1)
             else:
-                actions = actions_tmp
+                # Subsequent inputs come from the context based on previous action
+                # decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
+                decoder_input = context[batched_idx[:, 0], batched_idx[:, 1]].unsqueeze(1)
+                # print('passed')
+                # decoder_input = self.decoder_input.repeat(batch_size, 1, 1)
+            # print('Decoder input shape', decoder_input.size()) 
+            # print('Mask size: ', self.env.mask.size()) # Mask size should be [batch_size, n_nodes]
 
-            R = self.reward_func(actions)
-            # print("Reward: ", R)
+            # Send to Decode step
+            logit, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
 
-            # Critic
-            v = torch.tensor(0)
+            # States is list of shape (num-states-appended, 2, hidden_states) where hidden_states = [1, 128, 128] 
+            states.append(new_state)
+            # Size of logit: [batch_size, n_nodes]
+            logprob = F.log_softmax(logit, dim=-1)
+            probabilities = F.softmax(logit, dim=1)
 
-            if decode_type == "stochastic":
-                v = self.stochastic_process(batch_size, encoder_emb_inp)
-        return (R, v, log_probs, actions, idxs, self.env.input_pnt , probs)
-    
-    def stochastic_process(self, batch_size, encoder_emb_inp):
-        # Init States
-        (h, c) = self.decodeStep._init_hidden(batch_size)
-        hy = h[0]
+            #Chosen action size:  torch.Size([batch_size, 1])
+            #Change this to epsilon greedy !!!!!!
+            if decode_type == "greedy":
+                _, chosen_action = probabilities.max(dim=1)
+            elif decode_type == "stochastic":
+                chosen_action = probabilities.multinomial(num_samples=1)            
+            # print('Chosen action: ', chosen_action)
+
+            state = self.env.step(chosen_action)
+            
+            if chosen_action.dim() != 2:
+                chosen_action = chosen_action.unsqueeze(1)
+            #Batched index: torch.Size([batch_size, 2])
+            batched_idx = torch.cat([BatchSequence, chosen_action], dim=1).long()
+            gathered_probs = probabilities[batched_idx[:, 0], batched_idx[:, 1]]
+            logprob = torch.log(gathered_probs)
+            # print('Logprob size: ', logprob.size())
+
+            # print('batched_idx size: ', batched_idx.size()) 
+            actions.append(chosen_action) #replaces idxs
+            logits.append(logit)
+            logprobs.append(logprob)
+            probs.append(probabilities)
+
+            # Given action:  torch.Size([batch_size, 2]) (For batch size, coordinates obtained.)
+            given_action = self.env.input_pnt[batched_idx[:, 0], batched_idx[:, 1]] # Before called action
+            actions_tmp.append(given_action)
+            # print('Given action: ', given_action.shape)
+
+        logits = torch.stack(logits, dim=1)
+        actions = torch.stack(actions, dim=1)
+        logprobs = torch.stack(logprobs, dim=1)
+        probs = torch.stack(probs, dim=1)
+        actions_tmp = torch.stack(actions_tmp, dim=1) # on past code named actions
+
+        R = self.reward_func(actions_tmp)
+
+        #Critic part --------------------------------
+
+        #action4critic size = [1, batch_size, hidden_dim]
+        action4critic = chosen_action.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
+        # Initialize hidden and cell states
+        hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
+        cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
+        # Create the LSTM state tuple
+        lstm_state = (hidden_state, cell_state)
+        # Use the lstm_state in an LSTM
+        lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
+        # Forward pass through LSTM
+        output, (hn, cn) = lstm_layer(action4critic, lstm_state)
+        # Extracting hy (which in this context would be the last cell state from the first layer)
+        hy = cn[0]
 
         for i in range(self.args['n_process_blocks']):
-            process = self.clAttentionCritic(self.args['hidden_dim'])
-            e, logit = process(hy, encoder_emb_inp, self.env)
+            hy = self.critic(hy, context[torch.arange(batch_size), actions[-1], :])
 
-            prob = torch.softmax(logit, dim=-1)
-
-            # hy: [batch_size x 1 x sourceL] * [batch_size x sourceL x hidden_dim] -> 
-            #       [batch_size x hidden_dim]
-            prob_expanded = prob.unsqueeze(1)
-
-            # Perform matrix multiplication
-            hy = torch.matmul(prob_expanded, e)
-
-            # Final shape of 'hy' will be [batch_size, hidden_dim]
-            hy = hy.squeeze(1)
-
-            input_dim = hy.size(1)  # Assuming 'hy' is of shape [batch_size, feature_size]
-
-            network = MyNetwork(input_dim, self.args['hidden_dim'])
-
-            # Forward pass to compute 'v'
-            v = network(hy)
-
-        return v
+        v = self.critic.final_step_critic(hy)
+        # print('V: ', v)
+        # print("R: ", R)
+        return (R, v, logprobs, actions_tmp, actions, self.env.input_pnt, probs)
 
 
     def build_train_step(self):
         """
-        This function returns a train_step op, in which by running it we proceed one training step.
+        This function returns a train_step operation, in which by running it we proceed one training step.
         """
 
         R, v, log_probs, actions, idxs , batch , probs = self.build_model("stochastic") # self.train_model
-
+        # Convert R and v to float tensors
         R = R.float()
         v = v.float()
-        
-        v_nograd = v.detach()
-        R_nograd = R.detach()
 
-        # Losses
-        actor_loss = torch.mean((R_nograd - v_nograd) * torch.sum(torch.stack(log_probs), dim=0))
-        critic_loss = F.mse_loss(R_nograd, v)
+        # In Detach function we separate a tensor from the computational graph by returning a new tensor that doesn't require a gradient
+        v_nograd = v.detach()
+        R = R.detach()
+        # Size [batch_size]
+        advantage = R - v_nograd
+        #Size [batch_size]
+        logprob_sum = torch.sum(log_probs, dim=1)
+        # print('logprob_sum size: ', logprob_sum.size())
+
+        actor_loss_elements = advantage * logprob_sum
+        # print('advantage size: ', advantage.size())
+        # print('actor_loss_elements: ', actor_loss_elements.size())
+        # Computes actor loss and critic loss
+        actor_loss = torch.mean(actor_loss_elements)
+        # print('actor loss: ', actor_loss)
+
+        critic_loss = F.mse_loss(R, v)
     
         # Compute gradients
         # Clear previous gradients
@@ -288,7 +260,7 @@ class RLAgent(nn.Module):
         self.critic_optim.zero_grad()
 
         # Compute gradients
-        actor_loss.backward(retain_graph=True) # Retain graph to compute gradients for critic
+        actor_loss.backward(retain_graph=True)  # Retain graph to compute gradients for critic 
         critic_loss.backward()
 
         # # Clip gradients (optional, if args['max_grad_norm'] is set)
@@ -361,6 +333,11 @@ class RLAgent(nn.Module):
 
         self.prt.print_out("Finished evaluation with %d steps in %s." % (problem_count\
                            ,time.strftime("%H:%M:%S", time.gmtime(end_time))))
+
+        if self.args['print_route']:
+            print("Calculated Route:")
+            for step, action in enumerate(actions):
+                print(f"Step {step}: Node at coordinates {action.numpy()}")
         
     def evaluate_batch(self, eval_type='greedy'):
         
@@ -416,8 +393,12 @@ class RLAgent(nn.Module):
         self.prt.print_out("##################################################################")
 
     def run_train_step(self):
-        data = self.dataGen.get_train_next()
-        self.env.input_data = data
+        """
+        Obtains the next batch of training data (randomly created) and runs a training step.
+        """
+        # Obtains the next batch of training data
+        self.env.input_data = self.dataGen.get_train_next()
+
         train_results = self.build_train_step()
         return train_results
 
@@ -465,15 +446,41 @@ class RLAgent(nn.Module):
         # self.prt.print_out(f'Average Reward: {R.mean().numpy()}, Reward Std Dev: {R.std().item()}, -- time {end_time} s')
 
         return R, v, log_probs, actions, idxs, batch, _
+
+class Critic(nn.Module):
+    def __init__(self, args, input_dim):
+        super(Critic, self).__init__()
+        self.args = args
+        self.attention = Attention(args['hidden_dim'], use_tanh=args['use_tanh'], C=args['tanh_exploration']) # Assuming Attention is defined elsewhere
+        self.linear1 = nn.Linear(args['hidden_dim'], args['hidden_dim'])
+        self.linear2 = nn.Linear(args['hidden_dim'], 1)
+
+    def forward(self, hidden_state, encoder_outputs):
+        e, logit = self.attention(hidden_state, encoder_outputs, use_tanh=self.args['use_tanh'], C=self.args['tanh_exploration'])  # Assuming attention returns context and attn_weights
+        prob = F.softmax(logit, dim=-1)
+        prob_expanded = prob.unsqueeze(1)
+        result = torch.matmul(prob_expanded, e) 
+        hy = result.squeeze(1)
+        return hy
+    
+    def final_step_critic(self, hy):
+        x = F.relu(self.linear1(hy))
+        x = self.linear2(x)
+        v = x.squeeze(1)
+
+        return v
     
 
-class MyNetwork(nn.Module):
-    def __init__(self, input_dim, hidden_dim):
-        super(MyNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_dim, hidden_dim)  # First dense layer
-        self.fc2 = nn.Linear(hidden_dim, 1)  # Second dense layer to reduce dimension to 1
+# class MyNetwork(nn.Module):
+#     def __init__(self, input_dim, hidden_dim):
+#         super(MyNetwork, self).__init__()
+#         self.fc1 = nn.Linear(input_dim, hidden_dim)  # First dense layer
+#         self.fc2 = nn.Linear(hidden_dim, 1)  # Second dense layer to reduce dimension to 1
 
-    def forward(self, x):
-        x = F.relu(self.fc1(x))  # Apply ReLU activation function to the output of the first layer
-        x = self.fc2(x)  # Apply the second layer
-        return x.squeeze(1)  # Squeeze dimension 1 if it is of size 1
+#     def forward(self, x):
+#         x = F.relu(self.fc1(x))  # Apply ReLU activation function to the output of the first layer
+#         x = self.fc2(x)  # Apply the second layer
+#         return x.squeeze(1)  # Squeeze dimension 1 if it is of size 1
+
+
+

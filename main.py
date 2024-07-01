@@ -10,7 +10,6 @@ import sys
 # Import libraries from the task (TSP)
 from TSP.tsp_datagen import DataGenerator
 from TSP.tsp_env import VRPEnvironment, reward_func
-from shared.attention import Attention
 from model.attention_agent import RLAgent
 from model.self_attention_agent import RLAgent as SelfAttentionAgent
 
@@ -25,17 +24,12 @@ class principal(nn.Module):
 
         self.env = VRPEnvironment(args)
         
-        self.AttentionActor = Attention
-        self.AttentionCritic = Attention
-
         if args['decoder'] == 'self':
             self.agent = SelfAttentionAgent(args,
                             prt,
                             self.env,
                             self.dataGen,
                             reward_func,
-                            self.AttentionActor,
-                            self.AttentionCritic,
                             is_train=args['is_train']) # Model class
             
         elif args['decoder'] == 'pointer':
@@ -45,8 +39,6 @@ class principal(nn.Module):
                             self.env,
                             self.dataGen,
                             reward_func,
-                            self.AttentionActor,
-                            self.AttentionCritic,
                             is_train=args['is_train']) # Model class
         else:
             raise Exception('Decoder not implemented')
@@ -78,7 +70,7 @@ class principal(nn.Module):
         
         for step in range(args['n_train']):
             actor_loss_val, critic_loss_val, R_val, v_val = self.agent.run_train_step()
-            # Logging to TensorBoard
+            # Logging results to TensorBoard
             self.writer.add_scalar('Train/Reward', R_val.mean().item(), step)
             self.writer.add_scalar('Train/Value', v_val.mean().item(), step)
             self.writer.add_scalar('Train/Actor_Loss', np.mean(actor_loss_val), step)
@@ -100,6 +92,8 @@ class principal(nn.Module):
         # Close the SummaryWriter
         self.writer.close()
 
+
+
 if __name__ == "__main__":
     args, prt = ParseParams()
 
@@ -119,3 +113,5 @@ if __name__ == "__main__":
         torch.manual_seed(args['random_seed'])
 
     run_code = principal(args, prt)  # Create an instance
+
+

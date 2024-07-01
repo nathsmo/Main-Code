@@ -62,79 +62,32 @@ class VRPEnvironment:
         # Add the one-hot tensor to the mask
         self.mask = self.mask + one_hot
         state = State(mask = self.mask)
-        # print('one_hot size:', one_hot.size())
 
         return state
     
-def reward_func(sample_solution, show=False):
+def reward_func(route, show=False):
     """The reward for the TSP task is defined as the 
     negative value of the route length. This function gets the decoded
     actions and computed the reward.
 
     Args:
-        sample_solution : a list of tensors with len decode_len 
-            each having a shape [batch_size x input_dim] representing
-            the coordinates of each point in the sequence.
+        route : tensor  shape [batch_size, n_nodes, input_dim] representing
+            the coordinates of each point in the sequence of n_nodes for each batch.
 
     Returns:
         rewards (torch.Tensor): Reward tensor of size [batch_size] containing the 
             negative route length.
-
-    Example:
-        sample_solution = [[[1,1],[2,2]],[[3,3],[4,4]],[[5,5],[6,6]]]
-        decode_len = 3
-        batch_size = 2
-        input_dim = 2
-        sample_solution_tilted[ [[5,5]
-                                                    #  [6,6]]
-                                                    # [[1,1]
-                                                    #  [2,2]]
-                                                    # [[3,3]
-                                                    #  [4,4]] ]
     """
     #Route shape: [batch_size, n_nodes, input_dim]
-
     # # Compute Euclidean distances between consecutive points, considering the route as circular
-    # distances = torch.norm(route - torch.roll(route, -1, 1), dim=2)
-    # # print('Distances tsp env rewards:', distances)
-
-    # #For debugging
-    # if show:
-    #     # print('Route:', route)
-    #     # print('Distances:', distances)
-    #     zero_count = torch.sum(distances == 0)
-    #     if zero_count > 0:
-    #         print("Number of zeros in the tensor:", zero_count.item())
-    # # Calculate total distance for each route in the batch and negate to form the reward
-    # rewards = -distances.sum(0)
-    print('sample solution:', sample_solution)
-    sys.exit()
-    # return rewards
-    total_distance = 0
-    # Iterate through each step in the sequence
-    for i in range(len(sample_solution) - 1):
-        # Calculate the Euclidean distance between consecutive points
-        current_point = sample_solution[i]
-        next_point = sample_solution[i + 1]
-        distance = torch.sqrt(torch.sum((current_point - next_point) ** 2, dim=1))
-        total_distance += distance
-
-    # Add distance from the last point back to the first to complete the loop
-    last_point = sample_solution[-1]
-    first_point = sample_solution[0]
-    closing_distance = torch.sqrt(torch.sum((last_point - first_point) ** 2, dim=1))
+    # Calculate distances from each point to the next
+    distances = torch.sqrt(torch.sum((route[:, 1:] - route[:, :-1]) ** 2, dim=2))
+    # Sum distances for each route in the batch
+    total_distance = torch.sum(distances, dim=1)
+    # Compute distance from the last point back to the first to complete the loop
+    closing_distance = torch.sqrt(torch.sum((route[:, 0] - route[:, -1]) ** 2, dim=1))
+    # Add closing distance to total distance
     total_distance += closing_distance
 
     # Return negative route length as the reward
     return -total_distance
-
-"""
-# Example usage
-sample_solution = [
-    torch.tensor([[1.0, 1.0], [2.0, 2.0]]),  # Point sequence 1
-    torch.tensor([[3.0, 3.0], [4.0, 4.0]]),  # Point sequence 2
-    torch.tensor([[5.0, 5.0], [6.0, 6.0]])   # Point sequence 3
-]
-rewards = reward_func(sample_solution)
-print("Rewards:", rewards)
-"""

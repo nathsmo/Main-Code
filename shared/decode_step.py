@@ -27,7 +27,6 @@ class DecodeStep(nn.Module):
         # print(f"decoder_inp: {decoder_inp.shape}")
         # decoder_inp = decoder_inp.unsqueeze(1)  # [batch_size, 1, hidden_dim] for RNN input
         # print(f"decoder_inp: {decoder_inp.shape}")
-        # sys.exit()
 
         if decoder_inp.dim() == 2:
             decoder_inp = decoder_inp.unsqueeze(1)

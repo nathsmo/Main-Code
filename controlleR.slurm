@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_A5min
+#SBATCH --job-name=Training_DPN_20_min
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=120:00:00
+#SBATCH --time=20:00:00
 #SBATCH --partition=gpu-long
 #SBATCH --ntasks=1
 
@@ -74,6 +74,9 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DPN_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 # python main.py --variation='DPN_20_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
 # python main.py --variation='DPN_20_min' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=minimal 
+
+
+### We've tested until here
 
 # DSA_1H_20: Self-Attention Decoder (1 head) ------- # Also test with big epsilon if bad results
 # python main.py --variation='DSA_1H_20_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1

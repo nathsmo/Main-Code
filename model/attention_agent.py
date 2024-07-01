@@ -148,7 +148,8 @@ class RLAgent(nn.Module):
                 decoder_input = self.decoder_input.expand(batch_size, 1, -1)
             else:
                 # Subsequent inputs come from the context based on previous action
-                decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
+                # decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
+                decoder_input = context[batched_idx[:, 0], batched_idx[:, 1]].unsqueeze(1)
                 # print('passed')
                 # decoder_input = self.decoder_input.repeat(batch_size, 1, 1)
             # print('Decoder input shape', decoder_input.size()) 
@@ -159,6 +160,7 @@ class RLAgent(nn.Module):
 
             # States is list of shape (num-states-appended, 2, hidden_states) where hidden_states = [1, 128, 128] 
             states.append(new_state)
+            # Size of logit: [batch_size, n_nodes]
             logprob = F.log_softmax(logit, dim=-1)
             probabilities = F.softmax(logit, dim=1)
 
@@ -169,12 +171,18 @@ class RLAgent(nn.Module):
             elif decode_type == "stochastic":
                 chosen_action = probabilities.multinomial(num_samples=1)            
             # print('Chosen action: ', chosen_action)
-            
-            state = self.env.step(chosen_action)
 
+            state = self.env.step(chosen_action)
+            
+            if chosen_action.dim() != 2:
+                chosen_action = chosen_action.unsqueeze(1)
             #Batched index: torch.Size([batch_size, 2])
             batched_idx = torch.cat([BatchSequence, chosen_action], dim=1).long()
+            gathered_probs = probabilities[batched_idx[:, 0], batched_idx[:, 1]]
+            logprob = torch.log(gathered_probs)
+            # print('Logprob size: ', logprob.size())
 
+            # print('batched_idx size: ', batched_idx.size()) 
             actions.append(chosen_action) #replaces idxs
             logits.append(logit)
             logprobs.append(logprob)
@@ -192,15 +200,11 @@ class RLAgent(nn.Module):
         actions_tmp = torch.stack(actions_tmp, dim=1) # on past code named actions
 
         R = self.reward_func(actions_tmp)
-        # print('Reward: ', R)
-        # return logits, actions, states
 
-        #Critic part
-        v = torch.tensor(0)
-        # print('Chosen action size: ', chosen_action.size())
+        #Critic part --------------------------------
+
         #action4critic size = [1, batch_size, hidden_dim]
         action4critic = chosen_action.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-        # print(action4critic.shape)
         # Initialize hidden and cell states
         hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
         cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
@@ -237,18 +241,17 @@ class RLAgent(nn.Module):
         R = R.detach()
         # Size [batch_size]
         advantage = R - v_nograd
-        #Size [batch_size, n_nodes]
+        #Size [batch_size]
         logprob_sum = torch.sum(log_probs, dim=1)
+        # print('logprob_sum size: ', logprob_sum.size())
 
-        # print('idxs size', idxs.size())
-        # print('actions size', actions.size())
-        # print('log_probs size', log_probs.size())
-        # print('logprob_sum size', logprob_sum.size())
-        # print('advantage size', advantage.size())
-
-        actor_loss_elements = advantage.unsqueeze(1) * logprob_sum
+        actor_loss_elements = advantage * logprob_sum
+        # print('advantage size: ', advantage.size())
+        # print('actor_loss_elements: ', actor_loss_elements.size())
         # Computes actor loss and critic loss
-        actor_loss = torch.mean(actor_loss_elements) # Changed to R and v from R_nograd and v_nograd
+        actor_loss = torch.mean(actor_loss_elements)
+        # print('actor loss: ', actor_loss)
+
         critic_loss = F.mse_loss(R, v)
     
         # Compute gradients

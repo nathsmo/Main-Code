@@ -54,7 +54,8 @@ class VRPEnvironment:
         # Convert idx to a one-hot tensor and flatten
         # Remove the unnecessary dimension and ensure it's a long tensor
         # print('STEP idx shape:', idx.shape)
-        idx = idx.squeeze(1).long()  # idx: [batch_size, 1] with indices of nodes
+        if len(idx.shape) == 2:
+            idx = idx.squeeze(1).long()  # idx: [batch_size, 1] with indices of nodes
         
         # PyTorch one_hot requires the indices tensor to be in 'Long' datatype
         one_hot = F.one_hot(idx, num_classes=self.args['n_nodes'])

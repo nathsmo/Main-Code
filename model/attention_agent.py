@@ -64,7 +64,6 @@ class RLAgent(nn.Module):
         #     self.critic_attention
         # )
         self.critic = Critic(args, 2) #args and input_dim
-
         self.decoder_input = nn.Parameter(torch.randn(1, 1, args['embedding_dim']))
         nn.init.xavier_uniform_(self.decoder_input)
 
@@ -78,7 +77,7 @@ class RLAgent(nn.Module):
 
         self.prt.print_out("Agent created - Pointer Network.")
 
-    def build_model(self, decode_type= "greedy"):
+    def build_model(self, eval_type= "greedy"):
         """
         Could be seen as the forward pass function.
 
@@ -108,7 +107,7 @@ class RLAgent(nn.Module):
 
         # self.env.input_pnt: [batch_size x max_time x input_dim=2]
         if not isinstance(self.env.input_pnt, torch.Tensor):
-            self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float).float()
+            self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
 
         # encoder_emb_inp: [batch_size x max_time x embedding_dim]
         context = self.embedding(self.env.input_pnt) # this is a forward pass
@@ -166,9 +165,9 @@ class RLAgent(nn.Module):
 
             #Chosen action size:  torch.Size([batch_size, 1])
             #Change this to epsilon greedy !!!!!!
-            if decode_type == "greedy":
+            if eval_type == "greedy":
                 _, chosen_action = probabilities.max(dim=1)
-            elif decode_type == "stochastic":
+            elif eval_type == "stochastic":
                 chosen_action = probabilities.multinomial(num_samples=1)            
             # print('Chosen action: ', chosen_action)
 
@@ -176,13 +175,13 @@ class RLAgent(nn.Module):
             
             if chosen_action.dim() != 2:
                 chosen_action = chosen_action.unsqueeze(1)
+
             #Batched index: torch.Size([batch_size, 2])
             batched_idx = torch.cat([BatchSequence, chosen_action], dim=1).long()
             gathered_probs = probabilities[batched_idx[:, 0], batched_idx[:, 1]]
-            logprob = torch.log(gathered_probs)
-            # print('Logprob size: ', logprob.size())
 
-            # print('batched_idx size: ', batched_idx.size()) 
+            logprob = torch.log(gathered_probs)
+
             actions.append(chosen_action) #replaces idxs
             logits.append(logit)
             logprobs.append(logprob)
@@ -191,7 +190,6 @@ class RLAgent(nn.Module):
             # Given action:  torch.Size([batch_size, 2]) (For batch size, coordinates obtained.)
             given_action = self.env.input_pnt[batched_idx[:, 0], batched_idx[:, 1]] # Before called action
             actions_tmp.append(given_action)
-            # print('Given action: ', given_action.shape)
 
         logits = torch.stack(logits, dim=1)
         actions = torch.stack(actions, dim=1)
@@ -202,25 +200,28 @@ class RLAgent(nn.Module):
         R = self.reward_func(actions_tmp)
 
         #Critic part --------------------------------
+        v = torch.tensor(0)
 
-        #action4critic size = [1, batch_size, hidden_dim]
-        action4critic = chosen_action.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-        # Initialize hidden and cell states
-        hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-        cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-        # Create the LSTM state tuple
-        lstm_state = (hidden_state, cell_state)
-        # Use the lstm_state in an LSTM
-        lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
-        # Forward pass through LSTM
-        output, (hn, cn) = lstm_layer(action4critic, lstm_state)
-        # Extracting hy (which in this context would be the last cell state from the first layer)
-        hy = cn[0]
+        if eval_type == "stochastic":
+            # action4critic size = [1, batch_size, hidden_dim]
+            action4critic = chosen_action.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
+            # Initialize hidden and cell states
+            hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
+            cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
+            # Create the LSTM state tuple
+            lstm_state = (hidden_state, cell_state)
+            # Use the lstm_state in an LSTM
+            lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
+            # Forward pass through LSTM
+            output, (hn, cn) = lstm_layer(action4critic, lstm_state)
+            # Extracting hy (which in this context would be the last cell state from the first layer)
+            hy = cn[0]
 
-        for i in range(self.args['n_process_blocks']):
-            hy = self.critic(hy, context[torch.arange(batch_size), actions[-1], :])
+            for i in range(self.args['n_process_blocks']):
+                hy = self.critic(hy, context[torch.arange(batch_size), actions[-1], :])
 
-        v = self.critic.final_step_critic(hy)
+            v = self.critic.final_step_critic(hy)
+
         # print('V: ', v)
         # print("R: ", R)
         return (R, v, logprobs, actions_tmp, actions, self.env.input_pnt, probs)
@@ -238,7 +239,7 @@ class RLAgent(nn.Module):
 
         # In Detach function we separate a tensor from the computational graph by returning a new tensor that doesn't require a gradient
         v_nograd = v.detach()
-        R = R.detach()
+
         # Size [batch_size]
         advantage = R - v_nograd
         #Size [batch_size]
@@ -261,7 +262,7 @@ class RLAgent(nn.Module):
 
         # Compute gradients
         actor_loss.backward(retain_graph=True)  # Retain graph to compute gradients for critic 
-        critic_loss.backward()
+        critic_loss.backward(retain_graph=True) #See if this affects anything
 
         # # Clip gradients (optional, if args['max_grad_norm'] is set)
         torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])

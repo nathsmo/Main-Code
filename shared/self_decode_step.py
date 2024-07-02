@@ -4,9 +4,9 @@ import torch.nn.functional as F
 
 class SelfAttention(nn.Module):
     """ Implements a self-attention mechanism using nn.MultiheadAttention. """
-    def __init__(self, hidden_dim, num_heads):
+    def __init__(self, args):
         super(SelfAttention, self).__init__()
-        self.attention = nn.MultiheadAttention(embed_dim=hidden_dim, num_heads=num_heads)
+        self.attention = nn.MultiheadAttention(embed_dim=args['hidden_dim'], num_heads=args['num_heads'])
 
     def forward(self, query, key, value, mask=None):
         query, key, value = query.transpose(0, 1), key.transpose(0, 1), value.transpose(0, 1)
@@ -14,15 +14,13 @@ class SelfAttention(nn.Module):
         return attn_output.transpose(0, 1), attn_weights  # Convert back to (batch, seq_len, dim)
 
 class AttentionDecoder(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_heads, num_actions, args, num_layers=1, dropout=0.1, beam_width=1):
+    def __init__(self, attention_instance, num_actions, args):
         super(AttentionDecoder, self).__init__()
-        self.rnn = nn.LSTM(input_size=input_dim, hidden_size=hidden_dim, num_layers=num_layers,
-                           batch_first=True, dropout=dropout if num_layers > 1 else 0)
-        self.self_attention = SelfAttention(hidden_dim, num_heads)
-        self.action_head = nn.Linear(hidden_dim, num_actions)  # Action head for generating action logits
-        self.rnn_layers = num_layers
-        self.hidden_dim = hidden_dim
-        self.beam_width = beam_width  # Beam width
+        self.rnn = nn.LSTM(input_size=args['embedding_dim'], hidden_size=args['hidden_dim'], num_layers=args['rnn_layers'],
+                           batch_first=True, dropout=args['dropout'] if args['rnn_layers'] > 1 else 0)
+        self.self_attention = attention_instance
+        self.action_head = nn.Linear(args['hidden_dim'], num_actions)  # Action head for generating action logits
+        self.beam_width = 1  # Beam width
         self.args = args
 
     def forward(self, inputs, context, mask=None):
@@ -51,9 +49,7 @@ class AttentionDecoder(nn.Module):
 
         elif method == "stochastic":
             # Select stochastic actions.
-            # print("Prob: ", prob.shape)
             idx = torch.multinomial(prob, num_samples=1, replacement=True)
-
         #Action selection
         return prob, idx 
         

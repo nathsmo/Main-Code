@@ -54,9 +54,6 @@ class DecodeStep(nn.Module):
         if self.mask_pointer:
             logit -= self.BIGNUMBER * mask
 
-        # log_prob = F.log_softmax(logit, dim=-1)
-        # prob = F.exp(log_prob)
-        # No longer has the log_softmax included!!!
         return logit, hidden
 
     def _init_hidden(self, batch_size):

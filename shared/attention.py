@@ -33,7 +33,7 @@ class Attention(nn.Module):
         """
         # Project query tensor
         q = self.project_query(query)  # [batch_size x dim]
-
+        # print(f"q shape: {q.shape}")
         # Apply convolution along the time dimension
         e = self.project_ref(ref)  # [batch_size x max_time x dim]
         # print(f"e shape: {e.shape}")
@@ -41,23 +41,24 @@ class Attention(nn.Module):
             e = e.permute(1, 0, 2)
             # print('e shape:', e.shape)
             # print('permutted')
-
+        # print(f"e shape: {e.shape}")
         # Expand dimensions of q to match the shape of e
-        expanded_q = q.unsqueeze(1) # [batch_size, max_time, dim]
-
+        if q.dim() == 2:
+            q = q.unsqueeze(1) # [batch_size, max_time, dim]
+        # print(f"q - might be expanded shape: {q.shape}")
         # Prepare v for batch multiplication
         v_view = self.v.expand(e.size(0), -1, -1)  # [batch_size x dim x 1]
         # print('v_view shape:', v_view.shape)
 
         # Apply tanh activation function over the sum, prepare for multiplication
-        tanh_output = self.tanh(expanded_q + e)
+        tanh_output = self.tanh(q + e)
         if tanh_output.dim() > 3:
             # This means it's on the critic network
             # tanh_output = tanh_output.squeeze(1)
             # tanh_output = tanh_output.permute(1, 0, 2) 
             print("There's something wrong inside the critic network - attention file")
         # print(f"tanh_output shape: {tanh_output.shape}")
-        
+
         # Compute the attention logits using batch matrix multiplication
         u = torch.bmm(tanh_output, v_view).squeeze(2)  # [batch_size x max_time]
 

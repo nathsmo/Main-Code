@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Eval_All2s
+#SBATCH --job-name=Eval_DPN_10_conv
 #SBATCH --output=eval/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -27,21 +27,9 @@ echo "[$SHELL] ## Run script"
 
 # Eval organized
 
-# python main.py --variation='A2_lin' --task=tsp20 --decoder=pointer --emb_type=linear --is_train=False --model_dir=./logs/A2_lin/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='A2_lin' --task=tsp20 --decoder=pointer --emb_type=linear --is_train=False --model_dir=./logs/A2_lin_2/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='A2_en' --task=tsp20 --decoder=pointer --emb_type=enhanced --is_train=False --model_dir=./logs/A2_en/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='A2_en' --task=tsp20 --decoder=pointer --emb_type=enhanced --is_train=False --model_dir=./logs/A2_en_2/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='A2_en2' --task=tsp20 --decoder=pointer --emb_type=enhanced2 --is_train=False --model_dir=./logs/A2_en2/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='A2_min' --task=tsp20 --decoder=pointer --emb_type=minimal --is_train=False --model_dir=./logs/A2_min/model/agent_complete.pth --infer_type=batch
+python main.py --variation='DPN_10_conv' --task=tsp10 --decoder=pointer --emb_type=conv --is_train=False --infer_type=batch --model_dir=./logs/DPN_10_lin/model/agent_complete.pth 
 
-# python main.py --variation='B2_lin' --task=tsp20 --decoder=self --emb_type=linear --num_heads=1 --is_train=False --model_dir=./logs/B2_lin/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='B2_en' --task=tsp20 --decoder=self --emb_type=enhanced --num_heads=1 --is_train=False --model_dir=./logs/B2_en/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='B2_en2' --task=tsp20 --decoder=self --emb_type=enhanced2 --num_heads=1 --is_train=False --model_dir=./logs/B2_en2/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='B2_min' --task=tsp20 --decoder=self --emb_type=minimal --num_heads=1 --is_train=False --model_dir=./logs/B2_min/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='B2_min' --task=tsp20 --decoder=self --emb_type=minimal --num_heads=1 --is_train=False --model_dir=./logs/B2_min_2/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='D2_lin' --task=tsp20 --decoder=self --emb_type=linear --num_heads=4 --is_train=False --model_dir=./logs/D2_lin/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='E2_lin' --task=tsp20 --decoder=pointer --emb_type=linear --n_glimpses=3 --is_train=False --model_dir=./logs/E2_lin/model/agent_complete.pth --infer_type=batch
-# python main.py --variation='E2_en2' --task=tsp20 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3 --is_train=False --model_dir=./logs/E2_en2/model/agent_complete.pth --infer_type=batch
+# python main.py --variation='A2_lin' --task=tsp20 --decoder=pointer --emb_type=linear --is_train=False --model_dir=./logs/A2_lin/model/agent_complete.pth --infer_type=batch
 
 
 ##### EVAL

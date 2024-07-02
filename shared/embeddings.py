@@ -4,13 +4,13 @@ import sys
 import torch.nn.functional as F
 
 
-class LinearEmbedding(nn.Module):
+class ConvEmbedding(nn.Module):
     """ This class implements linear embedding.
     It is only a mapping to a higher dimensional space.
     """
     def __init__(self, prt, embedding_dim):
         # Input: embedding_dim: embedding dimension
-        super(LinearEmbedding, self).__init__()
+        super(ConvEmbedding, self).__init__()
         self.project_emb = nn.Conv1d(in_channels=2, out_channels=embedding_dim, kernel_size=1)
         prt.print_out("Embedding - linear")
     

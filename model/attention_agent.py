@@ -8,7 +8,7 @@ import time
 from torch.utils.data import DataLoader
 import sys
 
-from shared.embeddings import LinearEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
+from shared.embeddings import ConvEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
 from shared.decode_step import DecodeStep
 from shared.attention import Attention
 
@@ -24,9 +24,9 @@ class RLAgent(nn.Module):
         self.reward_func = reward_func
 
         # Embedding and Decoder setup
-        if args['emb_type'] == 'linear':
-            self.embedding = LinearEmbedding(prt, args['embedding_dim'])
-        elif args['emb_type'] == 'minimal':
+        if args['emb_type'] == 'conv':
+            self.embedding = ConvEmbedding(prt, args['embedding_dim'])
+        elif args['emb_type'] == 'linear':
             self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
         elif args['emb_type'] == 'enhanced':
             self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])

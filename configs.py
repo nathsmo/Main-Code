@@ -71,7 +71,7 @@ def ParseParams():
     parser.add_argument('--disable_tqdm', default=True, type=str2bool)
     
     # My implemented variables
-    parser.add_argument('--emb_type', default='linear', help='linear|enhanced_linear')
+    parser.add_argument('--emb_type', default='linear', help='conv|enhanced_linear')
 
     parser.add_argument('--decoder', default='pointer', help='pointer|self')
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in the multihead attention')

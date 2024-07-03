@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import sys
 
 class SelfAttention(nn.Module):
     """ Implements a self-attention mechanism using nn.MultiheadAttention. """
@@ -29,29 +30,56 @@ class AttentionDecoder(nn.Module):
         action_logits = self.action_head(attn_output[:, -1, :])  # Using the last timestep's output
         return action_logits, attn_weights
 
-    def select_action(self, action_logits, method='greedy'):
-        if method == 'beam_search':
-            return self.beam_search(action_logits, self.beam_width)
+    def select_action(self, action_logits, visited_positions, method='greedy'):
+        # This has a mask for previous visited nodes
+
         prob = F.softmax(action_logits, dim=-1)
+
+        # Create a mask to set the probability of previously visited positions to zero
+        mask = torch.ones_like(prob)
+        mask.scatter_(1, visited_positions, 0)
+
+        # Apply the mask to the probabilities
+        masked_prob = prob * mask
+
+        # Normalize the masked_prob to ensure it's a valid probability distribution
+        masked_prob_sum = masked_prob.sum(dim=1, keepdim=True)
+        
+        # Check for invalid values and handle them
+        if (masked_prob_sum == 0).any():
+            print("Masked probabilities sum to zero, which means all actions are masked out. This should not happen.")
+            print("Action logits:", action_logits)
+            print("Probabilities:", prob)
+            print("Masked probabilities:", masked_prob)
+            print("First array Visited positions:", visited_positions[0])
+            print("Last array Visited positions:", visited_positions[-1])
+            raise RuntimeError("Masked probabilities are invalid.")
+            sys.exit()
+    
+        masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
+        
         if method == "greedy":
+            # Epsilon-greedy action selection
             # Generate random numbers for each element in the batch
-            random_values = torch.rand(prob.size(0))
+            random_values = torch.rand(masked_prob.size(0), 1, device=masked_prob.device)
 
             # Calculate the index of the maximum probability (greedy action)
-            greedy_idx = torch.argmax(prob, dim=1).unsqueeze(1)
+            greedy_idx = torch.argmax(masked_prob, dim=1, keepdim=True)
 
-            random_values = torch.rand(prob.size(0), 1)
-            # Decide between the greedy action and a random action
-            idx = torch.where(random_values < self.args['epsilon'],
-                torch.randint(prob.size(1), (prob.size(0), 1), device=prob.device),  # Random action
-                greedy_idx)   # Greedy action
+            # Decide between the greedy action and a random action based on epsilon
+            idx = torch.where(
+                random_values < self.args['epsilon'],
+                torch.randint(masked_prob.size(1), (masked_prob.size(0), 1), device=masked_prob.device),  # Random action
+                greedy_idx  # Greedy action
+            )
             self.args['epsilon'] *= 0.9999  # Decay epsilon
+            # sys.exit()
 
         elif method == "stochastic":
             # Select stochastic actions.
-            idx = torch.multinomial(prob, num_samples=1, replacement=True)
+            idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
         #Action selection
-        return prob, idx 
+        return masked_prob, idx 
         
 
 

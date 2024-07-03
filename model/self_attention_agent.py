@@ -36,7 +36,7 @@ class RLAgent(nn.Module):
 
         # Initialize the self-attention based decoder
         self.decodeStep = AttentionDecoder(self.actor_attention, 
-                                           num_actions=5, 
+                                           num_actions=self.env.n_nodes, 
                                            args=args)
 
         self.actor = nn.Sequential(
@@ -80,11 +80,13 @@ class RLAgent(nn.Module):
         log_probs = []
         probs = []
         idxs = []
+        visited_positions = torch.zeros((batch_size, 1), dtype=torch.long, device=input_d.device)
 
         BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
-        
+        # print('This is the decode_len: ', args['decode_len'])
+
         #Decoding loop
-        for step in range(args['decode_len']):
+        for step in range(args['decode_len']-1):
             # Get logit and attention weights
             if step == 0:
                 # Start from trainable nodes in TSP
@@ -97,7 +99,9 @@ class RLAgent(nn.Module):
 
             action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
             # It does softmax inside here
-            prob, action_selected = self.decodeStep.select_action(action_logits, eval_type)   
+
+            prob, action_selected = self.decodeStep.select_action(action_logits, visited_positions, eval_type) 
+            # print('Step: ', step, 'Action selected: ', action_selected) 
 
             state = self.env.step(action_selected)
 
@@ -105,7 +109,6 @@ class RLAgent(nn.Module):
             
             # Advanced indexing in PyTorch to replace gather_nd
             selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]] 
-
             # Taking logarithm of the selected probabilities
             logprob = torch.log(selected_probs)
 
@@ -117,12 +120,20 @@ class RLAgent(nn.Module):
             action = input_d[batched_idx[:, 0], batched_idx[:, 1]]
             actions.append(action)
 
+            # Update visited positions
+            visited_positions = torch.cat([visited_positions, action_selected], dim=1)
+
         idxs = torch.stack(idxs, dim=1)
         log_probs = torch.stack(log_probs, dim=1)
         probs = torch.stack(probs, dim=1)
         actions = torch.stack(actions, dim=1)
         # print(actions.size())
         R = self.reward_func(actions, show=show)
+        if torch.any(R == 0):
+            print("Reward is zero. Stopping evaluation.")
+            print('actions: ', actions)
+            sys.exit()
+        # print('R: ', R, 'eval_type: ', eval_type)
 
         #Critic part --------------------------------
         v = torch.tensor(0)
@@ -262,7 +273,7 @@ class RLAgent(nn.Module):
                 break
             
             R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(data, eval_type)
-            # print('EB - R mean: ', R.mean().item())
+            # print('EB - R mean: ', np.mean(R.tolist()))
             total_reward.extend(R.tolist())
 
         # if np.array_equal(self.env.input_data, data):
@@ -323,7 +334,7 @@ class RLAgent(nn.Module):
         
         avg_reward = np.mean(total_reward)
         std_reward = np.std(total_reward)
-        self.prt.print_out(f'Evaluate model: Average Reward: {avg_reward}, Reward Std Dev: {std_reward}')
+        # self.prt.print_out(f'Evaluate model: Average Reward: {avg_reward}, Reward Std Dev: {std_reward}')
 
         return R, v, log_probs, actions, idxs, batch, _
 

@@ -25,8 +25,6 @@ echo "[$SHELL] ## current working directory: "$CWD
 # Run the file
 echo "[$SHELL] ## Run script"
 
-
-
 # Training organized
 
 # _______________________________________________________

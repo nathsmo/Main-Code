@@ -67,28 +67,50 @@ class VRPEnvironment:
         return state
     
 def reward_func(route, show=False):
-    """The reward for the TSP task is defined as the 
-    negative value of the route length. This function gets the decoded
-    actions and computed the reward.
+    """
+    The reward for the TSP task is defined as the negative value of the route length.
+    This function gets the decoded actions and computes the reward.
 
     Args:
-        route : tensor  shape [batch_size, n_nodes, input_dim] representing
-            the coordinates of each point in the sequence of n_nodes for each batch.
+        route: tensor of shape [batch_size, n_nodes, input_dim]
 
     Returns:
-        rewards (torch.Tensor): Reward tensor of size [batch_size] containing the 
-            negative route length.
+        rewards: tensor of size [batch_size]
     """
-    #Route shape: [batch_size, n_nodes, input_dim]
-    # # Compute Euclidean distances between consecutive points, considering the route as circular
-    # Calculate distances from each point to the next
-    distances = torch.sqrt(torch.sum((route[:, 1:] - route[:, :-1]) ** 2, dim=2))
-    # Sum distances for each route in the batch
-    total_distance = torch.sum(distances, dim=1)
-    # Compute distance from the last point back to the first to complete the loop
-    closing_distance = torch.sqrt(torch.sum((route[:, 0] - route[:, -1]) ** 2, dim=1))
-    # Add closing distance to total distance
-    total_distance += closing_distance
+    
+    # Tilt the sample solution by moving the last node to the first position
+    route_tilted = torch.cat((route[:, -1:, :], route[:, :-1, :]), dim=1)
 
-    # Return negative route length as the reward
-    return -total_distance
+    # Calculate Euclidean distances between consecutive points
+    distances = torch.sqrt(torch.sum((route_tilted - route) ** 2, dim=2))
+
+    # Sum the distances along the nodes to get the total route length for each batch
+    route_lens_decoded = torch.sum(distances, dim=1)
+    
+    return -route_lens_decoded
+
+# """The reward for the TSP task is defined as the 
+# negative value of the route length. This function gets the decoded
+# actions and computed the reward.
+
+# Args:
+#     route : tensor  shape [batch_size, n_nodes, input_dim] representing
+#         the coordinates of each point in the sequence of n_nodes for each batch.
+
+# Returns:
+#     rewards (torch.Tensor): Reward tensor of size [batch_size] containing the 
+#         negative route length.
+# """
+# #Route shape: [batch_size, n_nodes, input_dim]
+# # # Compute Euclidean distances between consecutive points, considering the route as circular
+# # Calculate distances from each point to the next
+# distances = torch.sqrt(torch.sum((route[:, 1:] - route[:, :-1]) ** 2, dim=2))
+# # Sum distances for each route in the batch
+# total_distance = torch.sum(distances, dim=1)
+# # Compute distance from the last point back to the first to complete the loop
+# closing_distance = torch.sqrt(torch.sum((route[:, 0] - route[:, -1]) ** 2, dim=1))
+# # Add closing distance to total distance
+# total_distance += closing_distance
+
+# # Return negative route length as the reward
+# return -total_distance

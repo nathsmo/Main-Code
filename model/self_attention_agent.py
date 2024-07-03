@@ -55,15 +55,22 @@ class RLAgent(nn.Module):
 
         self.prt.print_out("Agent created - Self Attention.")
 
-    def build_model(self, eval_type= "greedy", show=False): #prev -> forward
+    def build_model(self, eval_type= "greedy", show=False, data=None): #prev -> forward
         args = self.args
-        batch_size = self.env.input_pnt.shape[0]
+        batch_size = args['batch_size']
 
-        if not isinstance(self.env.input_pnt, torch.Tensor):
-            self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
+        # if not isinstance(self.env.input_pnt, torch.Tensor):
+        #     self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
 
         # encoder_emb_inp/context: [batch_size x seq_len x embedding_dim]
-        context = self.embedding(self.env.input_pnt)
+        if data is not None:
+            input_d = data
+            # print('Obtained data not from ENV')
+        else:
+            if not isinstance(self.env.input_pnt, torch.Tensor):
+                self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
+            input_d = self.env.input_pnt
+        context = self.embedding(input_d)
 
         # Reset the Environment.
         self.env.reset()
@@ -89,7 +96,7 @@ class RLAgent(nn.Module):
             # print('Context: ', context.size())
 
             action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
-
+            # It does softmax inside here
             prob, action_selected = self.decodeStep.select_action(action_logits, eval_type)   
 
             state = self.env.step(action_selected)
@@ -107,42 +114,40 @@ class RLAgent(nn.Module):
             log_probs.append(logprob)
 
             # Gather using the constructed indices
-            action = self.env.input_pnt[batched_idx[:, 0], batched_idx[:, 1]]
+            action = input_d[batched_idx[:, 0], batched_idx[:, 1]]
             actions.append(action)
 
         idxs = torch.stack(idxs, dim=1)
         log_probs = torch.stack(log_probs, dim=1)
         probs = torch.stack(probs, dim=1)
         actions = torch.stack(actions, dim=1)
-
+        # print(actions.size())
         R = self.reward_func(actions, show=show)
 
         #Critic part --------------------------------
         v = torch.tensor(0)
 
         if eval_type == "stochastic":
-            # action4critic size = [1, batch_size, hidden_dim]
+            # Ensure action_selected is of the correct shape
             action4critic = action_selected.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-            # Initialize hidden and cell states
+
+            # Initialize hidden and cell states for LSTM
             hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
             cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-            # Create the LSTM state tuple
-            lstm_state = (hidden_state, cell_state)
-            # Use the lstm_state in an LSTM
-            lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
+            
             # Forward pass through LSTM
-            output, (hn, cn) = lstm_layer(action4critic, lstm_state)
-            # Extracting hy (which in this context would be the last cell state from the first layer)
-            hy = cn[0]
+            lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
+            output, (hn, cn) = lstm_layer(action4critic, (hidden_state, cell_state))
+            
+            # Extract the last hidden state for further processing
+            hy = hn[-1]
 
             for i in range(self.args['n_process_blocks']):
                 hy = self.critic(hy, context[torch.arange(batch_size), idxs[-1], :])
             
             v = self.critic.final_step_critic(hy)
-            
-        # print('V: ', v)
-        # print("R: ", R)
-        return (R, v, log_probs, actions, idxs, self.env.input_pnt, probs)
+
+        return (R, v, log_probs, actions, idxs, input_d, probs)
 
 
 
@@ -157,29 +162,35 @@ class RLAgent(nn.Module):
         v = v.float()
 
         v_nograd = v.detach()
-        
+        # print('v_nograd: ', v_nograd)
         # Losses
+        # Advantage should represent the difference between the observed reward and the predicted value
         advantage = R - v_nograd
+        # print('Advantage: ', advantage)
         #Size [batch_size]
         logprob_sum = torch.sum(log_probs, dim=1)
+        # print('Logprob_sum: ', logprob_sum)
         actor_loss_elements = advantage * logprob_sum
         # Computes actor loss and critic loss
         actor_loss = torch.mean(actor_loss_elements)
         # actor_loss = torch.mean((R - v_nograd) * torch.sum(torch.stack(log_probs), dim=0))
         critic_loss = F.mse_loss(R, v)
         
+        # Add monitoring prints
+        print(f"Advantage: {advantage.mean().item()}, Actor Loss: {actor_loss.item()}, Critic Loss: {critic_loss.item()}")
+
         # Compute gradients
         # Clear previous gradients
         self.actor_optim.zero_grad()
         self.critic_optim.zero_grad()
 
         # Compute gradients
-        actor_loss.backward(retain_graph=True) # Retain graph to compute gradients for critic
-        critic_loss.backward(retain_graph=True) #See if this affects anything
-
+        actor_loss.backward(retain_graph=True)
+        critic_loss.backward()
+ 
         # # Clip gradients (optional, if args['max_grad_norm'] is set)
-        # torch.nn.utils.clip_grad_norm_(actor.parameters(), self.args['max_grad_norm'])
-        # torch.nn.utils.clip_grad_norm_(critic.parameters(), self.args['max_grad_norm'])
+        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])
+        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args['max_grad_norm'])
 
         # Apply gradients
         self.actor_optim.step()
@@ -237,13 +248,14 @@ class RLAgent(nn.Module):
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
-        data = self.dataGen.get_test_data()
-        start_time = time.time()
 
-        if np.array_equal(self.env.input_data, data):
-            self.prt.print_out("The data is the same.!!!!!!")
-            sys.exit()
-        self.env.input_data = data
+        # data = self.dataGen.get_test_data()
+        # start_time = time.time()
+
+        # if np.array_equal(self.env.input_data, data):
+        #     self.prt.print_out("The data is the same.!!!!!!")
+        #     sys.exit()
+        # self.env.input_data = data
 
         R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type)
 
@@ -256,9 +268,9 @@ class RLAgent(nn.Module):
         # print("This is the std of R: ", std_r)
         # R = torch.min(R) 
 
-        end_time = time.time() - start_time
-
-        self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} -- time {} s'.format(eval_type, R.mean().numpy(), str(std_r), end_time))  
+        # end_time = time.time() - start_time
+        # print('R: ', R)
+        self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} '.format(eval_type, R.mean().numpy(), str(std_r)))  
         
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
@@ -276,7 +288,7 @@ class RLAgent(nn.Module):
         train_results = self.build_train_step()
         return train_results
 
-    def evaluate_model(self, eval_type='greedy'):
+    def evaluate_model(self, data, eval_type='greedy'):
         """
         Evaluate the model on the provided DataLoader with a specific evaluation type.
         
@@ -290,12 +302,10 @@ class RLAgent(nn.Module):
         """
 
         total_reward = []
-
         self.dataGen.reset()
-
         test_df = self.dataGen.get_test_data()
         test_loader = DataLoader(test_df, batch_size=self.args['batch_size']) #, collate_fn=lambda x: padded_collate(x, self.args['batch_size'])) 
-        start_time = time.time()
+        # start_time = time.time()
 
         for data in test_loader:
             # print('Data shape: ', data.size())
@@ -303,19 +313,13 @@ class RLAgent(nn.Module):
                 # Fix this! as we are not testing the total amount of data
                 # Remember to fix also in attention
                 break
-            self.env.input_data = data  # Set the environment's input data to the batch provided by DataLoader
-            
+            # self.env.input_data = data  # Set the environment's input data to the batch provided by DataLoader
+    
             # Run model evaluation for the current batch
-            R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True)
+            R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True, data=data)
             # print('EM - Actions: ', actions)
             # print('EM - Rewards: ', R) # -> A lot of rewards are 0.0
-            if eval_type == 'beam_search':
-                # For beam search, handling multiple paths per instance
-                R = R.view(-1, self.args['beam_width'])  # Reshape R assuming it is flat with all paths
-                R_val, _ = torch.min(R, dim=1)  # Find the minimum reward across beams
-                total_reward.extend(R_val.tolist())  # Append to total rewards list
-            else:
-                total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
+            total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
         
         # end_time = time.time() - start_time
         # self.prt.print_out(f'Average Reward: {R.mean().numpy()}, Reward Std Dev: {R.std().item()}, -- time {end_time} s')
@@ -327,13 +331,16 @@ class Critic(nn.Module):
     def __init__(self, args, input_dim):
         super(Critic, self).__init__()
         self.args = args
-        self.attention = Attention(args['hidden_dim'], use_tanh=args['use_tanh'], C=args['tanh_exploration']) # Assuming Attention is defined elsewhere
+        self.attention = Attention(args['hidden_dim'], use_tanh=args['use_tanh'], C=args['tanh_exploration']) 
         self.linear1 = nn.Linear(args['hidden_dim'], args['hidden_dim'])
         self.linear2 = nn.Linear(args['hidden_dim'], 1)
 
     def forward(self, hidden_state, encoder_outputs):
-        e, logit = self.attention(hidden_state, encoder_outputs, use_tanh=self.args['use_tanh'], C=self.args['tanh_exploration'])  # Assuming attention returns context and attn_weights
+        e, logit = self.attention(hidden_state, encoder_outputs)
+        # print('logits critic: ', logit)
+        # print('e critic: ', e.size())
         prob = F.softmax(logit, dim=-1)
+        # print('prob critic: ', prob)
         prob_expanded = prob.unsqueeze(1)
         result = torch.matmul(prob_expanded, e) 
         hy = result.squeeze(1)

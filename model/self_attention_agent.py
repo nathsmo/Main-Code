@@ -146,6 +146,7 @@ class RLAgent(nn.Module):
                 hy = self.critic(hy, context[torch.arange(batch_size), idxs[-1], :])
             
             v = self.critic.final_step_critic(hy)
+            # print('R build model: ', R)
 
         return (R, v, log_probs, actions, idxs, input_d, probs)
 
@@ -160,6 +161,8 @@ class RLAgent(nn.Module):
 
         R = R.float()
         v = v.float()
+        # print(f"R: {R.mean().item()}")
+        # print(f"Build train step - Training R: {R.mean().item()}, v: {v.mean().item()}")
 
         v_nograd = v.detach()
         # print('v_nograd: ', v_nograd)
@@ -177,7 +180,8 @@ class RLAgent(nn.Module):
         critic_loss = F.mse_loss(R, v)
         
         # Add monitoring prints
-        print(f"Advantage: {advantage.mean().item()}, Actor Loss: {actor_loss.item()}, Critic Loss: {critic_loss.item()}")
+        # print(f"Advantage: {advantage.mean().item()}, Actor Loss: {actor_loss.item()}, Critic Loss: {critic_loss.item()}")
+        # print(f"R: {R.mean().item()}, v: {v.mean().item()}, Advantage: {advantage.mean().item()}, Actor Loss: {actor_loss.item()}, Critic Loss: {critic_loss.item()}")
 
         # Compute gradients
         # Clear previous gradients
@@ -248,38 +252,34 @@ class RLAgent(nn.Module):
     def evaluate_batch(self, eval_type='greedy'):
         
         self.env.reset()
+        total_reward = []
+        self.dataGen.reset()
+        test_df = self.dataGen.get_test_data()
+        test_loader = DataLoader(test_df, batch_size=self.args['batch_size'])
 
-        # data = self.dataGen.get_test_data()
-        # start_time = time.time()
+        for data in test_loader:
+            if data.size(0) != self.args['batch_size']:
+                break
+            
+            R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(data, eval_type)
+            # print('EB - R mean: ', R.mean().item())
+            total_reward.extend(R.tolist())
 
         # if np.array_equal(self.env.input_data, data):
         #     self.prt.print_out("The data is the same.!!!!!!")
         #     sys.exit()
         # self.env.input_data = data
 
-        R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type)
+        avg_reward = np.mean(total_reward)
+        std_reward = np.std(total_reward)
+        self.prt.print_out(f'Evaluate batch - Average of {eval_type} in batch-mode: {avg_reward} -- std R: {std_reward}')
 
-        if len(R.size()) == 0:
-            self.prt.print_out("This is the std of R: ", R.std())
-            self.prt.print_out("  R is empty !")
-            sys.exit()
-
-        std_r = R.std().item()
-        # print("This is the std of R: ", std_r)
-        # R = torch.min(R) 
-
-        # end_time = time.time() - start_time
-        # print('R: ', R)
-        self.prt.print_out('Average of {} in batch-mode: {} -- std R: {} '.format(eval_type, R.mean().numpy(), str(std_r)))  
-        
     def inference(self, infer_type='batch'):
         if infer_type == 'batch':
             self.evaluate_batch('greedy')
-            # self.evaluate_batch('beam_search')
         elif infer_type == 'single':
             self.evaluate_single('single')
-            # self.evaluate_single('beam_search')
-        
+
         self.prt.print_out("##################################################################")
 
     def run_train_step(self):
@@ -318,11 +318,12 @@ class RLAgent(nn.Module):
             # Run model evaluation for the current batch
             R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True, data=data)
             # print('EM - Actions: ', actions)
-            # print('EM - Rewards: ', R) # -> A lot of rewards are 0.0
+            # print('EM - Rewards mean: ', R.mean().item()) # -> A lot of rewards are 0.0
             total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
         
-        # end_time = time.time() - start_time
-        # self.prt.print_out(f'Average Reward: {R.mean().numpy()}, Reward Std Dev: {R.std().item()}, -- time {end_time} s')
+        avg_reward = np.mean(total_reward)
+        std_reward = np.std(total_reward)
+        self.prt.print_out(f'Evaluate model: Average Reward: {avg_reward}, Reward Std Dev: {std_reward}')
 
         return R, v, log_probs, actions, idxs, batch, _
 

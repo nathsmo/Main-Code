@@ -166,7 +166,19 @@ class RLAgent(nn.Module):
             #Chosen action size:  torch.Size([batch_size, 1])
             #Change this to epsilon greedy !!!!!!
             if eval_type == "greedy":
-                _, chosen_action = probabilities.max(dim=1)
+                random_values = torch.rand(probabilities.size(0), 1, device=probabilities.device)
+
+                # Calculate the index of the maximum probability (greedy action)
+                greedy_idx = torch.argmax(probabilities, dim=1, keepdim=True)
+
+                # Decide between the greedy action and a random action based on epsilon
+                chosen_action = torch.where(
+                    random_values < self.args['epsilon'],
+                    torch.randint(probabilities.size(1), (probabilities.size(0), 1), device=probabilities.device),  # Random action
+                    greedy_idx  # Greedy action
+                )
+                self.args['epsilon'] *= 0.9999  # Decay epsilon
+
             elif eval_type == "stochastic":
                 chosen_action = probabilities.multinomial(num_samples=1)            
             # print('Chosen action: ', chosen_action)

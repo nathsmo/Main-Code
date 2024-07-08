@@ -9,32 +9,13 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 ## Information
 ## Currently under construction!!!! 
 *Ideas to implement to make code more efficient*
-* Self Attention
 * Different Embedding
-* Multi-head Attention
-* Beam Search
-* PPO method (RL)
-* Paper 6 - use to obtain more information 
+* Self Attention (via Multi-head Attention)
 
 
-### Modifications needed/ Problems to be solved:
-- [x] Migrate Code to Tensorflow 2 (NOT)
-- [x] Migrate Code to Pytorch
-- [x] Actor/Critic are not talking to each other and that's why variables never change
-- [x] Standard deviation is null but that's because there's no data to compare it to.
-- [x] Never makes a decision, always returns the same value.
-- [x] The model isn't being saved, therefore the variables arent being reused in the correct way (I think) (BUT, idk how to evaluate)
-- [x] We have to save the model and print the results
-- [x] Evaluate the model to see performance
-- [x] Run on cloud - LIACS servers
-- [ ] See tests for the model. (Test all parameters)
-- [ ] Create baselines for comparison -> from Github baseline
-- [ ] Create graph to show progress over time of the algorithm
-
-**Ultimate question for our angle:**  What is the factor taking too long to train the model. Reduce Runtime
-* Note: we did change the neural network layer from convolutional to linear because it is supposed to be more effective on pytorch that way.
-* Note: Experiments could include change in embedding dimensions/ changing kernel size
-    In order to change the embedding from simple to enhanced -> emb_type configuration.
+**Ultimate question for our angle:**  
+* What is the factor taking too long to train the model. 
+* Reduce Runtime
 
 ## Dependencies
 
@@ -45,14 +26,15 @@ Base code inspired by the implementation of paper: [Reinforcement Learning for S
 ## How to Run
 ### Train
 By default, the code is running in the training mode on a single gpu. For running the code, one can use the following command:
+
 ```bash
-python main.py --task=tsp10
+# DPN_10: Basic Pointer Network - Decoder
+python main.py --variation='DPN_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv 
+
+# DSA_1H_10: Self-Attention Decoder (1 head)
+python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1
 ```
 
-It is possible to add other config parameters like:
-```bash
-python main.py --task=tsp10 --gpu=0 --n_glimpses=1 --use_tanh=False 
-```
 There is a full list of all configs in the ``config.py`` file. Also, task specific parameters are available in ``task_specific_params.py``
 
 ### Inference
@@ -64,9 +46,9 @@ The default inference is run in batch mode, meaning that all testing instances a
 ```bash
 python main.py --task=tsp10 --is_train=False --infer_type=single --model_dir=./path_to_your_saved_checkpoint
 ```
-## Running self-attention
+## Example for inference
 ```bash
-python main.py --task=tsp10 --decoder=self --num_heads=4
+python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1 --is_train=False --infer_type=batch --model_dir=./logs/DSA_1H_10_conv/model/agent_complete.pth 
 ```
 ### Logs
 All logs are stored in ``result.txt`` file stored in ``./logs/task_date_time`` directory.

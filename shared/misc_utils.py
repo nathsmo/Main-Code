@@ -16,7 +16,6 @@ from io import BytesIO         # Python 3.x
 
 print_grad = True
 
-
 class printOut(object):
     def __init__(self,f=None ,stdout_print=True):
         ''' 

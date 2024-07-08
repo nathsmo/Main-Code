@@ -157,7 +157,19 @@ class MinimalLinearEmbedding(nn.Module):
         emb_inp_pnt = self.linear(input_pnt)
         emb_inp_pnt = emb_inp_pnt.reshape(batch_size, seq_len, -1)
         return emb_inp_pnt
-    
+
+def choose_embedding(prt, embedding_type, embedding_dim):
+    if embedding_type == "conv":
+        return ConvEmbedding(prt, embedding_dim)
+    elif embedding_type == "enhanced":
+        return EnhancedLinearEmbedding(prt, 2, embedding_dim)
+    elif embedding_type == "enhanced2":
+        return Enhanced__LinearEmbedding(prt, 2, embedding_dim)
+    elif embedding_type == "linear":
+        return MinimalLinearEmbedding(prt, 2, embedding_dim)
+    else:
+        raise ValueError("Invalid embedding type specified. Supported types: linear, enhanced, minimal")
+
 # if __name__ == "__main__":
 #     # Example usage
 #     # embedding_dim = 64

@@ -10,8 +10,7 @@ import sys
 # Import libraries from the task (TSP)
 from TSP.tsp_datagen import DataGenerator
 from TSP.tsp_env import VRPEnvironment, reward_func
-from model.attention_agent import RLAgent
-from model.self_attention_agent import RLAgent as SelfAttentionAgent
+from model.agent_att import RLAgent
 
 from configs import ParseParams
 
@@ -24,25 +23,13 @@ class principal(nn.Module):
 
         self.env = VRPEnvironment(args)
         
-        if args['decoder'] == 'self':
-            self.agent = SelfAttentionAgent(args,
+        self.agent = RLAgent(args,
                             prt,
                             self.env,
                             self.dataGen,
                             reward_func,
                             is_train=args['is_train']) # Model class
-            
-        elif args['decoder'] == 'pointer':
-            # create an RL Agent (Network)
-            self.agent = RLAgent(args,
-                            prt,
-                            self.env,
-                            self.dataGen,
-                            reward_func,
-                            is_train=args['is_train']) # Model class
-        else:
-            raise Exception('Decoder not implemented')
-        
+
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 
         # Set up TensorBoard SummaryWriter

@@ -4,7 +4,6 @@ import numpy as np
 import sys
 
 class Attention(nn.Module):
-    """A generic attention module for a decoder in seq2seq models"""
     def __init__(self, dim, use_tanh=False, C=10):
         super(Attention, self).__init__()
         self.use_tanh = use_tanh        # Set use_tanh flag

@@ -4,6 +4,9 @@
 /outputs
 /runs
 /cplex_env
+/lightning_attempt
+/totest
+/ignorefolder
 
 /model/__pycache__
 /shared/__pycache__

@@ -57,7 +57,17 @@ class AttentionDecoder(nn.Module):
             sys.exit()
     
         masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
+
+        if torch.isnan(masked_prob).any() or torch.isinf(masked_prob).any():
+            print("masked_prob contains NaN or Inf values")
+            print("masked_prob:", masked_prob)
+            raise ValueError("masked_prob contains NaN or Inf values")
         
+        if (masked_prob < 0).any():
+            print("masked_prob contains negative values")
+            print("masked_prob:", masked_prob)
+            raise ValueError("masked_prob contains negative values")
+
         if method == "greedy":
             # Epsilon-greedy action selection
             # Generate random numbers for each element in the batch
@@ -77,6 +87,7 @@ class AttentionDecoder(nn.Module):
 
         elif method == "stochastic":
             # Select stochastic actions.
+            if masked_prob
             idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
         #Action selection
         return masked_prob, idx 

@@ -87,7 +87,6 @@ class AttentionDecoder(nn.Module):
 
         elif method == "stochastic":
             # Select stochastic actions.
-            if masked_prob
             idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
         #Action selection
         return masked_prob, idx 

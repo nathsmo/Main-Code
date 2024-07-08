@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP50_DSA_4H_2RNN_50_en2
+#SBATCH --job-name=Training_TSP50_75_DSA_4H_2RNN_50_conv
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=50:00:00
+#SBATCH --time=70:00:00
 #SBATCH --partition=gpu-long
 #SBATCH --ntasks=1
 
@@ -49,6 +49,33 @@ echo "[$SHELL] ## Run script"
 
 # DSA_4H_2RNN_50: Self-Attention Decoder (4 heads) + 2 RNN Layers
 # python main.py --variation='DSA_4H_2RNN_50_conv' --task=tsp50 --n_train=35000 --decoder=self --emb_type=conv --rnn_layers=2 --num_heads=4
+# python main.py --variation='DSA_4H_2RNN_50_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
+# python main.py --variation='DSA_4H_2RNN_50_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
+# python main.py --variation='DSA_4H_2RNN_50_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4
+
+
+#### TSP50 ## upping training amount
+
+# DPN_50: Basic Pointer Network - Decoder
+# python main.py --variation='DPN_50_conv' --task=tsp50 --n_train=75000 --decoder=pointer --emb_type=conv 
+# python main.py --variation='DPN_50_lin' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=linear 
+# python main.py --variation='DPN_50_en' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced  
+# python main.py --variation='DPN_50_en2' --task=tsp50 --n_train=35000 --decoder=pointer --emb_type=enhanced2 
+
+# DSA_1H_50: Self-Attention Decoder (1 head)
+# python main.py --variation='DSA_1H_50_conv' --task=tsp50 --n_train=35000 --decoder=self --emb_type=conv  --num_heads=1
+# python main.py --variation='DSA_1H_50_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear  --num_heads=1
+# python main.py --variation='DSA_1H_50_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='DSA_1H_50_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2  --num_heads=1
+
+# DSA_4H_50: Self-Attention Decoder (4 heads)
+# python main.py --variation='DSA_4H_50_conv' --task=tsp50 --n_train=35000 --decoder=self --emb_type=conv  --num_heads=4
+# python main.py --variation='DSA_4H_50_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear  --num_heads=4
+# python main.py --variation='DSA_4H_50_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced  --num_heads=4
+# python main.py --variation='DSA_4H_50_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2  --num_heads=4
+
+# DSA_4H_2RNN_50: Self-Attention Decoder (4 heads) + 2 RNN Layers
+python main.py --variation='DSA_4H_2RNN_50_conv' --task=tsp50 --n_train=75000 --decoder=self --emb_type=conv --rnn_layers=2 --num_heads=4
 # python main.py --variation='DSA_4H_2RNN_50_lin' --task=tsp50 --n_train=35000 --decoder=self --emb_type=linear --rnn_layers=2 --num_heads=4
 # python main.py --variation='DSA_4H_2RNN_50_en' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced --rnn_layers=2 --num_heads=4
 # python main.py --variation='DSA_4H_2RNN_50_en2' --task=tsp50 --n_train=35000 --decoder=self --emb_type=enhanced2 --rnn_layers=2 --num_heads=4

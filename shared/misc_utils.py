@@ -71,7 +71,6 @@ def has_nan(datum, tensor):
         else:
                 return False
 
-
 def openAI_entropy(logits):
     a0 = logits - torch.max(logits, dim=2, keepdim=True)[0]
     ea0 = torch.exp(a0)

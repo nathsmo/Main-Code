@@ -91,24 +91,23 @@ class AttentionDecoder(nn.Module):
         #Action selection
         return masked_prob, idx 
         
-
-
-    def beam_search(self, logits, beam_width):
-        # Start with an empty beam
-        beam = [(torch.tensor([]), 0)]  # (action sequence, log_prob)
-        for _ in range(logits.size(1)):  # Assuming logits are (batch_size, seq_len, num_actions)
-            new_beam = []
-            for prefix, score in beam:
-                probabilities = F.softmax(logits, dim=-1)
-                top_probs, top_inds = probabilities.topk(beam_width, dim=1)  # Get top beam_width probabilities and their indices
-                for i in range(beam_width):
-                    new_prefix = torch.cat([prefix, top_inds[:, i]])  # Append new index to prefix
-                    new_score = score + torch.log(top_probs[:, i])  # Add log probability of choosing this index
-                    new_beam.append((new_prefix, new_score))
-            # Sort all candidates in new_beam by score in descending order and select the best beam_width ones
-            beam = sorted(new_beam, key=lambda x: x[1], reverse=True)[:beam_width]
-        return beam[0][0]  # Return the sequence with the highest probability
-
     def _init_hidden(self, batch_size):
         return (torch.zeros(self.rnn_layers, batch_size, self.hidden_dim),
                 torch.zeros(self.rnn_layers, batch_size, self.hidden_dim))
+
+
+    # def beam_search(self, logits, beam_width):
+    #     # Start with an empty beam
+    #     beam = [(torch.tensor([]), 0)]  # (action sequence, log_prob)
+    #     for _ in range(logits.size(1)):  # Assuming logits are (batch_size, seq_len, num_actions)
+    #         new_beam = []
+    #         for prefix, score in beam:
+    #             probabilities = F.softmax(logits, dim=-1)
+    #             top_probs, top_inds = probabilities.topk(beam_width, dim=1)  # Get top beam_width probabilities and their indices
+    #             for i in range(beam_width):
+    #                 new_prefix = torch.cat([prefix, top_inds[:, i]])  # Append new index to prefix
+    #                 new_score = score + torch.log(top_probs[:, i])  # Add log probability of choosing this index
+    #                 new_beam.append((new_prefix, new_score))
+    #         # Sort all candidates in new_beam by score in descending order and select the best beam_width ones
+    #         beam = sorted(new_beam, key=lambda x: x[1], reverse=True)[:beam_width]
+    #     return beam[0][0]  # Return the sequence with the highest probability

@@ -6,7 +6,7 @@
 /cplex_env
 /lightning_attempt
 /totest
-/ignorefolder
+/ignore_folder
 
 /model/__pycache__
 /shared/__pycache__

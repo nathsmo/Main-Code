@@ -58,14 +58,13 @@ class RLAgent(nn.Module):
 
         self.prt.print_out("Agent created - " + args['decoder'])
 
-    def build_model_pointer(self, eval_type= "greedy"):
+    def build_model(self, eval_type="greedy", show=False, data=None):
         """
-        Could be seen as the forward pass function.
-
-        The build_model function constructs the computation graph (or computational steps) for the model. 
-        It initializes and prepares all necessary inputs, embeddings, and settings for the batch processing of 
-        data through the neural network, particularly focusing on the decoding or inference of the next actions 
-        (or steps) given the current environment's state.
+        Constructs the computation graph (or computational steps) for the model. 
+        Initializes and prepares all necessary inputs, embeddings, and settings for 
+        the batch processing of data through the neural network, particularly 
+        focusing on the decoding or inference of the next actions (or steps) given 
+        the current environment's state.
 
         Parameters:
         env.n_nodes are the tsp nodes = 10, 20 or 50
@@ -78,260 +77,87 @@ class RLAgent(nn.Module):
         idxs (list): The indices of the actions taken. (tsp, batch_size)
             idx might look like [5, 2, 6, ..., 1] (with values for all 128 instances).
         """
-        # Builds the model
-        batch_size = self.env.input_pnt.shape[0]
-        # Reset the Environment.
-        self.env.reset(1)
-
-        # self.env.input_pnt: [batch_size x max_time x input_dim=2]
-        if not isinstance(self.env.input_pnt, torch.Tensor):
-            self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
-
-        # encoder_emb_inp: [batch_size x max_time x embedding_dim]
-        context = self.embedding(self.env.input_pnt) # this is a forward pass
-
-        # Code tryout
-        # Decoder State -> First: initial_state -> Then -> new_state (in loop)
-        initial_state = self.decodeStep._init_hidden(batch_size)
-        
-        logits, actions = [], []
-        states = [initial_state]
-
-        #old code - batchsequence --------------------------------
-        # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
-        BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
-        # print('BatchSequence size: ', BatchSequence.size())
-
-        # create tensors and lists
-        actions_tmp = []
-        logprobs = []
-        probs = []
-        idxs = []
-
-        # Start from depot
-        # This should be a tensor of size [batch_size, 1] with values of (n_nodes - 1)
-        chosen_action = (self.env.n_nodes - 1) * torch.ones([batch_size, 1]) # Before called idx
-        # print('chosen_action size: ', chosen_action.size())
-
-        #List with selected coodinate, size [batch_size, 1, 2]
-        action = self.env.input_pnt[:, self.env.n_nodes - 1].unsqueeze(1)
-
-        #Decoding loop
-        for step in range(self.args['decode_len']):
-            # Update the decoder input at each step
-            # decoder_input: [batch_size, 1, hidden_dim]
-            if step == 0:
-                # Start from trainable nodes in TSP
-                decoder_input = self.decoder_input.expand(batch_size, 1, -1)
-            else:
-                # Subsequent inputs come from the context based on previous action
-                # decoder_input = context[torch.arange(batch_size), actions[-1], :]  # Actions indexed from context
-                decoder_input = context[batched_idx[:, 0], batched_idx[:, 1]].unsqueeze(1)
-                # print('passed')
-                # decoder_input = self.decoder_input.repeat(batch_size, 1, 1)
-            # print('Decoder input shape', decoder_input.size()) 
-            # print('Mask size: ', self.env.mask.size()) # Mask size should be [batch_size, n_nodes]
-
-            # Send to Decode step
-            logit, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
-
-            # States is list of shape (num-states-appended, 2, hidden_states) where hidden_states = [1, 128, 128] 
-            states.append(new_state)
-            # Size of logit: [batch_size, n_nodes]
-            logprob = F.log_softmax(logit, dim=-1)
-            probabilities = F.softmax(logit, dim=1)
-
-            #Chosen action size:  torch.Size([batch_size, 1])
-            #Change this to epsilon greedy !!!!!!
-            if eval_type == "greedy":
-                random_values = torch.rand(probabilities.size(0), 1, device=probabilities.device)
-
-                # Calculate the index of the maximum probability (greedy action)
-                greedy_idx = torch.argmax(probabilities, dim=1, keepdim=True)
-
-                # Decide between the greedy action and a random action based on epsilon
-                chosen_action = torch.where(
-                    random_values < self.args['epsilon'],
-                    torch.randint(probabilities.size(1), (probabilities.size(0), 1), device=probabilities.device),  # Random action
-                    greedy_idx  # Greedy action
-                )
-                self.args['epsilon'] *= 0.9999  # Decay epsilon
-
-            elif eval_type == "stochastic":
-                chosen_action = probabilities.multinomial(num_samples=1)            
-            # print('Chosen action: ', chosen_action)
-
-            state = self.env.step(chosen_action)
-            
-            if chosen_action.dim() != 2:
-                chosen_action = chosen_action.unsqueeze(1)
-
-            #Batched index: torch.Size([batch_size, 2])
-            batched_idx = torch.cat([BatchSequence, chosen_action], dim=1).long()
-            gathered_probs = probabilities[batched_idx[:, 0], batched_idx[:, 1]]
-
-            logprob = torch.log(gathered_probs)
-
-            actions.append(chosen_action) #replaces idxs
-            logits.append(logit)
-            logprobs.append(logprob)
-            probs.append(probabilities)
-
-            # Given action:  torch.Size([batch_size, 2]) (For batch size, coordinates obtained.)
-            given_action = self.env.input_pnt[batched_idx[:, 0], batched_idx[:, 1]] # Before called action
-            actions_tmp.append(given_action)
-
-        logits = torch.stack(logits, dim=1)
-        actions = torch.stack(actions, dim=1)
-        logprobs = torch.stack(logprobs, dim=1)
-        probs = torch.stack(probs, dim=1)
-        actions_tmp = torch.stack(actions_tmp, dim=1) # on past code named actions
-
-        R = self.reward_func(actions_tmp)
-
-        #Critic part --------------------------------
-        v = torch.tensor(0)
-
-        if eval_type == "stochastic":
-            # action4critic size = [1, batch_size, hidden_dim]
-            action4critic = chosen_action.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-            # Initialize hidden and cell states
-            hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-            cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-            # Create the LSTM state tuple
-            lstm_state = (hidden_state, cell_state)
-            # Use the lstm_state in an LSTM
-            lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
-            # Forward pass through LSTM
-            output, (hn, cn) = lstm_layer(action4critic, lstm_state)
-            # Extracting hy (which in this context would be the last cell state from the first layer)
-            hy = cn[0]
-
-            for i in range(self.args['n_process_blocks']):
-                hy = self.critic(hy, context[torch.arange(batch_size), actions[-1], :])
-
-            v = self.critic.final_step_critic(hy)
-
-        # print('V: ', v)
-        # print("R: ", R)
-        return (R, v, logprobs, actions_tmp, actions, self.env.input_pnt, probs)
-
-
-    def build_model_self(self, eval_type= "greedy", show=False, data=None): #prev -> forward
         args = self.args
         batch_size = args['batch_size']
 
-        # if not isinstance(self.env.input_pnt, torch.Tensor):
-        #     self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
-
-        # encoder_emb_inp/context: [batch_size x seq_len x embedding_dim]
         if data is not None:
             input_d = data
-            # print('Obtained data not from ENV')
         else:
             if not isinstance(self.env.input_pnt, torch.Tensor):
                 self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
             input_d = self.env.input_pnt
+
         context = self.embedding(input_d)
 
         # Reset the Environment.
         self.env.reset()
 
         # Create tensors and lists
-        actions = []
-        log_probs = []
-        probs = []
-        idxs = []
-        visited_positions = torch.zeros((batch_size, 1), dtype=torch.long, device=input_d.device)
-
+        actions, log_probs, probs, idxs = [], [], [], []
+        # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
         BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
-        # print('This is the decode_len: ', args['decode_len'])
+        visited_positions = torch.zeros((batch_size, 1), dtype=torch.long, device=input_d.device)
+        start_node = 0
+        # action_selected = torch.full((batch_size, 1), start_node, dtype=torch.long, device=input_d.device)
+        # visited_positions = torch.cat([visited_positions, action_selected], dim=1)
 
-        #Decoding loop
-        for step in range(args['decode_len']-1):
-            # Get logit and attention weights
-            if step == 0:
-                # Start from trainable nodes in TSP
+        if self.args['decoder'] == "pointer":
+            initial_state = self._init_hidden(batch_size)
+            states = [initial_state]
+
+        for step in range(1, args['decode_len']):
+            if step == 1:
                 decoder_input = self.decoder_input.expand(batch_size, 1, -1)
             else:
-                # Subsequent inputs come from the context based on previous action
                 decoder_input = context[batched_idx[:, 0], batched_idx[:, 1]].unsqueeze(1)
-            # print('Decoder input: ', decoder_input.size())
-            # print('Context: ', context.size())
 
-            action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
-            # It does softmax inside here
+            if self.args['decoder'] == "pointer":
+                action_logits, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
+                states.append(new_state)
 
-            prob, action_selected = self.decodeStep.select_action(action_logits, visited_positions, eval_type) 
-            # print('Step: ', step, 'Action selected: ', action_selected) 
-
-            state = self.env.step(action_selected)
+            else:
+                action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
+            prob, action_selected = self.select_action(action_logits, eval_type, visited_positions)
 
             batched_idx = torch.cat([BatchSequence, action_selected], dim=1).long()
-            
-            # Advanced indexing in PyTorch to replace gather_nd
-            selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]] 
-            # Taking logarithm of the selected probabilities
+            selected_probs = prob[batched_idx[:, 0], batched_idx[:, 1]]
             logprob = torch.log(selected_probs)
 
             probs.append(prob)
             idxs.append(action_selected)
             log_probs.append(logprob)
-
-            # Gather using the constructed indices
             action = input_d[batched_idx[:, 0], batched_idx[:, 1]]
             actions.append(action)
-
-            # Update visited positions
             visited_positions = torch.cat([visited_positions, action_selected], dim=1)
 
         idxs = torch.stack(idxs, dim=1)
         log_probs = torch.stack(log_probs, dim=1)
         probs = torch.stack(probs, dim=1)
         actions = torch.stack(actions, dim=1)
-        # print(actions.size())
-        R = self.reward_func(actions, show=show)
-        if torch.any(R == 0):
-            print("Reward is zero. Stopping evaluation.")
-            print('actions: ', actions)
-            sys.exit()
-        # print('R: ', R, 'eval_type: ', eval_type)
 
-        #Critic part --------------------------------
+        R = self.reward_func(actions, show=show)
+
+        # Critic part --------------------------------
         v = torch.tensor(0)
 
         if eval_type == "stochastic":
-            # Ensure action_selected is of the correct shape
             action4critic = action_selected.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-
-            # Initialize hidden and cell states for LSTM
-            hidden_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-            cell_state = torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim'])
-            
-            # Forward pass through LSTM
             lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
-            output, (hn, cn) = lstm_layer(action4critic, (hidden_state, cell_state))
-            
-            # Extract the last hidden state for further processing
+            output, (hn, cn) = lstm_layer(action4critic, self._init_hidden(batch_size))
             hy = hn[-1]
 
             for i in range(self.args['n_process_blocks']):
                 hy = self.critic(hy, context[torch.arange(batch_size), idxs[-1], :])
-            
+
             v = self.critic.final_step_critic(hy)
-            # print('R build model: ', R)
 
         return (R, v, log_probs, actions, idxs, input_d, probs)
-
 
     def build_train_step(self):
         """
         This function returns a train_step operation, in which by running it we proceed one training step.
         """
-        if self.args['decoder'] == "pointer":
-            R, v, log_probs, actions, idxs, batch, probs = self.build_model_pointer("stochastic")
-        else:
-            R, v, log_probs, actions, idxs, batch, probs = self.build_model_self("stochastic")
+        R, v, log_probs, actions, idxs, batch, probs = self.build_model("stochastic")
 
         # Convert R and v to float tensors
         R = R.float()
@@ -390,10 +216,7 @@ class RLAgent(nn.Module):
             for data in test_loader:                
                 self.env.input_data = data
 
-                if self.args['decoder'] == "pointer":
-                    R, v, log_probs, actions, idxs, batch, _ = self.build_model_pointer(eval_type)
-                else:
-                    R, v, log_probs, actions, idxs, batch, _ = self.build_model_self(eval_type)
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
 
                 if eval_type == 'greedy':
                     avg_reward.append(R)
@@ -501,18 +324,87 @@ class RLAgent(nn.Module):
     
             # Run model evaluation for the current batch
             if self.args['decoder'] == "pointer":
-                R, v, log_probs, actions, idxs, batch, _ = self.build_model_pointer(eval_type)
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
             else:
-                R, v, log_probs, actions, idxs, batch, _ = self.build_model_self(eval_type, show=True, data=data)
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True, data=data)
             
             # print('EM - Actions: ', actions)
             # print('EM - Rewards mean: ', R.mean().item()) # -> A lot of rewards are 0.0
             total_reward.extend(R.tolist())  # Append rewards for 'greedy' or other single-path evaluations
         
         return R, v, log_probs, actions, idxs, batch, _
+    
+    def select_action(self, action_logits, method='greedy', visited_positions=None):
+        # This has a mask for previous visited nodes
+        prob = F.softmax(action_logits, dim=-1)
 
+        if visited_positions is not None:
+            # Create a mask to set the probability of previously visited positions to zero
+            mask = torch.ones_like(prob)
+            mask.scatter_(1, visited_positions, 0)
 
+            # Apply the mask to the probabilities
+            masked_prob = prob * mask
 
+            # Normalize the masked_prob to ensure it's a valid probability distribution
+            # masked_prob_sum = masked_prob.sum(dim=1, keepdim=True)
+
+            # Check for invalid values and handle them
+            if (masked_prob.sum(dim=1) == 0).any():
+                # If all actions are masked, we need to handle this case
+                print("All actions are masked. Selecting a random unvisited action.")
+                for i in range(masked_prob.size(0)):
+                    if masked_prob[i].sum() == 0:
+                        available_actions = torch.tensor([j for j in range(prob.size(1)) if j not in visited_positions[i]], device=prob.device)
+                        if len(available_actions) > 0:
+                            masked_prob[i][available_actions] = prob[i][available_actions]
+                        else:
+                            raise ValueError("No available actions to select from.")
+                masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
+
+            # # Check for invalid values and handle them
+            # if (masked_prob_sum == 0).any() or torch.isnan(masked_prob).any() or torch.isinf(masked_prob).any():
+            #     print("Masked probabilities sum to zero, which means all actions are masked out. This should not happen.")
+            #     print("Action logits:", action_logits)
+            #     print("Probabilities:", prob)
+            #     print("Masked probabilities:", masked_prob)
+            #     print("First array Visited positions:", visited_positions[0])
+            #     print("Last array Visited positions:", visited_positions[-1])
+            #     raise ValueError("masked_prob contains NaN or Inf values")
+            
+            # if (masked_prob < 0).any():
+            #     print("masked_prob contains negative values")
+            #     print("masked_prob:", masked_prob)
+            #     raise ValueError("masked_prob contains negative values")
+
+        if method == "greedy":
+            # Epsilon-greedy action selection
+            # Generate random numbers for each element in the batch
+            random_values = torch.rand(masked_prob.size(0), 1, device=masked_prob.device)
+
+            # Calculate the index of the maximum probability (greedy action)
+            greedy_idx = torch.argmax(masked_prob, dim=1, keepdim=True)
+
+            # Decide between the greedy action and a random action based on epsilon
+            idx = torch.where(
+                random_values < self.args['epsilon'],
+                torch.randint(masked_prob.size(1), (masked_prob.size(0), 1), device=masked_prob.device),  # Random action
+                greedy_idx  # Greedy action
+            )
+            self.args['epsilon'] *= 0.9999  # Decay epsilon
+            # sys.exit()
+
+        elif method == "stochastic":
+            # Select stochastic actions.
+            idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
+        
+        #Action selection
+        return masked_prob, idx 
+
+    def _init_hidden(self, batch_size):
+        return (torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim']),
+                torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim']))
+    
 class Critic(nn.Module):
     def __init__(self, args, input_dim):
         super(Critic, self).__init__()
@@ -535,3 +427,4 @@ class Critic(nn.Module):
         v = x.squeeze(1)
 
         return v
+    

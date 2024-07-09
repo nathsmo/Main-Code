@@ -100,5 +100,3 @@ if __name__ == "__main__":
         torch.manual_seed(args['random_seed'])
 
     run_code = principal(args, prt)  # Create an instance
-
-

@@ -36,7 +36,7 @@ echo "[$SHELL] ## Run script"
 # DSA_1H_10: Self-Attention Decoder (1 head)
 # python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1
 # python main.py --variation='DSA_1H_10_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=1
-python main.py --variation='DSA_1H_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=1
+# python main.py --variation='DSA_1H_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=1
 # python main.py --variation='DSA_1H_10_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=1
 
 # DSA_4H_10: Self-Attention Decoder (4 heads)

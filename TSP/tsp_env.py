@@ -34,10 +34,8 @@ class VRPEnvironment:
         """
         Reset the environment and return the initial state.
         """
-        """
         # This definition is so bad... like the tensor wants to to be a flexible tensor 
         #       but pytorch doesnt work like that
-        """
         self.beam_width = beam_width
         self.input_pnt = self.input_data
         batch_size = self.input_data.shape[0]

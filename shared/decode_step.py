@@ -10,36 +10,24 @@ class DecodeStep(nn.Module):
     """
     def __init__(self, attention_instance, hidden_dim, n_glimpses=0, mask_glimpses=True, mask_pointer=True, rnn_layers=1):
         super(DecodeStep, self).__init__()
-        self.hidden_dim = hidden_dim
         self.glimpses = nn.ModuleList([attention_instance for _ in range(n_glimpses)])
         self.pointer = attention_instance
         self.mask_glimpses = mask_glimpses
         self.mask_pointer = mask_pointer
         self.BIGNUMBER = 100000
-        self.rnn_layers = rnn_layers
 
         # Multi-layer LSTM
         self.rnn = nn.LSTM(hidden_dim, hidden_dim, num_layers=rnn_layers, batch_first=True)
 
     def forward(self, decoder_inp, context, mask, hidden=None):
-        # Running the RNN
-        # No need for this as the shape is already [batch_size, 1, hidden_dim]
-        # print(f"decoder_inp: {decoder_inp.shape}")
-        # decoder_inp = decoder_inp.unsqueeze(1)  # [batch_size, 1, hidden_dim] for RNN input
-        # print(f"decoder_inp: {decoder_inp.shape}")
-
         if decoder_inp.dim() == 2:
             decoder_inp = decoder_inp.unsqueeze(1)
-
         # Verify hidden state dimensions if provided
         if hidden is not None:
             assert hidden[0].dim() == 3 and hidden[1].dim() == 3, "Hidden states should be 3-dimensional"
-        
         output, hidden = self.rnn(decoder_inp, hidden)
-
         # Use the last hidden state from RNN output
         last_hidden = output[:, -1, :]  # Taking the last output as the next input to attention
-
         # Process each glimpse
         for glimpse in self.glimpses:
             _, logit = glimpse(last_hidden, context)
@@ -51,29 +39,9 @@ class DecodeStep(nn.Module):
 
         # Process pointer attention
         _, logit = self.pointer(last_hidden, context)
+
         if self.mask_pointer:
             logit -= self.BIGNUMBER * mask
 
         return logit, hidden
-
-    def _init_hidden(self, batch_size):
-        return (torch.zeros(self.rnn_layers, batch_size, self.hidden_dim),
-                torch.zeros(self.rnn_layers, batch_size, self.hidden_dim))
-
-# class RNNDecodeStep(DecodeStep):
-#     def __init__(self, AttentionClass, hidden_dim, n_glimpses=0, mask_glimpses=True, mask_pointer=True, rnn_layers=1):
-#         super(RNNDecodeStep, self).__init__(AttentionClass, hidden_dim, n_glimpses, mask_glimpses, mask_pointer)
-#         # Multi-layer LSTM
-#         self.rnn = nn.LSTM(hidden_dim, hidden_dim, num_layers=rnn_layers, batch_first=True)
-#         self.rnn_layers = rnn_layers
-
-#     def forward(self, decoder_inp, context, mask, hidden=None):
-#         # Running the RNN
-#         # decoder_inp # [batch_size, 1, hidden_dim] for RNN input
-#         output, hidden = self.rnn(decoder_inp, hidden)
-
-#         # Use the last hidden state for attention
-#         last_hidden = hidden[0][-1]  # Taking the last layer's hidden state
-#         # I've just ommited the last_hidden
-#         return super().forward(last_hidden, context, mask)
 

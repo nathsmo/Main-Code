@@ -63,7 +63,7 @@ def ParseParams():
     parser.add_argument("--gpu", default='3', type=str,help="gpu number.")
     parser.add_argument('--log_interval', default=200,type=int, help='Log info every log_step steps')
     parser.add_argument('--test_interval', default=200,type=int, help='test every test_interval steps')
-    parser.add_argument('--save_interval', default=10000,type=int, help='save every save_interval steps') # Original every: 10,000 now: 10,000
+    parser.add_argument('--save_interval', default=10000,type=int, help='save every save_interval steps')
     parser.add_argument('--log_dir', type=str, default='logs')
     parser.add_argument('--data_dir', type=str, default='data')
     parser.add_argument('--model_dir', type=str, default='')

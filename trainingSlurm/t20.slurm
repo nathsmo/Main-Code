@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP20_DSA_4H_20_en2
+#SBATCH --job-name=Training_TSP20_DPN_3G_20_en
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --time=20:00:00
+#SBATCH --time=40:00:00
 #SBATCH --partition=gpu-long
 #SBATCH --ntasks=1
 
@@ -47,12 +47,12 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DSA_4H_20_conv' --task=tsp20 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=4
 # python main.py --variation='DSA_4H_20_lin' --task=tsp20 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=4
 # python main.py --variation='DSA_4H_20_en' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
-python main.py --variation='DSA_4H_20_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=4
+# python main.py --variation='DSA_4H_20_en2' --task=tsp20 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=4
 
 # DPN_3G_20: Pointer Network - Decoder + 3 Glimpses
 # python main.py --variation='DPN_3G_20_conv' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=conv --n_glimpses=3 
 # python main.py --variation='DPN_3G_20_lin' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3
-# python main.py --variation='DPN_3G_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+python main.py --variation='DPN_3G_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
 # python main.py --variation='DPN_3G_20_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3
 
 # DSA_4H_2RNN_20: Self-Attention Decoder (4 heads) + 2 RNN Layers

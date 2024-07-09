@@ -55,10 +55,14 @@ class AttentionDecoder(nn.Module):
             print("Last array Visited positions:", visited_positions[-1])
             raise RuntimeError("Masked probabilities are invalid.")
             sys.exit()
-    
-        masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
 
         if torch.isnan(masked_prob).any() or torch.isinf(masked_prob).any():
+            print("Masked probabilities sum to zero, which means all actions are masked out. This should not happen.")
+            print("Action logits:", action_logits)
+            print("Probabilities:", prob)
+            print("Masked probabilities:", masked_prob)
+            print("First array Visited positions:", visited_positions[0])
+            print("Last array Visited positions:", visited_positions[-1])
             print("masked_prob contains NaN or Inf values")
             print("masked_prob:", masked_prob)
             raise ValueError("masked_prob contains NaN or Inf values")
@@ -88,6 +92,7 @@ class AttentionDecoder(nn.Module):
         elif method == "stochastic":
             # Select stochastic actions.
             idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
+        
         #Action selection
         return masked_prob, idx 
         

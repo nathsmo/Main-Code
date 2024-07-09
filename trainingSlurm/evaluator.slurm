@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Eval_DSA_1H_10_conv
+#SBATCH --job-name=Eval_DPN_50_conv
 #SBATCH --output=eval/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -27,8 +27,9 @@ echo "[$SHELL] ## Run script"
 
 # Eval organized
 
-python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1 --is_train=False --infer_type=batch --model_dir=./logs/DSA_1H_10_conv/model/agent_complete.pth 
+# python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1 --is_train=False --infer_type=batch --model_dir=./logs/DSA_1H_10_conv/model/agent_complete.pth 
 
+python main.py --variation='DPN_50_conv' --task=tsp20 --decoder=pointer --emb_type=conv --is_train=False --infer_type=batch --model_dir=./logs/DPN/DPN_50/DPN_50_conv_2/model/agent_complete.pth 
 
 ##### EVAL
 #--is_train=False --infer_type=batch --model_dir=./logs/DPN_10_lin/model/agent_complete.pth 

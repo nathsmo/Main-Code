@@ -11,7 +11,10 @@ import numpy as np
 import time
 import sys
 
-from shared.embeddings import choose_embedding
+# import torch.autograd
+# torch.autograd.set_detect_anomaly(True)
+
+from shared.embeddings import ConvEmbedding, EnhancedLinearEmbedding, Enhanced__LinearEmbedding, MinimalLinearEmbedding
 from shared.self_decode_step import AttentionDecoder as SelfAttention
 from shared.decode_step import DecodeStep as PointerNetwork
 from shared.attention import Attention
@@ -25,7 +28,16 @@ class RLAgent(nn.Module):
         self.dataGen = dataGen
         self.reward_func = reward_func
         # Embedding and Decoder setup
-        self.embedding = choose_embedding(prt, args['emb_type'], args['embedding_dim'])
+        if self.args['emb_type'] == "conv":
+            self.embedding = ConvEmbedding(prt, args['embedding_dim'])
+        elif self.args['emb_type'] == "enhanced":
+            self.embedding = EnhancedLinearEmbedding(prt, 2, args['embedding_dim'])
+        elif self.args['emb_type'] == "enhanced2":
+            self.embedding = Enhanced__LinearEmbedding(prt, 2, args['embedding_dim'])
+        elif self.args['emb_type'] == "linear":
+            self.embedding = MinimalLinearEmbedding(prt, 2, args['embedding_dim'])
+        else:
+            raise ValueError("Invalid embedding type specified. Supported types: linear, enhanced, minimal")
         
         # Separate attention mechanisms
         self.actor_attention = Attention(args['hidden_dim'])
@@ -53,11 +65,22 @@ class RLAgent(nn.Module):
         init.xavier_uniform_(self.decoder_input)
 
         # Define optimizers for actor and critic
-        self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.args['actor_net_lr'])
-        self.critic_optim = optim.Adam(self.critic.parameters(), lr=self.args['critic_net_lr'])
+        # self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.args['actor_net_lr'])
+        # self.critic_optim = optim.Adam(self.critic.parameters(), lr=self.args['critic_net_lr'])
+        self.actor_optim = optim.Adam(self.actor.parameters(), lr=self.args.get('actor_net_lr', 1e-4))
+        self.critic_optim = optim.Adam(self.critic.parameters(), lr=self.args.get('critic_net_lr', 1e-4))
 
         self.prt.print_out("Agent created - " + args['decoder'])
 
+    def _initialize_weights(self):
+        if hasattr(self.embedding, '_initialize_weights'):
+            self.embedding._initialize_weights()
+
+    def _check_for_nan(self):
+        for name, param in self.embedding.named_parameters():
+            if torch.isnan(param).any() or torch.isinf(param).any():
+                raise ValueError(f"NaNs or Infs detected in {name}")
+            
     def build_model(self, eval_type="greedy", show=False, data=None):
         """
         Constructs the computation graph (or computational steps) for the model. 
@@ -86,18 +109,24 @@ class RLAgent(nn.Module):
             if not isinstance(self.env.input_pnt, torch.Tensor):
                 self.env.input_pnt = torch.tensor(self.env.input_pnt, dtype=torch.float)
             input_d = self.env.input_pnt
+            
+        if torch.isnan(input_d).any() or torch.isinf(input_d).any():
+            print("Input data contains NaNs or Infs")
+            sys.exit()
 
         context = self.embedding(input_d)
+        self._check_for_nan()
 
         # Reset the Environment.
         self.env.reset()
+        # self._initialize_weights()
 
         # Create tensors and lists
         actions, log_probs, probs, idxs = [], [], [], []
         # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
         BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
         visited_positions = torch.zeros((batch_size, 1), dtype=torch.long, device=input_d.device)
-        start_node = 0
+        # start_node = 0
         # action_selected = torch.full((batch_size, 1), start_node, dtype=torch.long, device=input_d.device)
         # visited_positions = torch.cat([visited_positions, action_selected], dim=1)
 
@@ -117,6 +146,21 @@ class RLAgent(nn.Module):
 
             else:
                 action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
+
+            if torch.isnan(action_logits).any() or torch.isinf(action_logits).any():
+                print("Problem with action logits.")
+                print("Step: ", step)
+                print("Decoder input: ", decoder_input)
+                print("Before embeddings input_d: ", input_d)
+                print("context: ", context)
+                print("Mask env: ", self.env.mask)
+                print("Action logits:", action_logits)
+                print("eval_type:", eval_type)
+                print("First array Visited positions:", visited_positions[0])
+                print("Last array Visited positions:", visited_positions[-1])
+
+                raise ValueError("masked_prob contains NaN or Inf values")
+            
             prob, action_selected = self.select_action(action_logits, eval_type, visited_positions)
 
             batched_idx = torch.cat([BatchSequence, action_selected], dim=1).long()
@@ -193,10 +237,13 @@ class RLAgent(nn.Module):
         # # Clip gradients (optional, if args['max_grad_norm'] is set)
         torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])
         torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args['max_grad_norm'])
+        torch.nn.utils.clip_grad_norm_(self.embedding.parameters(), max_norm=1.0)
 
         # Apply gradients
         self.actor_optim.step()
         self.critic_optim.step()
+
+        self._check_for_nan()  # Check for NaNs after optimizer step
         
         train_step = [actor_loss.item(), critic_loss.item(), R, v]
         
@@ -335,71 +382,45 @@ class RLAgent(nn.Module):
         return R, v, log_probs, actions, idxs, batch, _
     
     def select_action(self, action_logits, method='greedy', visited_positions=None):
-        # This has a mask for previous visited nodes
+        # Clip action_logits to avoid extremely large values
+        action_logits = torch.clamp(action_logits, -10, 10)
+
+        # Check for NaNs or Infs in action_logits
+        if torch.isnan(action_logits).any() or torch.isinf(action_logits).any():
+            print("NaNs or Infs detected in action_logits before softmax")
+            print("action_logits:", action_logits)
+            raise ValueError("NaNs or Infs detected in action_logits before softmax")
+
         prob = F.softmax(action_logits, dim=-1)
 
         if visited_positions is not None:
-            # Create a mask to set the probability of previously visited positions to zero
             mask = torch.ones_like(prob)
             mask.scatter_(1, visited_positions, 0)
-
-            # Apply the mask to the probabilities
             masked_prob = prob * mask
-
-            # Normalize the masked_prob to ensure it's a valid probability distribution
-            # masked_prob_sum = masked_prob.sum(dim=1, keepdim=True)
-
-            # Check for invalid values and handle them
-            if (masked_prob.sum(dim=1) == 0).any():
-                # If all actions are masked, we need to handle this case
-                print("All actions are masked. Selecting a random unvisited action.")
-                for i in range(masked_prob.size(0)):
-                    if masked_prob[i].sum() == 0:
-                        available_actions = torch.tensor([j for j in range(prob.size(1)) if j not in visited_positions[i]], device=prob.device)
-                        if len(available_actions) > 0:
-                            masked_prob[i][available_actions] = prob[i][available_actions]
-                        else:
-                            raise ValueError("No available actions to select from.")
-                masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
-
-            # # Check for invalid values and handle them
-            # if (masked_prob_sum == 0).any() or torch.isnan(masked_prob).any() or torch.isinf(masked_prob).any():
-            #     print("Masked probabilities sum to zero, which means all actions are masked out. This should not happen.")
-            #     print("Action logits:", action_logits)
-            #     print("Probabilities:", prob)
-            #     print("Masked probabilities:", masked_prob)
-            #     print("First array Visited positions:", visited_positions[0])
-            #     print("Last array Visited positions:", visited_positions[-1])
-            #     raise ValueError("masked_prob contains NaN or Inf values")
-            
-            # if (masked_prob < 0).any():
-            #     print("masked_prob contains negative values")
-            #     print("masked_prob:", masked_prob)
-            #     raise ValueError("masked_prob contains negative values")
+            masked_prob = masked_prob / masked_prob.sum(dim=1, keepdim=True)
+            if torch.isnan(masked_prob).any() or torch.isinf(masked_prob).any():
+                print("Masked probabilities sum to zero, which means all actions are masked out. This should not happen.")
+                print("Action logits:", action_logits)
+                print("Probabilities:", prob)
+                print("Masked probabilities:", masked_prob)
+                print("First array Visited positions:", visited_positions[0])
+                print("Last array Visited positions:", visited_positions[-1])
+                raise ValueError("masked_prob contains NaN or Inf values")
 
         if method == "greedy":
-            # Epsilon-greedy action selection
-            # Generate random numbers for each element in the batch
             random_values = torch.rand(masked_prob.size(0), 1, device=masked_prob.device)
-
-            # Calculate the index of the maximum probability (greedy action)
             greedy_idx = torch.argmax(masked_prob, dim=1, keepdim=True)
-
-            # Decide between the greedy action and a random action based on epsilon
             idx = torch.where(
                 random_values < self.args['epsilon'],
                 torch.randint(masked_prob.size(1), (masked_prob.size(0), 1), device=masked_prob.device),  # Random action
                 greedy_idx  # Greedy action
             )
-            self.args['epsilon'] *= 0.9999  # Decay epsilon
-            # sys.exit()
-
+            self.args['epsilon'] *= 0.9999
         elif method == "stochastic":
-            # Select stochastic actions.
             idx = torch.multinomial(masked_prob, num_samples=1, replacement=True)
         
-        #Action selection
-        return masked_prob, idx 
+        return masked_prob, idx
+
 
     def _init_hidden(self, batch_size):
         return (torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim']),

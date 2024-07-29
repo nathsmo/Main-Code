@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP10_DSA_1H_10_en
+#SBATCH --job-name=Training_TSP10_DSA_4H_2RNN_10_en2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -57,4 +57,6 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DSA_4H_2RNN_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 
 # python main.py --variation='DSA_4H_2RNN_10_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --rnn_layers=2 --num_heads=4 
 
+
 echo "[$SHELL] ## Script finished"
+

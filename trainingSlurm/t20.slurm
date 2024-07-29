@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP20_DPN_3G_20_en
+#SBATCH --job-name=Training_TSP20_DDSA_4H_2RNN_20_en2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -26,7 +26,6 @@ echo "[$SHELL] ## current working directory: "$CWD
 echo "[$SHELL] ## Run script"
 
 # Training organized
-
 #### TSP20
 
 # DPN_20: Basic Pointer Network - Decoder
@@ -34,8 +33,6 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DPN_20_lin' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear 
 # python main.py --variation='DPN_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 # python main.py --variation='DPN_20_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
-
-### We've tested until here
 
 # DSA_1H_20: Self-Attention Decoder (1 head) 
 # python main.py --variation='DSA_1H_20_conv' --task=tsp20 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=1
@@ -52,7 +49,7 @@ echo "[$SHELL] ## Run script"
 # DPN_3G_20: Pointer Network - Decoder + 3 Glimpses
 # python main.py --variation='DPN_3G_20_conv' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=conv --n_glimpses=3 
 # python main.py --variation='DPN_3G_20_lin' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3
-python main.py --variation='DPN_3G_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='DPN_3G_20_en' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
 # python main.py --variation='DPN_3G_20_en2' --task=tsp20 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3
 
 # DSA_4H_2RNN_20: Self-Attention Decoder (4 heads) + 2 RNN Layers

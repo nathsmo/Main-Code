@@ -1,0 +1,71 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node851 and this job has the ID 2645779
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 20
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: conv
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp20-2024-07-12_15-49-17
+log_interval: 200
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/DPN/DPN_50/DPN_50_conv_3/model/agent_complete.pth
+n_glimpses: 3
+n_nodes: 20
+n_process_blocks: 3
+n_train: 25000
+num_heads: 1
+print_route: True
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp20
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: tsp20
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    tsp20
+# Task:         tsp20
+# Decoder:      pointer
+# Embed type:   conv
+# n_glimpses:   3
+# rnn layers:   1
+# n_train:      25000
+# num heads:    1
+Embedding - convolutional
+Agent created - pointer
+Evaluation started ...
+Traceback (most recent call last):
+  File "/data1/s3516423/Main-Code/main.py", line 102, in <module>
+    run_code = principal(args, prt)  # Create an instance
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/data1/s3516423/Main-Code/main.py", line 48, in __init__
+    self.agent.load_state_dict(torch.load(args['model_dir']))
+  File "/home/s3516423/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2189, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for RLAgent:
+	Missing key(s) in state_dict: "embedding.bn.weight", "embedding.bn.bias", "embedding.bn.running_mean", "embedding.bn.running_var", "decodeStep.glimpses.0.v", "decodeStep.glimpses.0.project_query.weight", "decodeStep.glimpses.0.project_query.bias", "decodeStep.glimpses.0.project_ref.weight", "decodeStep.glimpses.0.project_ref.bias", "decodeStep.glimpses.1.v", "decodeStep.glimpses.1.project_query.weight", "decodeStep.glimpses.1.project_query.bias", "decodeStep.glimpses.1.project_ref.weight", "decodeStep.glimpses.1.project_ref.bias", "decodeStep.glimpses.2.v", "decodeStep.glimpses.2.project_query.weight", "decodeStep.glimpses.2.project_query.bias", "decodeStep.glimpses.2.project_ref.weight", "decodeStep.glimpses.2.project_ref.bias", "actor.0.bn.weight", "actor.0.bn.bias", "actor.0.bn.running_mean", "actor.0.bn.running_var". 
+[/bin/bash] ## Script finished

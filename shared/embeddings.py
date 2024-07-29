@@ -12,35 +12,35 @@ class ConvEmbedding(nn.Module):
         # Input: embedding_dim: embedding dimension
         super(ConvEmbedding, self).__init__()
         self.project_emb = nn.Conv1d(in_channels=2, out_channels=embedding_dim, kernel_size=1)
-        prt.print_out("Embedding - linear")
+        self.bn = nn.BatchNorm1d(embedding_dim)
+        prt.print_out("Embedding - convolutional")
+        self._initialize_weights()
+
+    
+    def _initialize_weights(self):
+        # Proper weight initialization
+        nn.init.xavier_uniform_(self.project_emb.weight)
+        if self.project_emb.bias is not None:
+            nn.init.constant_(self.project_emb.bias, 0)
+        
+        # Check if weights are properly initialized
+        if torch.isnan(self.project_emb.weight).any() or torch.isinf(self.project_emb.weight).any():
+            raise ValueError("project_emb.weight contains NaN or Inf values after initialization")
+        if self.project_emb.bias is not None and (torch.isnan(self.project_emb.bias).any() or torch.isinf(self.project_emb.bias).any()):
+            raise ValueError("project_emb.bias contains NaN or Inf values after initialization")
+
     
     def forward(self, input_pnt):
-        # emb_inp_pnt: [batch_size, embedding_dim, max_time]
-        # print('Input pnt -in- forward Embedding: ', input_pnt.shape)
-        input_pnt = input_pnt.float()  
+        input_pnt = input_pnt.float()
+        input_pnt = torch.clamp(input_pnt, min=-1e5, max=1e5)
+        if torch.isnan(input_pnt).any() or torch.isinf(input_pnt).any():
+            raise ValueError("Input data contains NaNs or Infs before embedding")
         emb_inp_pnt = self.project_emb(input_pnt.transpose(1, 2))
-        
+        emb_inp_pnt = self.bn(emb_inp_pnt)
+        if torch.isnan(emb_inp_pnt).any() or torch.isinf(emb_inp_pnt).any():
+            raise ValueError("Embedding output contains NaNs or Infs after processing")
         return emb_inp_pnt.transpose(1, 2)
 
-'''
-class EnhancedLinearEmbedding(nn.Module):
-    def __init__(self, prt, input_dim, output_dim):
-        super(EnhancedLinearEmbedding, self).__init__()
-        prt.print_out("Embedding - enhanced")
-        
-        self.layer1 = nn.Conv1d(input_dim, 128, kernel_size=1)
-        self.layer2 = nn.Conv1d(128, 256, kernel_size=1)
-        self.layer3 = nn.Conv1d(256, output_dim, kernel_size=1)
-        self.activation = nn.ReLU()
-        # self.adaptive_pool = nn.AdaptiveAvgPool1d(1)  # Ensure the feature map is reduced to 1
-
-    def forward(self, x):
-        x = x.transpose(1, 2).float()  # Assuming x is [batch_size, feature_dim, seq_len]
-        x = self.activation(self.layer1(x))
-        x = self.activation(self.layer2(x))
-        x = self.layer3(x)
-        return x.transpose(1, 2)  # Transpose back to [batch_size, 1, output_dim]
-'''
 
 class EnhancedLinearEmbedding(nn.Module):
     """
@@ -141,7 +141,7 @@ class MinimalLinearEmbedding(nn.Module):
     """
     def __init__(self, prt, num_input_features, embedding_dim):
         super(MinimalLinearEmbedding, self).__init__()
-        prt.print_out("Embedding - Minimal")
+        prt.print_out("Embedding - linear")
         self.num_input_features = num_input_features
         # A linear layer to project input features directly to the embedding dimension
         self.linear = nn.Linear(num_input_features, embedding_dim)
@@ -159,6 +159,7 @@ class MinimalLinearEmbedding(nn.Module):
         return emb_inp_pnt
 
 def choose_embedding(prt, embedding_type, embedding_dim):
+    print('Embedding type: ', embedding_type)
     if embedding_type == "conv":
         return ConvEmbedding(prt, embedding_dim)
     elif embedding_type == "enhanced":

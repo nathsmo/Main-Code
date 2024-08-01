@@ -1,0 +1,72 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node852 and this job has the ID 2689374
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+actor_net_lr: 0.001
+batch_size: 256
+beam_width: 10
+critic_net_lr: 0.001
+data_dir: data
+decode_len: 20
+decoder: pointer
+disable_tqdm: True
+dropout: 0.1
+emb_type: linear
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.0
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp20-2024-07-31_20-21-28
+log_interval: 1000
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/tsp20-2024-07-31_19-04-44/model/best_model.pth
+n_glimpses: 0
+n_nodes: 20
+n_process_blocks: 3
+n_train: 100000
+num_heads: 1
+print_route: True
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp20
+task_name: tsp
+test_interval: 2000
+test_size: 1000
+use_tanh: False
+variation: DPN_20_ep0_lin
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    DPN_20_ep0_lin
+# Task:         tsp20
+# Decoder:      pointer
+# Embed type:   linear
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      100000
+# num heads:    1
+Embedding - linear
+Agent created - pointer
+Evaluation started ...
+Traceback (most recent call last):
+  File "/data1/s3516423/Main-Code/main.py", line 124, in <module>
+    run_code = principal(args, prt)  # Create an instance
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/data1/s3516423/Main-Code/main.py", line 52, in __init__
+    self.agent.load_state_dict(torch.load(args['model_dir']))
+  File "/home/s3516423/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 2189, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for RLAgent:
+	Missing key(s) in state_dict: "embedding.linear.weight", "embedding.linear.bias", "actor.0.linear.weight", "actor.0.linear.bias". 
+	Unexpected key(s) in state_dict: "embedding.layer1.weight", "embedding.layer1.bias", "embedding.bn1.weight", "embedding.bn1.bias", "embedding.bn1.running_mean", "embedding.bn1.running_var", "embedding.bn1.num_batches_tracked", "embedding.layer2.weight", "embedding.layer2.bias", "embedding.bn2.weight", "embedding.bn2.bias", "embedding.bn2.running_mean", "embedding.bn2.running_var", "embedding.bn2.num_batches_tracked", "embedding.layer3.weight", "embedding.layer3.bias", "embedding.bn3.weight", "embedding.bn3.bias", "embedding.bn3.running_mean", "embedding.bn3.running_var", "embedding.bn3.num_batches_tracked", "embedding.residual.weight", "embedding.residual.bias", "actor.0.layer1.weight", "actor.0.layer1.bias", "actor.0.bn1.weight", "actor.0.bn1.bias", "actor.0.bn1.running_mean", "actor.0.bn1.running_var", "actor.0.bn1.num_batches_tracked", "actor.0.layer2.weight", "actor.0.layer2.bias", "actor.0.bn2.weight", "actor.0.bn2.bias", "actor.0.bn2.running_mean", "actor.0.bn2.running_var", "actor.0.bn2.num_batches_tracked", "actor.0.layer3.weight", "actor.0.layer3.bias", "actor.0.bn3.weight", "actor.0.bn3.bias", "actor.0.bn3.running_mean", "actor.0.bn3.running_var", "actor.0.bn3.num_batches_tracked", "actor.0.residual.weight", "actor.0.residual.bias". 
+[/bin/bash] ## Script finished

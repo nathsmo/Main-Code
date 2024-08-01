@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP10_DSA_4H_2RNN_10_en2
+#SBATCH --job-name=ADV_Training_TSP10_DPN_3G_10_conv
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -27,8 +27,11 @@ echo "[$SHELL] ## Run script"
 
 ### TSP 10
 
+python main.py --variation='DPN_3G_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv --n_glimpses=3 --batch_size=128
+
+
 # DPN_10: Basic Pointer Network - Decoder
-# python main.py --variation='DPN_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv 
+# python main.py --variation='DPN_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv
 # python main.py --variation='DPN_10_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear 
 # python main.py --variation='DPN_10_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced  
 # python main.py --variation='DPN_10_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 
@@ -39,20 +42,21 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DSA_1H_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=1
 # python main.py --variation='DSA_1H_10_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=1
 
+# DPN_3G_10: Pointer Network - Decoder + 3 Glimpses
+# python main.py --variation='DPN_3G_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv --n_glimpses=3 --batch_size=128
+# python main.py --variation='DPN_3G_10_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3 
+# python main.py --variation='DPN_3G_10_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
+# python main.py --variation='DPN_3G_10_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3 
+
+
 # DSA_4H_10: Self-Attention Decoder (4 heads)
 # python main.py --variation='DSA_4H_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --num_heads=4
 # python main.py --variation='DSA_4H_10_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --num_heads=4
 # python main.py --variation='DSA_4H_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --num_heads=4
 # python main.py --variation='DSA_4H_10_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --num_heads=4
 
-# DPN_3G_10: Pointer Network - Decoder + 3 Glimpses
-# python main.py --variation='DPN_3G_10_conv' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv --n_glimpses=3 
-# python main.py --variation='DPN_3G_10_lin' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=linear --n_glimpses=3 
-# python main.py --variation='DPN_3G_10_en' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced --n_glimpses=3 
-# python main.py --variation='DPN_3G_10_en2' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=enhanced2 --n_glimpses=3 
-
 # DSA_4H_2RNN_10: Self-Attention Decoder (4 heads) + 2 RNN Layers
-# python main.py --variation='DSA_4H_2RNN_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --rnn_layers=2 --num_heads=4 
+# python main.py --variation='DSA_4H_2RNN_10_conv' --task=tsp10 --n_train=100000 --decoder=self --emb_type=conv  --rnn_layers=2 --num_heads=4 --batch_size=128
 # python main.py --variation='DSA_4H_2RNN_10_lin' --task=tsp10 --n_train=100000 --decoder=self --emb_type=linear  --rnn_layers=2 --num_heads=4 
 # python main.py --variation='DSA_4H_2RNN_10_en' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced  --rnn_layers=2 --num_heads=4 
 # python main.py --variation='DSA_4H_2RNN_10_en2' --task=tsp10 --n_train=100000 --decoder=self --emb_type=enhanced2  --rnn_layers=2 --num_heads=4 

@@ -173,6 +173,9 @@ class RLAgent(nn.Module):
             action = input_d[batched_idx[:, 0], batched_idx[:, 1]]
             actions.append(action)
             visited_positions = torch.cat([visited_positions, action_selected], dim=1)
+        # if show:
+        #     print('Route created:', visited_positions.tolist())
+        #     print('Set of coordinates: ', input_d .tolist())
 
         idxs = torch.stack(idxs, dim=1)
         log_probs = torch.stack(log_probs, dim=1)
@@ -198,56 +201,92 @@ class RLAgent(nn.Module):
         return (R, v, log_probs, actions, idxs, input_d, probs)
 
     def build_train_step(self):
-        """
-        This function returns a train_step operation, in which by running it we proceed one training step.
-        """
         R, v, log_probs, actions, idxs, batch, probs = self.build_model("stochastic")
 
-        # Convert R and v to float tensors
         R = R.float()
         v = v.float()
 
-        # In Detach function we separate a tensor from the computational graph by returning a new tensor that doesn't require a gradient
         v_nograd = v.detach()
 
-        # Size [batch_size]
-        advantage = R - v_nograd
-        #Size [batch_size]
+        advantage = (R - v_nograd).detach()
         logprob_sum = torch.sum(log_probs, dim=1)
-        # print('logprob_sum size: ', logprob_sum.size())
 
+        entropy = -torch.sum(probs * torch.log(probs + 1e-8), dim=1).mean()
         actor_loss_elements = advantage * logprob_sum
-        # print('advantage size: ', advantage.size())
-        # print('actor_loss_elements: ', actor_loss_elements.size())
-        # Computes actor loss and critic loss
-        actor_loss = torch.mean(actor_loss_elements)
-        # print('actor loss: ', actor_loss)
-
+        actor_loss = torch.mean(actor_loss_elements) - self.args.get('entropy_weight', 0.01) * entropy
         critic_loss = F.mse_loss(R, v)
-    
-        # Compute gradients
-        # Clear previous gradients
+
+        total_loss = actor_loss + self.args.get('critic_loss_weight', 1.0) * critic_loss
+
         self.actor_optim.zero_grad()
         self.critic_optim.zero_grad()
+        total_loss.backward()
 
-        # Compute gradients
-        actor_loss.backward(retain_graph=True)  # Retain graph to compute gradients for critic 
-        critic_loss.backward(retain_graph=True) #See if this affects anything
+        # for name, param in self.actor.named_parameters():
+        #     if param.grad is not None:
+        #         print(f"{name} gradient: {param.grad.norm()}")
 
-        # # Clip gradients (optional, if args['max_grad_norm'] is set)
-        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])
-        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args['max_grad_norm'])
-        torch.nn.utils.clip_grad_norm_(self.embedding.parameters(), max_norm=1.0)
+        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args.get('max_grad_norm', 1.0))
+        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args.get('max_grad_norm', 1.0))
 
-        # Apply gradients
         self.actor_optim.step()
         self.critic_optim.step()
 
         self._check_for_nan()  # Check for NaNs after optimizer step
-        
+
         train_step = [actor_loss.item(), critic_loss.item(), R, v]
-        
+
         return train_step
+
+    # def build_train_step(self):
+    #     """
+    #     This function returns a train_step operation, in which by running it we proceed one training step.
+    #     """
+    #     R, v, log_probs, actions, idxs, batch, probs = self.build_model("stochastic")
+
+    #     # Convert R and v to float tensors
+    #     R = R.float()
+    #     v = v.float()
+
+    #     # In Detach function we separate a tensor from the computational graph by returning a new tensor that doesn't require a gradient
+    #     v_nograd = v.detach()
+
+    #     # Size [batch_size]
+    #     advantage = R - v_nograd
+    #     #Size [batch_size]
+    #     logprob_sum = torch.sum(log_probs, dim=1)
+
+    #     actor_loss_elements = advantage * logprob_sum
+    #     # Computes actor loss and critic loss
+    #     actor_loss = torch.mean(actor_loss_elements)
+    #     critic_loss = F.mse_loss(R, v)
+    
+    #     # Combine losses for a single backward pass
+    #     total_loss = actor_loss + critic_loss
+
+    #     # Compute gradients and update parameters
+    #     self.actor_optim.zero_grad()
+    #     self.critic_optim.zero_grad()
+    #     total_loss.backward()
+
+    #     # Compute gradients
+    #     # actor_loss.backward(retain_graph=True)  # Retain graph to compute gradients for critic 
+    #     # critic_loss.backward(retain_graph=True) #See if this affects anything
+
+    #     # # Clip gradients (optional, if args['max_grad_norm'] is set)
+    #     torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.args['max_grad_norm'])
+    #     torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.args['max_grad_norm'])
+    #     torch.nn.utils.clip_grad_norm_(self.embedding.parameters(), max_norm=1.0)
+
+    #     # Apply gradients
+    #     self.actor_optim.step()
+    #     self.critic_optim.step()
+
+    #     self._check_for_nan()  # Check for NaNs after optimizer step
+        
+    #     train_step = [actor_loss.item(), critic_loss.item(), R, v]
+        
+    #     return train_step
 
     def evaluate_single(self, eval_type="greedy"):
 
@@ -308,7 +347,7 @@ class RLAgent(nn.Module):
 
         if self.args['decoder'] == "pointer":
             self.env.input_data = data
-            R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type, data)
+            R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type, data, show=False)
             std_r = R.std().item()
             avg_r = R.mean().numpy()
 
@@ -319,7 +358,7 @@ class RLAgent(nn.Module):
             for data in test_loader:
                 if data.size(0) != self.args['batch_size']:
                     break
-                R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type, data)
+                R, v, log_probs, actions, idxs, batch, _ = self.evaluate_model(eval_type, data, show=False)
                 total_reward.extend(R.tolist())
 
             avg_r = np.mean(total_reward)
@@ -342,7 +381,7 @@ class RLAgent(nn.Module):
         train_results = self.build_train_step()
         return train_results
 
-    def evaluate_model(self, eval_type='greedy', data=None):
+    def evaluate_model(self, eval_type='greedy', data=None, show=False):
         """
         Evaluate the model on the provided DataLoader with a specific evaluation type.
         
@@ -371,7 +410,7 @@ class RLAgent(nn.Module):
     
             # Run model evaluation for the current batch
             if self.args['decoder'] == "pointer":
-                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type)
+                R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show)
             else:
                 R, v, log_probs, actions, idxs, batch, _ = self.build_model(eval_type, show=True, data=data)
             

@@ -1,0 +1,64 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node859 and this job has the ID 2688082
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+actor_net_lr: 0.0001
+batch_size: 128
+beam_width: 10
+critic_net_lr: 0.0001
+data_dir: data
+decode_len: 10
+decoder: self
+disable_tqdm: True
+dropout: 0.1
+emb_type: enhanced
+embedding_dim: 128
+entropy_coeff: 0.0
+epsilon: 0.1
+forget_bias: 1.0
+gpu: 3
+hidden_dim: 128
+infer_type: batch
+input_dim: 2
+is_train: False
+load_path: 
+log_dir: logs/tsp10-2024-07-31_13-03-13
+log_interval: 1000
+mask_glimpses: True
+mask_pointer: True
+max_grad_norm: 2.0
+model_dir: ./logs/tsp10-2024-07-30_23-56-10/model/best_model.pth
+n_glimpses: 0
+n_nodes: 10
+n_process_blocks: 3
+n_train: 100000
+num_heads: 4
+print_route: True
+random_seed: 24601
+rnn_layers: 1
+save_interval: 10000
+stdout_print: True
+tanh_exploration: 10.0
+task: tsp10
+task_name: tsp
+test_interval: 200
+test_size: 1000
+use_tanh: False
+variation: DSA_10_4H_1RNN_en
+# Set random seed to 24601
+# Set parameters for this run:
+# Variation:    DSA_10_4H_1RNN_en
+# Task:         tsp10
+# Decoder:      self
+# Embed type:   enhanced
+# n_glimpses:   0
+# rnn layers:   1
+# n_train:      100000
+# num heads:    4
+Embedding - enhanced 2
+Agent created - self
+Evaluation started ...
+Average of greedy in batch-mode: -4.6146361908292 -- std R: 0.8558577316523177
+##################################################################
+Total time is 00:00:02
+[/bin/bash] ## Script finished

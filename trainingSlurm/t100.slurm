@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP100_75_DSA_4H_2RNN_100_en2
+#SBATCH --job-name=Training_TSP100_75_DSA_4H_100_en2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -44,7 +44,7 @@ echo "[$SHELL] ## Run script"
 # python main.py --variation='DSA_4H_100_conv' --task=tsp100 --n_train=75000 --decoder=self --emb_type=conv  --num_heads=4
 # python main.py --variation='DSA_4H_100_lin' --task=tsp100 --n_train=75000 --decoder=self --emb_type=linear  --num_heads=4
 # python main.py --variation='DSA_4H_100_en' --task=tsp100 --n_train=75000 --decoder=self --emb_type=enhanced  --num_heads=4
-# python main.py --variation='DSA_4H_100_en2' --task=tsp100 --n_train=75000 --decoder=self --emb_type=enhanced2  --num_heads=4
+python main.py --variation='DSA_4H_100_en2' --task=tsp100 --n_train=75000 --decoder=self --emb_type=enhanced2  --num_heads=4
 
 # DSA_4H_2RNN_100: Self-Attention Decoder (4 heads) + 2 RNN Layers
 # python main.py --variation='DSA_4H_2RNN_100_conv' --task=tsp100 --n_train=75000 --decoder=self --emb_type=conv --rnn_layers=2 --num_heads=4

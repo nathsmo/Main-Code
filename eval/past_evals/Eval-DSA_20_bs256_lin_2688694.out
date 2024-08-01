@@ -1,0 +1,26 @@
+[/bin/bash] #### Starting Python test
+[/bin/bash] ## This is s3516423 on node856 and this job has the ID 2688694
+[/bin/bash] ## current working directory: /home/s3516423/data1/Main-Code
+[/bin/bash] ## Run script
+usage: main.py [-h] [--task TASK] [--batch_size BATCH_SIZE]
+               [--n_train N_TRAIN] [--test_size TEST_SIZE]
+               [--forget_bias FORGET_BIAS] [--embedding_dim EMBEDDING_DIM]
+               [--hidden_dim HIDDEN_DIM] [--n_process_blocks N_PROCESS_BLOCKS]
+               [--rnn_layers RNN_LAYERS] [--decode_len DECODE_LEN]
+               [--n_glimpses N_GLIMPSES] [--tanh_exploration TANH_EXPLORATION]
+               [--use_tanh USE_TANH] [--mask_glimpses MASK_GLIMPSES]
+               [--mask_pointer MASK_POINTER] [--dropout DROPOUT]
+               [--epsilon EPSILON] [--is_train IS_TRAIN]
+               [--actor_net_lr ACTOR_NET_LR] [--critic_net_lr CRITIC_NET_LR]
+               [--random_seed RANDOM_SEED] [--max_grad_norm MAX_GRAD_NORM]
+               [--entropy_coeff ENTROPY_COEFF] [--infer_type INFER_TYPE]
+               [--beam_width BEAM_WIDTH] [--stdout_print STDOUT_PRINT]
+               [--gpu GPU] [--log_interval LOG_INTERVAL]
+               [--test_interval TEST_INTERVAL] [--save_interval SAVE_INTERVAL]
+               [--log_dir LOG_DIR] [--data_dir DATA_DIR]
+               [--model_dir MODEL_DIR] [--load_path LOAD_PATH]
+               [--disable_tqdm DISABLE_TQDM] [--emb_type EMB_TYPE]
+               [--decoder DECODER] [--num_heads NUM_HEADS]
+               [--variation VARIATION] [--print_route PRINT_ROUTE]
+main.py: error: argument --num_heads: invalid int value: '1--is_train=False'
+[/bin/bash] ## Script finished

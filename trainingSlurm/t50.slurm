@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_TSP50_75_DPN_3G_50_conv
+#SBATCH --job-name=Training_TSP50_75_DPN_3G_50_en2
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"

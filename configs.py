@@ -23,8 +23,8 @@ def ParseParams():
     # Data
     parser.add_argument('--task', default='tsp10', help="Select the task to solve; i.e. tsp10")
     # Number of epochs = n_train/batch_size
-    parser.add_argument('--batch_size', default=128,type=int, help='Batch size in training')
-    parser.add_argument('--n_train', default=25000,type=int, help='Number of training steps') # Original every: 2,560 . 260,000 now: 100,000
+    parser.add_argument('--batch_size', default=64,type=int, help='Batch size in training')
+    parser.add_argument('--n_train', default=100000,type=int, help='Number of training steps') # Original every: 2,560 . 260,000 now: 100,000
     parser.add_argument('--test_size', default=1000,type=int, help='Number of problems in test set')# Keeping to the original 1000 for test size
     
     # Network
@@ -47,8 +47,8 @@ def ParseParams():
 
     # Training
     parser.add_argument('--is_train', default=True,type=str2bool, help="whether to do the training or not")
-    parser.add_argument('--actor_net_lr', default=1e-4,type=float, help="Set the learning rate for the actor network")
-    parser.add_argument('--critic_net_lr', default=1e-4,type=float, help="Set the learning rate for the critic network")
+    parser.add_argument('--actor_net_lr', default=1e-3,type=float, help="Set the learning rate for the actor network")
+    parser.add_argument('--critic_net_lr', default=1e-3,type=float, help="Set the learning rate for the critic network")
     parser.add_argument('--random_seed', default=24601,type=int, help='')
     parser.add_argument('--max_grad_norm', default=2.0, type=float, help='Gradient clipping')
     parser.add_argument('--entropy_coeff', default=0.0, type=float, help='coefficient for entropy regularization')
@@ -61,8 +61,8 @@ def ParseParams():
     # Misc
     parser.add_argument('--stdout_print', default=True, type=str2bool, help='print control')
     parser.add_argument("--gpu", default='3', type=str,help="gpu number.")
-    parser.add_argument('--log_interval', default=200,type=int, help='Log info every log_step steps')
-    parser.add_argument('--test_interval', default=200,type=int, help='test every test_interval steps')
+    parser.add_argument('--log_interval', default=1000,type=int, help='Log info every log_step steps')
+    parser.add_argument('--test_interval', default=2000,type=int, help='test every test_interval steps')
     parser.add_argument('--save_interval', default=10000,type=int, help='save every save_interval steps')
     parser.add_argument('--log_dir', type=str, default='logs')
     parser.add_argument('--data_dir', type=str, default='data')

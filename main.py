@@ -32,6 +32,10 @@ class principal(nn.Module):
 
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 
+        self.patience = args.get('patience', 5000)  # Number of steps to wait for improvement before stopping
+        self.best_reward = float('-inf')  # Best observed reward
+        self.steps_without_improvement = 0
+
         # Set up TensorBoard SummaryWriter
         self.writer = SummaryWriter()
 
@@ -63,8 +67,26 @@ class principal(nn.Module):
             self.writer.add_scalar('Train/Actor_Loss', np.mean(actor_loss_val), step)
             self.writer.add_scalar('Train/Critic_Loss', np.mean(critic_loss_val), step)
             
-            if step % args['save_interval'] == 0:
-                torch.save(self.agent.state_dict(), f"{args['model_dir']}/model_{step}.pth")
+            avg_reward = R_val.mean().item()
+
+            if avg_reward > self.best_reward:
+                self.best_reward = avg_reward
+                self.steps_without_improvement = 0
+                torch.save(self.agent.state_dict(), f"{args['model_dir']}/best_model.pth")
+                prt.print_out(f"New best model saved with reward: {self.best_reward}")
+
+            else:
+                self.steps_without_improvement += 1
+
+            if self.steps_without_improvement >= self.patience:
+                print(f"Early stopping at step {step} with best reward {self.best_reward}")
+                break
+
+            if step % 100 == 0:
+                print(f"Step {step}: Avg Reward: {avg_reward}, Best Reward: {self.best_reward}, Steps without Improvement: {self.steps_without_improvement}")
+
+            # if step % args['save_interval'] == 0 or step == 800:
+                # torch.save(self.agent.state_dict(), f"{args['model_dir']}/model_{step}.pth")
 
             if step % args['log_interval'] == 0:    
                 train_time_end = time.time()-train_time_beg

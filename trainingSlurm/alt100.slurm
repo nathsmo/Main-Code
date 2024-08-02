@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=Training-DSA_100_4H_2RNN_en2
+#SBATCH --job-name=Training-DPN_100_3G_en2_2RNN
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
 #SBATCH --time=90:00:00
-#SBATCH --partition=gpu-long
+#SBATCH --partition=mem
 #SBATCH --ntasks=4
 
 # load modules (assuming you start from the default environment) we explicitly call the modules to improve reproducibility
@@ -20,16 +20,17 @@ export CWD=$(pwd)
 echo "[$SHELL] ## current working directory: "$CWD
 # Run the file
 echo "[$SHELL] ## Run script"
+
 #  DPN_100: Pointer Network - Decoder - 1 RNN
-# python main.py --variation='DPN_100_conv_1RNN' --task=tsp100 --decoder=pointer --emb_type=conv --rnn_layers=1 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_lin_1RNN' --task=tsp100 --decoder=pointer --emb_type=linear --rnn_layers=1 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_en_1RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced --rnn_layers=1 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_en2_1RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced2 --rnn_layers=1 --batch_size=64 --epsilon=0
+# python main.py --variation='DPN_100_conv_1RNN' --task=tsp100 --decoder=pointer --emb_type=conv --rnn_layers=1 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_lin_1RNN' --task=tsp100 --decoder=pointer --emb_type=linear --rnn_layers=1 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_en_1RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced --rnn_layers=1 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_en2_1RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced2 --rnn_layers=1 --batch_size=128 --epsilon=0
 # DPN_100: Pointer Network - Decoder - 2 RNN
-# python main.py --variation='DPN_100_conv_2RNN' --task=tsp100 --decoder=pointer --emb_type=conv --rnn_layers=2 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_lin_2RNN' --task=tsp100 --decoder=pointer --emb_type=linear --rnn_layers=2 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_en_2RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced --rnn_layers=2 --batch_size=64 --epsilon=0
-# python main.py --variation='DPN_100_en2_2RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced2 --rnn_layers=2 --batch_size=64 --epsilon=0
+# python main.py --variation='DPN_100_conv_2RNN' --task=tsp100 --decoder=pointer --emb_type=conv --rnn_layers=2 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_lin_2RNN' --task=tsp100 --decoder=pointer --emb_type=linear --rnn_layers=2 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_en_2RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced --rnn_layers=2 --batch_size=128 --epsilon=0
+# python main.py --variation='DPN_100_en2_2RNN' --task=tsp100 --decoder=pointer --emb_type=enhanced2 --rnn_layers=2 --batch_size=128 --epsilon=0
 # DSA_2H_100: Self-Attention Decoder (1 head) + 1RNN
 # python main.py --variation='DSA_100_1H_1RNN_conv' --task=tsp100 --decoder=self --emb_type=conv --num_heads=1 --rnn_layers=1 --batch_size=128 --epsilon=0
 # python main.py --variation='DSA_100_1H_1RNN_lin' --task=tsp100 --decoder=self --emb_type=linear --num_heads=1 --rnn_layers=1 --batch_size=128 --epsilon=0

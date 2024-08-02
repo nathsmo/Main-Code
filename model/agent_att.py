@@ -48,12 +48,14 @@ class RLAgent(nn.Module):
                                             mask_glimpses=args['mask_glimpses'],
                                             mask_pointer=args['mask_pointer'],
                                             rnn_layers=args['rnn_layers'])        
-        else:
+        elif args['decoder']=='self':
             # Initialize the self-attention based decoder
             self.decodeStep = SelfAttention(self.actor_attention, 
                                             num_actions=self.env.n_nodes, 
                                            args=args)
-            
+        else:
+            raise ValueError("Invalid decoder type specified. Supported types: pointer, self_attention, fast.")
+
         self.actor = nn.Sequential(
             self.embedding,
             nn.Linear(args['embedding_dim'], args['hidden_dim']),
@@ -90,7 +92,7 @@ class RLAgent(nn.Module):
         the current environment's state.
 
         Parameters:
-        env.n_nodes are the tsp nodes = 10, 20 or 50
+        env.n_nodes are the tsp nodes = 10, 20...
 
         Returns:
         R: The reward for the current batch of data.
@@ -119,16 +121,11 @@ class RLAgent(nn.Module):
 
         # Reset the Environment.
         self.env.reset()
-        # self._initialize_weights()
-
         # Create tensors and lists
         actions, log_probs, probs, idxs = [], [], [], []
         # This should be a list ranging from 0 to batch_size, size [batch_size, 1]
         BatchSequence = torch.arange(batch_size, dtype=torch.int64).unsqueeze(1)
         visited_positions = torch.zeros((batch_size, 1), dtype=torch.long, device=input_d.device)
-        # start_node = 0
-        # action_selected = torch.full((batch_size, 1), start_node, dtype=torch.long, device=input_d.device)
-        # visited_positions = torch.cat([visited_positions, action_selected], dim=1)
 
         if self.args['decoder'] == "pointer":
             initial_state = self._init_hidden(batch_size)
@@ -141,11 +138,10 @@ class RLAgent(nn.Module):
                 decoder_input = context[batched_idx[:, 0], batched_idx[:, 1]].unsqueeze(1)
 
             if self.args['decoder'] == "pointer":
-                action_logits, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1])
+                action_logits, new_state = self.decodeStep(decoder_input, context, self.env.mask, states[-1]) #self.env.mask
                 states.append(new_state)
-
-            else:
-                action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask)
+            elif self.args['decoder'] == "self":
+                action_logits, attn_weights = self.decodeStep(decoder_input, context, self.env.mask) #self.env.mask
 
             if torch.isnan(action_logits).any() or torch.isinf(action_logits).any():
                 print("Problem with action logits.")
@@ -173,9 +169,6 @@ class RLAgent(nn.Module):
             action = input_d[batched_idx[:, 0], batched_idx[:, 1]]
             actions.append(action)
             visited_positions = torch.cat([visited_positions, action_selected], dim=1)
-        # if show:
-        #     print('Route created:', visited_positions.tolist())
-        #     print('Set of coordinates: ', input_d .tolist())
 
         idxs = torch.stack(idxs, dim=1)
         log_probs = torch.stack(log_probs, dim=1)
@@ -460,10 +453,37 @@ class RLAgent(nn.Module):
         
         return masked_prob, idx
 
-
     def _init_hidden(self, batch_size):
         return (torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim']),
                 torch.zeros(self.args['rnn_layers'], batch_size, self.args['hidden_dim']))
+    
+    def process_decoder_step_per_instance(self, context, mask=None):
+        # x = context.long()
+        batch_size = context.size(0)
+        action_logits_list = []
+        mean_tensor = torch.mean(context, dim=-1)
+
+        # Map the mean values to integers, you can use a simple linear transformation or quantization
+        # Here's a basic example using a linear transformation to map to integer range [0, N)
+        N = 4096  # Example integer range, change according to your requirements
+        integer_tensor = (mean_tensor - mean_tensor.min()) / (mean_tensor.max() - mean_tensor.min())  # Normalize to [0, 1]
+        integer_tensor = (integer_tensor * N).long()  # Scale to [0, N) and convert to long
+
+        for i in range(batch_size):
+            instance_context = integer_tensor[i].unsqueeze(0)  # Extract a single instance and add batch dimension
+            print('instance_context', instance_context)
+            if mask is not None:
+                instance_mask = mask[i].unsqueeze(0)
+                instance_action_logits = self.decodeStep(instance_context, mask=instance_mask)
+            else:
+                instance_action_logits = self.decodeStep(instance_context)
+        
+            action_logits_list.append(instance_action_logits)
+        
+        # Combine the action logits into a single tensor
+        combined_action_logits = torch.cat(action_logits_list, dim=0)
+        
+        return combined_action_logits
     
 class Critic(nn.Module):
     def __init__(self, args, input_dim):
@@ -487,4 +507,5 @@ class Critic(nn.Module):
         v = x.squeeze(1)
 
         return v
+    
     

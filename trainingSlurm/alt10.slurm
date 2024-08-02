@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Training_DSA_10_2H_1RNN_conv
+#SBATCH --job-name=A-Fast_try
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
@@ -12,7 +12,6 @@
 # in case the default settings change
 module load Python/3.11.3-GCCcore-12.3.0
 module load Miniconda3/23.9.0-0
-
 # Source the Python virtual environment
 # source $HOME/user_guide_tutorials/thesis/torch_thesis_server/bin/activate
 
@@ -23,6 +22,8 @@ export CWD=$(pwd)
 echo "[$SHELL] ## current working directory: "$CWD
 # Run the file
 echo "[$SHELL] ## Run script"
+
+python main.py --variation='A-Fast_try' --task=tsp10 --decoder=fast 
 
 # DPN_10: Pointer Network - Decoder - 1 RNN
 # python main.py --variation='DPN_10_3G_conv_1RNN' --task=tsp10 --n_train=100000 --decoder=pointer --emb_type=conv --rnn_layers=1 --batch_size=64 --epsilon=0 --n_glimpses=3

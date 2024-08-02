@@ -11,6 +11,7 @@ import sys
 from TSP.tsp_datagen import DataGenerator
 from TSP.tsp_env import VRPEnvironment, reward_func
 from model.agent_att import RLAgent
+from model.fast_agent_att import RLAgent as FastRLAgent
 
 from configs import ParseParams
 
@@ -22,17 +23,30 @@ class principal(nn.Module):
         self.dataGen.reset()
 
         self.env = VRPEnvironment(args)
-        
-        self.agent = RLAgent(args,
-                            prt,
-                            self.env,
-                            self.dataGen,
-                            reward_func,
-                            is_train=args['is_train']) # Model class
+
+
+        if  args['decoder'] !='fast':
+            self.agent = RLAgent(args,
+                                prt,
+                                self.env,
+                                self.dataGen,
+                                reward_func,
+                                is_train=args['is_train']) # Model class
+            
+        else:
+            self.agent = FastRLAgent(args,
+                                prt,
+                                self.env,
+                                self.dataGen,
+                                reward_func,
+                                is_train=args['is_train']) # Model class
 
         self.optimizer = torch.optim.Adam(self.agent.parameters(), lr=0.001)
 
-        self.patience = args.get('patience', 5000)  # Number of steps to wait for improvement before stopping
+        self.patience = args.get('patience', 5000) # Number of steps to wait for improvement before stopping
+
+        if args['decoder'] == 'fast':
+                self.patience = 100
         self.best_reward = float('-inf')  # Best observed reward
         self.steps_without_improvement = 0
 

@@ -114,14 +114,20 @@ class RLAgent(nn.Module):
 
         if eval_type == "stochastic":
             # action4critic = action_selected.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
-            # action4critic = actions # Change the action4critic
+            # action4critic = actions # Change the action4critic #torch.Size([1, 64, 128])
+            # action_selected = last column of actions and then do the action4critic
+            last_column = actions[:, -1]  # Shape [64]
+            print('Size of last column: ', last_column.size())
+            print('Size of actions: ', actions.size())
+            # Step 2: Expand the extracted column to the desired shape [1, 64, 128]
+            # We can use unsqueeze to add the necessary dimensions and then expand
+            action4critic = last_column.unsqueeze(0).float()
             lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
-            output, (hn, cn) = lstm_layer(actions, self._init_hidden(batch_size))
+            output, (hn, cn) = lstm_layer(action4critic, self._init_hidden(2))
             hy = hn[-1]
 
             for i in range(self.args['n_process_blocks']):
                 hy = self.critic(hy, input_d)
-
             v = self.critic.final_step_critic(hy)
 
         return (R, v, log_probs, actions, input_d, probs)

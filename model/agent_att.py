@@ -182,13 +182,13 @@ class RLAgent(nn.Module):
 
         if eval_type == "stochastic":
             action4critic = action_selected.unsqueeze(0).expand(1, batch_size, self.args['hidden_dim']).float()
+            print(action4critic.size())
             lstm_layer = nn.LSTM(input_size=self.args['hidden_dim'], hidden_size=self.args['hidden_dim'], num_layers=self.args['rnn_layers'])
             output, (hn, cn) = lstm_layer(action4critic, self._init_hidden(batch_size))
             hy = hn[-1]
 
             for i in range(self.args['n_process_blocks']):
                 hy = self.critic(hy, context[torch.arange(batch_size), idxs[-1], :])
-
             v = self.critic.final_step_critic(hy)
 
         return (R, v, log_probs, actions, idxs, input_d, probs)

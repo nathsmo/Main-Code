@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=A-Fast_try
+#SBATCH --job-name=A-Fast
 #SBATCH --output=outputs/%x_%j.out
 #SBATCH --mail-user="s3516423@vuw.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
 #SBATCH --time=10:00:00
-#SBATCH --partition=gpu-long
+#SBATCH --partition=mem
 #SBATCH --ntasks=4
 
 # load modules (assuming you start from the default environment)

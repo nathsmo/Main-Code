@@ -7,15 +7,8 @@ We use Reinforcement for solving Travelling Salesman Problem (TSP)
 Base code inspired by the implementation of paper: [Reinforcement Learning for Solving the Vehicle Routing Problem](https://arxiv.org/abs/1802.04240v2). 
 
 ## Information
-## Currently under construction!!!! 
-*Ideas to implement to make code more efficient*
-* Different Embedding
-* Self Attention (via Multi-head Attention)
 
-
-**Ultimate question for our angle:**  
-* What is the factor taking too long to train the model. 
-* Reduce Runtime
+This project focuses on solving the Traveling Salesman Problem (TSP) using Actor-Critic (reinforcement learning) with an attention mechanism (pointer network or self-attention) and various embeddings. The primary objective is to evaluate the performance of different embeddings with attention mechanisms and the parameters of: batch sizes, epsilon values, RNN layers, and glimpses/attention heads (dependent on the attention mechanism) in optimizing the TSP.
 
 ## Dependencies
 
@@ -52,9 +45,6 @@ python main.py --variation='DSA_1H_10_conv' --task=tsp10 --n_train=100000 --deco
 ```
 ### Logs
 All logs are stored in ``result.txt`` file stored in ``./logs/task_date_time`` directory.
-
-<!---## Acknowledgements
-Thanks to [pemami4911/neural-combinatorial-rl-pytorch](https://github.com/pemami4911/neural-combinatorial-rl-pytorch) for getting the idea of restructuring the code.)---!>
 
 <!---
 * Modify Reinforcement Learning - see options. (More efficient, see different reward functions, aim to lower time)
